@@ -1,0 +1,46 @@
+<style type="text/css">
+#djDebugSubdomainPanel form,
+#djDebugSubdomainPanel #clear_subdomain
+{
+  margin-top: 2em;
+}
+#djDebugSubdomainPanel label
+{
+  display: block;
+}
+#djDebugSubdomainPanel input,
+#djDebugSubdomainPanel form button
+{
+  font-size: 150%;
+  margin-top: 10px;
+}
+</style>
+
+<script language="javascript">
+  var navigate_to_subdomain = function(domain) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + 365);
+
+    document.cookie = "_domain=" + escape(domain) + "; expires=" + exdate.toUTCString() + "; path=/";
+
+    window.location.reload();
+  };
+
+  $('#djDebugSubdomainPanel #clear_subdomain').live('click', function () {
+    navigate_to_subdomain('');
+    return false;
+  });
+
+  $('form[name=navigate_to_domain]').live('submit', function () {
+    navigate_to_subdomain($('#domain_enter').val());
+    return false;
+  });
+</script>
+
+<form name="navigate_to_domain">
+  <label for="domain_enter">Subdomain to navigate to (eg. <em>api</em> or <em>api.example.com</em>):</label>
+  <input id="domain_enter">
+  <button type="submit">Navigate</button>
+</form>
+
+<button id="clear_subdomain">Clear subdomain</button>
