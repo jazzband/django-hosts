@@ -1,4 +1,0 @@
-django-dynamic-subdomains
-=========================
-
-FIXME
