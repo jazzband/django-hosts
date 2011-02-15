@@ -27,7 +27,9 @@ class SubdomainPanel(DebugPanel):
         return _("Subdomain navigation")
 
     def content(self):
-        return render_to_string('subdomains/panel.html', self.context)
+        context = self.context.copy()
+        context['domain'] = self.domain
+        return render_to_string('subdomains/panel.html', context)
 
     def process_request(self, request):
         self.domain = request.COOKIES.get('_domain')
