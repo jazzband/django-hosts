@@ -10,5 +10,6 @@ def redirect(request):
 
     response = HttpResponseRedirect(form.cleaned_data['path'])
     response.set_cookie('_domain', form.cleaned_data['domain'])
+    response.status_code = 307 # Re-submit POST requests
 
     return response
