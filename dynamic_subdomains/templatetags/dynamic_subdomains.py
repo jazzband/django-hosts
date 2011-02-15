@@ -3,7 +3,7 @@ import urllib
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
-from django.core.urlresolvers import set_urlconf, get_urlconf
+from django.core.urlresolvers import set_urlconf, get_urlconf, reverse
 from django.utils.regex_helper import normalize
 from django.template.defaulttags import url, URLNode, kwarg_re
 
@@ -71,6 +71,15 @@ class DomainURLNode(URLNode):
             path_part = super(DomainURLNode, self).render(context)
         finally:
             set_urlconf(prev)
+
+        if settings.DEBUG:
+            return '%s?%s' % (
+                reverse('debug-subdomain-redirect'),
+                urllib.urlencode((
+                    ('domain', domain_part),
+                    ('path', path_part),
+                ))
+            )
 
         return '//%s%s' % (domain_part, path_part)
 
