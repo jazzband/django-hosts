@@ -185,7 +185,7 @@ class SubdomainMiddleware(object):
                 break
         else:
             kwargs = {}
-            subdomain = self.fallback
+            subdomain = self.default
 
         urlconf = subdomain['urlconf']
         callback = subdomain['_callback']
