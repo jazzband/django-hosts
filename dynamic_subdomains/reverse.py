@@ -1,8 +1,9 @@
 import re
+import urllib
 
 from django.conf import settings
 from django.utils.encoding import force_unicode
-from django.core.urlresolvers import NoReverseMatch
+from django.core.urlresolvers import NoReverseMatch, reverse
 from django.utils.regex_helper import normalize
 
 def reverse_subdomain(name, args=(), kwargs=None):
@@ -37,3 +38,39 @@ def reverse_subdomain(name, args=(), kwargs=None):
         "Reverse subdomain for '%s' with arguments '%s' and keyword arguments "
         "'%s' not found." % (name, args, kwargs)
     )
+
+def reverse_crossdomain(subdomain, view, subdomain_args=(), subdomain_kwargs=None, view_args=(), view_kwargs=None):
+    if subdomain_kwargs is None:
+        subdomain_kwargs = {}
+
+    if view_kwargs is None:
+        view_kwargs = {}
+
+    domain_part = reverse_subdomain(
+        subdomain,
+        args=subdomain_args,
+        kwargs=subdomain_kwargs,
+    )
+
+    try:
+        urlconf = settings.SUBDOMAINS[subdomain]['urlconf']
+    except KeyError:
+        raise NoReverseMatch("No subdomain called %s exists" % subdomain)
+
+    path_part = reverse(
+        view,
+        args=view_args,
+        kwargs=view_kwargs,
+        urlconf=urlconf,
+    )
+
+    if settings.DEBUG:
+        return '%s?%s' % (
+            reverse('debug-subdomain-redirect'),
+            urllib.urlencode((
+                ('domain', domain_part),
+                ('path', path_part),
+            ))
+        )
+
+    return u'//%s%s' % (domain_part, path_part)

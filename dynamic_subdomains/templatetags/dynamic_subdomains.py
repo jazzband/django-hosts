@@ -1,13 +1,10 @@
-import urllib
-
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
-from django.core.urlresolvers import set_urlconf, get_urlconf, reverse
-from django.utils.regex_helper import normalize
-from django.template.defaulttags import url, URLNode, kwarg_re
+from django.utils.encoding import smart_str
+from django.template.defaulttags import kwarg_re
 
-from ..reverse import reverse_subdomain
+from ..reverse import reverse_crossdomain
 
 register = template.Library()
 
@@ -17,7 +14,7 @@ def domain_url(parser, token):
     if len(bits) < 2:
         raise TemplateSyntaxError("'%s' takes at least 1 argument" % bits[0])
 
-    view_name = bits[1]
+    view = bits[1]
     bits = bits[1:] # Strip off view
 
     try:
@@ -40,48 +37,37 @@ def domain_url(parser, token):
         domain_args, domain_kwargs = (), {}
 
     return DomainURLNode(
-        domain, domain_args, domain_kwargs, view_name, view_args, view_kwargs,
+        domain, view, domain_args, domain_kwargs, view_args, view_kwargs,
     )
 
-class DomainURLNode(URLNode):
-    def __init__(self, domain, domain_args, domain_kwargs, view_name, view_args, view_kwargs):
-        self.domain = domain
-        self.domain_args = domain_args
-        self.domain_kwargs = domain_kwargs
+class DomainURLNode(template.Node):
+    def __init__(self, subdomain, view, subdomain_args, subdomain_kwargs, view_args, view_kwargs):
+        self.subdomain = subdomain
+        self.view = view
 
-        super(DomainURLNode, self).__init__(view_name, view_args, view_kwargs, None)
+        self.subdomain_args = subdomain_args
+        self.subdomain_kwargs = subdomain_kwargs
+
+        self.view_args = view_args
+        self.view_kwargs = view_kwargs
 
     def render(self, context):
-        domain_part = reverse_subdomain(
-            self.domain,
-            args=self.domain_args,
-            kwargs=self.domain_kwargs,
+        subdomain_args = [x.resolve(context) for x in self.subdomain_args]
+        subdomain_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
+            for k, v in self.subdomain_kwargs.items())
+
+        view_args = [x.resolve(context) for x in self.view_args]
+        view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
+            for k, v in self.view_kwargs.items())
+
+        return reverse_crossdomain(
+            self.subdomain,
+            self.view,
+            subdomain_args,
+            subdomain_kwargs,
+            view_args,
+            view_kwargs,
         )
-
-        try:
-            subdomain = settings.SUBDOMAINS[self.domain]
-        except KeyError:
-            raise TemplateSyntaxError(
-                "Subdomain name %r could not be found" % self.domain
-            )
-
-        prev = get_urlconf()
-        try:
-            set_urlconf(subdomain['urlconf'])
-            path_part = super(DomainURLNode, self).render(context)
-        finally:
-            set_urlconf(prev)
-
-        if settings.DEBUG:
-            return '%s?%s' % (
-                reverse('debug-subdomain-redirect'),
-                urllib.urlencode((
-                    ('domain', domain_part),
-                    ('path', path_part),
-                ))
-            )
-
-        return '//%s%s' % (domain_part, path_part)
 
 def parse_args_kwargs(parser, bits):
     args = []
