@@ -14,8 +14,8 @@ register = template.Library()
 @register.tag
 def domain_url(parser, token):
     bits = token.split_contents()
-    if len(bits) < 3:
-        raise TemplateSyntaxError("'%s' takes at least 4 arguments" % bits[0])
+    if len(bits) < 2:
+        raise TemplateSyntaxError("'%s' takes at least 1 argument" % bits[0])
 
     view_name = bits[1]
     bits = bits[1:] # Strip off view
