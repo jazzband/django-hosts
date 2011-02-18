@@ -50,7 +50,7 @@ def reverse_crossdomain_part(subdomain, path, subdomain_args=(), subdomain_kwarg
         kwargs=subdomain_kwargs,
     )
 
-    if settings.DEBUG:
+    if getattr(settings, 'EMULATE_SUBDOMAINS', settings.DEBUG):
         return '%s?%s' % (
             reverse('debug-subdomain-redirect'),
             urllib.urlencode((
