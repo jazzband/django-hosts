@@ -9,7 +9,7 @@ from ..reverse import reverse_crossdomain
 register = template.Library()
 
 @register.tag
-def domain_url(parser, token):
+def domain_url(parser, token, mangle=True):
     bits = token.split_contents()
     if len(bits) < 2:
         raise TemplateSyntaxError("'%s' takes at least 1 argument" % bits[0])
@@ -37,11 +37,15 @@ def domain_url(parser, token):
         domain_args, domain_kwargs = (), {}
 
     return DomainURLNode(
-        domain, view, domain_args, domain_kwargs, view_args, view_kwargs,
+        domain, view, domain_args, domain_kwargs, view_args, view_kwargs, mangle
     )
 
+@register.tag
+def domain_url_no_mangle(parser, token):
+    return domain_url(parser, token, mangle=False)
+
 class DomainURLNode(template.Node):
-    def __init__(self, subdomain, view, subdomain_args, subdomain_kwargs, view_args, view_kwargs):
+    def __init__(self, subdomain, view, subdomain_args, subdomain_kwargs, view_args, view_kwargs, mangle):
         self.subdomain = subdomain
         self.view = view
 
@@ -50,6 +54,8 @@ class DomainURLNode(template.Node):
 
         self.view_args = view_args
         self.view_kwargs = view_kwargs
+
+        self.mangle = mangle
 
     def render(self, context):
         subdomain_args = [x.resolve(context) for x in self.subdomain_args]
@@ -67,6 +73,7 @@ class DomainURLNode(template.Node):
             subdomain_kwargs,
             view_args,
             view_kwargs,
+            self.mangle,
         )
 
 def parse_args_kwargs(parser, bits):

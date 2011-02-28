@@ -39,7 +39,7 @@ def reverse_subdomain(name, args=(), kwargs=None):
         "'%s' not found." % (name, args, kwargs)
     )
 
-def reverse_crossdomain_part(subdomain, path, subdomain_args=(), subdomain_kwargs=None):
+def reverse_crossdomain_part(subdomain, path, subdomain_args=(), subdomain_kwargs=None, mangle=True):
     if subdomain_kwargs is None:
         subdomain_kwargs = {}
 
@@ -50,7 +50,7 @@ def reverse_crossdomain_part(subdomain, path, subdomain_args=(), subdomain_kwarg
         kwargs=subdomain_kwargs,
     )
 
-    if getattr(settings, 'EMULATE_SUBDOMAINS', settings.DEBUG):
+    if mangle and getattr(settings, 'EMULATE_SUBDOMAINS', settings.DEBUG):
         return '%s?%s' % (
             reverse('debug-subdomain-redirect'),
             urllib.urlencode((
@@ -61,7 +61,7 @@ def reverse_crossdomain_part(subdomain, path, subdomain_args=(), subdomain_kwarg
 
     return u'//%s%s' % (domain_part, path)
 
-def reverse_crossdomain(subdomain, view, subdomain_args=(), subdomain_kwargs=None, view_args=(), view_kwargs=None):
+def reverse_crossdomain(subdomain, view, subdomain_args=(), subdomain_kwargs=None, view_args=(), view_kwargs=None, mangle=True):
     if view_kwargs is None:
         view_kwargs = {}
 
@@ -82,4 +82,5 @@ def reverse_crossdomain(subdomain, view, subdomain_args=(), subdomain_kwargs=Non
         path,
         subdomain_args,
         subdomain_kwargs,
+        mangle=mangle,
     )
