@@ -61,21 +61,20 @@ def reverse_crossdomain_part(subdomain, path, subdomain_args=(), subdomain_kwarg
 
     return u'//%s%s' % (domain_part, path)
 
-def reverse_crossdomain(subdomain, view, subdomain_args=(), subdomain_kwargs=None, view_args=(), view_kwargs=None, mangle=True):
-    if view_kwargs is None:
-        view_kwargs = {}
+def reverse_path(subdomain, view, args=(), kwargs=None):
+    if kwargs is None:
+        kwargs = {}
 
     try:
         urlconf = settings.SUBDOMAINS[subdomain]['urlconf']
     except KeyError:
         raise NoReverseMatch("No subdomain called %s exists" % subdomain)
 
-    path = reverse(
-        view,
-        args=view_args,
-        kwargs=view_kwargs,
-        urlconf=urlconf,
-    )
+    return reverse(view, args=args, kwargs=kwargs, urlconf=urlconf)
+
+def reverse_crossdomain(subdomain, view, subdomain_args=(), subdomain_kwargs=None, view_args=(), view_kwargs=None, mangle=True):
+
+    path = reverse_path(subdomain, view, view_args, view_kwargs)
 
     return reverse_crossdomain_part(
         subdomain,
