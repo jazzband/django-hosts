@@ -93,9 +93,9 @@ class SubdomainMiddleware(object):
     if your subdomain matches:
 
         SUBDOMAINS = patterns(
-            ('www', ROOT_URLCONF, name='static'),
-            ('(?P<username>\w+)', 'path.to.custom_urls',
-                callback='path.to.custom_fn', name='with-callback'),
+            subdomain('www', ROOT_URLCONF, name='static'),
+            subdomain('(?P<username>\w+)', 'path.to.custom_urls',
+                      callback='path.to.custom_fn', name='with-callback'),
         )
 
         [..]
@@ -154,12 +154,10 @@ class SubdomainMiddleware(object):
             self.default = settings.SUBDOMAINS[settings.SUBDOMAIN_DEFAULT]
         except AttributeError:
             raise ImproperlyConfigured(
-                "Missing settings.SUBDOMAIN_DEFAULT setting"
-            )
+                "Missing settings.SUBDOMAIN_DEFAULT setting")
         except KeyError:
             raise ImproperlyConfigured(
-                "settings.SUBDOMAIN_DEFAULT does not point to a valid domain"
-            )
+                "settings.SUBDOMAIN_DEFAULT does not point to a valid domain")
 
         if not settings.SUBDOMAINS:
             raise MiddlewareNotUsed()

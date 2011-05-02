@@ -24,8 +24,7 @@ def domain_url(parser, token, mangle=True):
             domain = bits[pivot + 1]
         except IndexError:
             raise TemplateSyntaxError(
-                "'%s' arguments must include a domain after 'on'" % bits[0]
-            )
+                "'%s' arguments must include a domain after 'on'" % bits[0])
 
         view_args, view_kwargs = parse_args_kwargs(parser, bits[1:pivot])
         domain_args, domain_kwargs = parse_args_kwargs(parser, bits[pivot+2:])
@@ -36,9 +35,8 @@ def domain_url(parser, token, mangle=True):
         view_args, view_kwargs = parse_args_kwargs(parser, bits[1:])
         domain_args, domain_kwargs = (), {}
 
-    return DomainURLNode(
-        domain, view, domain_args, domain_kwargs, view_args, view_kwargs, mangle
-    )
+    return DomainURLNode(domain, view,
+        domain_args, domain_kwargs, view_args, view_kwargs, mangle)
 
 @register.tag
 def domain_url_no_mangle(parser, token):

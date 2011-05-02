@@ -36,13 +36,11 @@ def reverse_subdomain(name, args=(), kwargs=None):
 
     raise NoReverseMatch(
         "Reverse subdomain for '%s' with arguments '%s' and keyword arguments "
-        "'%s' not found." % (name, args, kwargs)
-    )
+        "'%s' not found." % (name, args, kwargs))
 
 def reverse_crossdomain_part(subdomain, path, subdomain_args=(), subdomain_kwargs=None, mangle=True):
     if subdomain_kwargs is None:
         subdomain_kwargs = {}
-
 
     domain_part = reverse_subdomain(
         subdomain,
