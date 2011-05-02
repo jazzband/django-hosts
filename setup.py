@@ -13,4 +13,9 @@ setup(
     license='BSD',
 
     packages=find_packages(),
+    package_data={
+        'dynamic_subdomains': [
+            'templates/*/*.html',
+        ],
+    },
 )
