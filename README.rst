@@ -6,7 +6,7 @@ schemes ("hostconf").
 
 For example, if you own ``example.com`` but want to serve specific content
 at ``api.example.com` and ``beta.example.com``, add the following to your
-``hosts.py``:
+``hosts.py``::
 
     from hosts.defaults import patterns, host
 
@@ -29,6 +29,10 @@ The patterns on the left-hand side are regular expressions. For example,
 the following ``settings.ROOT_HOSTCONF`` will route ``foo.example.com``
 and ``bar.example.com`` to the same URLconf.
 
+::
+
+    from hosts.defaults import patterns, host
+
     host_patterns = patterns('',
         host(r'(foo|bar)', 'path.to.urls', name='foo-or-bar'),
     )
@@ -46,9 +50,10 @@ Dynamic hosts using regular expressions
 =======================================
 
 Patterns being regular expressions allows setups to feature dynamic (or
-"wildcard") host schemes:
+"wildcard") host schemes::
 
     from django.conf import settings
+    from hosts.defaults import patterns, host
 
     host_patterns = patterns('',
         host('www', settings.ROOT_URLCONF, name='static'),
@@ -62,7 +67,9 @@ As patterns are matched in order, we placed ``www`` first as it otherwise
 would have matched against ``\w+`` and thus routed to the wrong
 destination.
 
-Alternatively, we could have used negative lookahead:
+Alternatively, we could have used negative lookahead::
+
+    from hosts.defaults import patterns, host
 
     host_patterns = patterns('',
         host('(?!www)\w+', 'path.to.custom_urls', name='wildcard'),
@@ -80,9 +87,10 @@ object instance, violating DRY. If these dynamic hosts had a lot of views
 this would become particularly unwieldy.
 
 To remedy this, you can optionally specify a callback method to be called
-if your host matches:
+if your host matches::
 
     from django.conf import settings
+    from hosts.defaults import patterns, host
 
     host_patterns = patterns('',
         host('www', settings.ROOT_URLCONF, name='static'),
