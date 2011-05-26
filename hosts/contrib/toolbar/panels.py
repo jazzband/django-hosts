@@ -1,21 +1,22 @@
-from debug_toolbar.panels import DebugPanel
-
 from django.http.utils import fix_location_header
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.core.handlers.base import BaseHandler
 
-class SubdomainPanel(DebugPanel):
+from debug_toolbar.panels import DebugPanel
+
+
+class HostPanel(DebugPanel):
     """
-    Panel that allows you to alter the subdomain you are viewing the site
+    Panel that allows you to alter the host you are viewing the site
     without /etc/hosts hacks.
     """
 
-    name = 'Subdomain'
+    name = 'Host'
     has_content = True
 
     def nav_title(self):
-        return _("Subdomain")
+        return _("Host")
 
     def nav_subtitle(self):
         return self.domain
@@ -24,12 +25,12 @@ class SubdomainPanel(DebugPanel):
         return ''
 
     def title(self):
-        return _("Subdomain navigation")
+        return _("Host navigation")
 
     def content(self):
         context = self.context.copy()
         context['domain'] = self.domain
-        return render_to_string('subdomains/panel.html', context)
+        return render_to_string('hosts/panel.html', context)
 
     def process_request(self, request):
         self.domain = request.COOKIES.get('_domain')
@@ -43,7 +44,7 @@ class SubdomainPanel(DebugPanel):
             #
             #    Location: /foo   ==>   Location: http://sub.example.com/foo
             #
-            # This causes problems when testing subdomains locally so we remove
+            # This causes problems when testing hosts locally so we remove
             # it here.
 
             try:

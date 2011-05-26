@@ -1,21 +1,19 @@
-#!/usr/bin/env python
-
 from setuptools import setup, find_packages
 
 setup(
-    name='django-dynamic-subdomains',
-    description="Dynamic and static subdomain support for Django.",
+    name='django-hosts',
+    description="Dynamic and static hosts support for Django.",
     version='0.1',
-    url='http://code.playfire.com/',
+    url='https://github.com/jezdez/django-hosts',
 
-    author='Playfire.com',
-    author_email='tech@playfire.com',
+    author='Jannis Leidel',
+    author_email='jannis@leidel.info',
     license='BSD',
 
     packages=find_packages(),
     package_data={
-        'dynamic_subdomains': [
-            'templates/*/*.html',
+        'hosts': [
+            'contrib/toolbar/templates/hosts/*.html',
         ],
     },
 )
