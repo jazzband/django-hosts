@@ -14,7 +14,9 @@ if not settings.configured:
         DATABASE_ENGINE='sqlite3',
         INSTALLED_APPS=[
             'hosts',
+            'hosts.contrib.toolbar',
         ],
+        ROOT_URLCONF='hosts.tests.urls.root',
     )
 
 from django.test.simple import run_tests
@@ -23,7 +25,7 @@ from django.test.simple import run_tests
 def runtests(*test_args):
     if not test_args:
         test_args = ['hosts']
-    cov = coverage.coverage(
+    cov = coverage.coverage(branch=True,
         include=[join(here, 'hosts', '*.py')],
         omit=[join(here, 'hosts', 'tests', '*.py')])
     cov.load()
