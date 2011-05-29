@@ -15,7 +15,6 @@ if not settings.configured:
         INSTALLED_APPS=[
             'hosts',
         ],
-        ROOT_URLCONF='hosts.tests.urls.root',
     )
 
 from django.test.simple import run_tests
