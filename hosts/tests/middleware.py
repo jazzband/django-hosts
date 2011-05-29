@@ -1,12 +1,12 @@
 from __future__ import absolute_import
 
 from django.conf import settings
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.core.exceptions import MiddlewareNotUsed, ImproperlyConfigured
 
 from hosts.defaults import patterns, host
 from hosts.middleware import HostsMiddleware
-from hosts.tests.base import override_settings, HostsTestCase
+from hosts.tests.base import override_settings, HostsTestCase, RequestFactory
 
 class MiddlewareTests(HostsTestCase):
 

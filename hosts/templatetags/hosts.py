@@ -1,13 +1,15 @@
+from __future__ import absolute_import
+import re
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils.encoding import smart_str
-from django.template.defaulttags import kwarg_re
 
-from ..reverse import reverse_crossdomain
+from hosts.reverse import reverse_crossdomain
 
 register = template.Library()
 
+kwarg_re = re.compile(r"(?:(\w+)=)?(.+)")
 
 class HostURLNode(template.Node):
 

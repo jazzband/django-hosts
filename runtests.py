@@ -14,7 +14,6 @@ if not settings.configured:
         DATABASE_ENGINE='sqlite3',
         INSTALLED_APPS=[
             'hosts',
-            'hosts.contrib.toolbar',
         ],
         ROOT_URLCONF='hosts.tests.urls.root',
     )
