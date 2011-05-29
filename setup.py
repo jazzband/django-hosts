@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='django-hosts',
     description="Dynamic and static hosts support for Django.",
+    long_description=open('README.rst').read(),
     version='0.1',
     url='https://github.com/jezdez/django-hosts',
     author='Jannis Leidel',
