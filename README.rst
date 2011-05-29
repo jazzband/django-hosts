@@ -31,6 +31,9 @@ Installation
 
 - Add ``'hosts'`` to your ``INSTALLED_APPS`` setting.
 
+- Add ``'hosts.middleware.HostsMiddleware'`` to your ``MIDDLEWARE_CLASSES``
+  setting.
+
 - Create a module containing your default host patterns,
   e.g. in the ``hosts.py`` file next to your ``urls.py``.
 
@@ -38,6 +41,11 @@ Installation
   import path of the module containing your default host patterns, e.g.::
 
     ROOT_HOSTCONF = 'mysite.hosts'
+
+- Set the ``DEFAULT_HOST`` setting to the name of the host pattern you
+  want to refer to as the default pattern. It'll be used if no other
+  pattern matches or you don't give a name to the ``host_url`` template
+  tag (see below).
 
 Pattern format
 ==============
