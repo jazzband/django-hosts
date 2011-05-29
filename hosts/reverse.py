@@ -33,6 +33,7 @@ def get_host_patterns():
         raise ImproperlyConfigured("Missing host_patterns in '%s'" % hostconf)
 get_host_patterns = memoize(get_host_patterns, _host_patterns_cache, 0)
 
+
 def clear_host_caches():
     global _hostconf_cache
     global _host_patterns_cache
@@ -71,8 +72,9 @@ def reverse_host(name, args=None, kwargs=None):
         if re.match(host.regex, candidate, re.UNICODE):
             return candidate
 
-    raise NoReverseMatch("Reverse host for '%s' %s with arguments '%s' and "
-                         "keyword arguments '%s' not found." % (name, candidate, args, kwargs))
+    raise NoReverseMatch("Reverse host for '%s' with arguments '%s' and "
+                         "keyword arguments '%s' not found."
+                         % (name, args, kwargs))
 
 def reverse_crossdomain_part(host, path, host_args=None, host_kwargs=None):
     if host_args is None:
@@ -80,26 +82,29 @@ def reverse_crossdomain_part(host, path, host_args=None, host_kwargs=None):
     if host_kwargs is None:
         host_kwargs = {}
 
-    domain_part = reverse_host(host, args=host_args, kwargs=host_kwargs)
+    host_part = reverse_host(host, args=host_args, kwargs=host_kwargs)
+
+    if getattr(settings, 'PARENT_HOST', False):
+        host_part = '%s.%s' % (host_part, settings.PARENT_HOST.lstrip('.'))
+
     if getattr(settings, 'EMULATE_HOSTS', settings.DEBUG):
         query_string = QueryDict('', mutable=True)
-        query_string.update({'host': domain_part, 'path': path})
+        query_string.update({'host': host_part, 'path': path})
         redirect_path = reverse('hosts-debug-redirect')
         return '%s?%s' % (redirect_path, query_string.urlencode())
-    return u'//%s%s' % (domain_part, path)
+
+    return u'//%s%s' % (host_part, path)
 
 def reverse_path(host, view, args=None, kwargs=None):
     if args is None:
         args = ()
     if kwargs is None:
         kwargs = {}
-
     host_patterns = get_host_patterns()
     try:
         urlconf = host_patterns[host].urlconf
     except KeyError:
         raise NoReverseMatch("No host called %s exists" % host)
-
     return reverse(view, args=args, kwargs=kwargs, urlconf=urlconf)
 
 def reverse_crossdomain(host, view, host_args=None, host_kwargs=None,

@@ -34,6 +34,24 @@ class TemplateTagsTest(HostsTestCase):
 
     @override_settings(
         DEFAULT_HOST='www',
+        PARENT_HOST='eggs.spam',
+        ROOT_HOSTCONF='hosts.tests.hosts.simple')
+    def test_host_url_tag_with_kwargs(self):
+        rendered = self.render(
+            "{% load hosts %}{% host_url simple-direct on with_kwargs username='johndoe' %}")
+        self.assertEqual(rendered, '//johndoe.eggs.spam/simple/')
+
+    @override_settings(
+        DEFAULT_HOST='www',
+        ROOT_HOSTCONF='hosts.tests.hosts.simple',
+        PARENT_HOST='eggs.spam')
+    def test_host_url_tag_parent_host(self):
+        rendered = self.render(
+            "{% load hosts %}{% host_url simple-direct on static %}")
+        self.assertEqual(rendered, '//static.eggs.spam/simple/')
+
+    @override_settings(
+        DEFAULT_HOST='www',
         ROOT_HOSTCONF='hosts.tests.hosts.simple')
     def test_raises_template_syntaxerror(self):
         self.assertRaises(TemplateSyntaxError, self.render, "{% load hosts %}{% host_url %}")
