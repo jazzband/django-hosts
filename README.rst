@@ -5,7 +5,7 @@ This middleware routes requests to specific hosts to different URL
 schemes ("hostconf").
 
 For example, if you own ``example.com`` but want to serve specific content
-at ``api.example.com` and ``beta.example.com``, add the following to your
+at ``api.example.com`` and ``beta.example.com``, add the following to your
 ``hosts.py``::
 
     from hosts import patterns, host
