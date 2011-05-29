@@ -8,11 +8,11 @@ For example, if you own ``example.com`` but want to serve specific content
 at ``api.example.com` and ``beta.example.com``, add the following to your
 ``hosts.py``::
 
-    from hosts.defaults import patterns, host
+    from hosts import patterns, host
 
     host_patterns = patterns('path.to',
-        host('api', 'api.urls', name='api'),
-        host('beta', 'beta.urls', name='beta'),
+        host(r'api', 'api.urls', name='api'),
+        host(r'beta', 'beta.urls', name='beta'),
     )
 
 This causes requests to ``{api,beta}.example.com`` to be routed to their
@@ -31,7 +31,7 @@ and ``bar.example.com`` to the same URLconf.
 
 ::
 
-    from hosts.defaults import patterns, host
+    from hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'(foo|bar)', 'path.to.urls', name='foo-or-bar'),
@@ -53,11 +53,11 @@ Patterns being regular expressions allows setups to feature dynamic (or
 "wildcard") host schemes::
 
     from django.conf import settings
-    from hosts.defaults import patterns, host
+    from hosts import patterns, host
 
     host_patterns = patterns('',
-        host('www', settings.ROOT_URLCONF, name='static'),
-        host('\w+', 'path.to.custom_urls', name='wildcard'),
+        host(r'www', settings.ROOT_URLCONF, name='static'),
+        host(r'\w+', 'path.to.custom_urls', name='wildcard'),
     )
 
 Here, requests to ``www.example.com`` will be routed as normal but a
@@ -69,10 +69,10 @@ destination.
 
 Alternatively, we could have used negative lookahead::
 
-    from hosts.defaults import patterns, host
+    from hosts import patterns, host
 
     host_patterns = patterns('',
-        host('(?!www)\w+', 'path.to.custom_urls', name='wildcard'),
+        host(r'(?!www)\w+', 'path.to.custom_urls', name='wildcard'),
     )
 
 Callback methods to simplify dynamic hosts
@@ -90,11 +90,11 @@ To remedy this, you can optionally specify a callback method to be called
 if your host matches::
 
     from django.conf import settings
-    from hosts.defaults import patterns, host
+    from hosts import patterns, host
 
     host_patterns = patterns('',
-        host('www', settings.ROOT_URLCONF, name='static'),
-        host('(?P<username>\w+)', 'path.to.custom_urls',
+        host(r'www', settings.ROOT_URLCONF, name='static'),
+        host(r'(?P<username>\w+)', 'path.to.custom_urls',
              callback='path.to.custom_fn', name='with-callback'),
     )
 
