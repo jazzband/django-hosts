@@ -22,6 +22,23 @@ URLconfs.
 Patterns are evaluated in order. If no pattern matches, the request is
 processed in the usual way, ie. using ``settings.ROOT_URLCONF``.
 
+Installation
+============
+
+- Install the app with your favorite package manager, e.g.::
+
+    pip install django-hosts
+
+- Add ``'hosts'`` to your ``INSTALLED_APPS`` setting.
+
+- Create a module containing your default host patterns,
+  e.g. in the ``hosts.py`` file next to your ``urls.py``.
+
+- Set the ``ROOT_HOSTCONF`` setting to the dotted Python
+  import path of the module containing your default host patterns, e.g.::
+
+    ROOT_HOSTCONF = 'mysite.hosts'
+
 Pattern format
 ==============
 
