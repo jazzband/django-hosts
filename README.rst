@@ -197,7 +197,12 @@ which will be rendered as::
     Your browser will automatically choose the currently used scheme.
     If you're on ``https://mysite.com/`` a link with an href
     of ``//mysite.com/about/`` would actually point to
-    ``https://mysite.com/about/``.
+    ``https://mysite.com/about/``. For more information see the
+    `The protocol-relative URL`_ article by Paul Irish or the
+    appropriate `section in RFC 3986`_.
+
+.. _The protocol-relative URL: http://paulirish.com/2010/the-protocol-relative-url/
+.. _section in RFC 3986: http://tools.ietf.org/html/rfc3986#section-4.2
 
 In case you want to append a default domain name to the domain part of
 the rendered URL you can simply set the ``PARENT_HOST``, e.g::
