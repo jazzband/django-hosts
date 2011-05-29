@@ -18,11 +18,11 @@
 </style>
 
 <script language="javascript">
-  var navigate_to_host = function(domain) {
+  var navigate_to_host = function(host) {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + 365);
 
-    document.cookie = "_domain=" + escape(domain) + "; expires=" + exdate.toUTCString() + "; path=/";
+    document.cookie = "_host=" + escape(host) + "; expires=" + exdate.toUTCString() + "; path=/";
 
     window.location.reload();
   };
@@ -32,15 +32,15 @@
     return false;
   });
 
-  $('form[name=navigate_to_domain]').live('submit', function () {
-    navigate_to_host($('#domain_enter').val());
+  $('form[name=navigate_to_host]').live('submit', function () {
+    navigate_to_host($('#host_enter').val());
     return false;
   });
 </script>
 
-<form name="navigate_to_domain">
-  <label for="domain_enter">{% trans "Host to navigate to (eg. api.example.com):" %}</label>
-  <input id="domain_enter" value="{{ domain }}">
+<form name="navigate_to_host">
+  <label for="host_enter">{% trans "Host to navigate to (eg. api.example.com):" %}</label>
+  <input id="host_enter" value="{{ host }}">
   <button type="submit">{% trans "Navigate" %}</button>
 </form>
 
