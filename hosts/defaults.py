@@ -1,8 +1,8 @@
 import re
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.datastructures import SortedDict
 from django.core.urlresolvers import get_callable, get_mod_func
-from django.utils.encoding import iri_to_uri, force_unicode, smart_str
+from django.utils.datastructures import SortedDict
+from django.utils.encoding import smart_str
 
 def patterns(prefix, *args):
     hosts = SortedDict()

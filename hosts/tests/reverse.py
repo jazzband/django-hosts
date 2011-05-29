@@ -1,8 +1,8 @@
 from __future__ import absolute_import, with_statement
 
-from django.core.exceptions import MiddlewareNotUsed, ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured
 
-from hosts.reverse import clear_host_caches, get_hostconf_module, get_host_patterns
+from hosts.reverse import get_hostconf_module, get_host_patterns
 from hosts.tests.base import override_settings, HostsTestCase
 
 class ReverseTest(HostsTestCase):

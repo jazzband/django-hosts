@@ -6,7 +6,7 @@ from django.core.handlers.base import BaseHandler
 from django.test import TestCase, Client
 from django.utils.functional import wraps
 
-from ..reverse import clear_host_caches, get_hostconf_module, get_host_patterns
+from ..reverse import clear_host_caches
 
 class override_settings(object):
     """

@@ -1,13 +1,10 @@
 from __future__ import absolute_import, with_statement
 
-from django.core.exceptions import MiddlewareNotUsed, ImproperlyConfigured
-from django.template import Template, Context, TemplateSyntaxError
-
-from django.utils.html import escape
+from django.core.exceptions import ImproperlyConfigured
 
 from hosts import patterns, host
-from hosts.reverse import clear_host_caches, get_hostconf_module, get_host_patterns
-from hosts.tests.base import override_settings, HostsTestCase
+from hosts.reverse import get_host_patterns
+from hosts.tests.base import HostsTestCase
 
 
 class PatternsTests(HostsTestCase):
