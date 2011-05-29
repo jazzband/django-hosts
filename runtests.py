@@ -23,7 +23,7 @@ from django.test.simple import run_tests
 def runtests(*test_args):
     if not test_args:
         test_args = ['hosts']
-    cov = coverage.coverage(
+    cov = coverage.coverage(branch=True,
         include=[join(here, 'hosts', '*.py')],
         omit=[join(here, 'hosts', 'tests', '*.py')])
     cov.load()

@@ -19,7 +19,7 @@ class HostPanel(DebugPanel):
         return _("Host")
 
     def nav_subtitle(self):
-        return self.domain
+        return self.host
 
     def url(self):
         return ''
@@ -29,15 +29,15 @@ class HostPanel(DebugPanel):
 
     def content(self):
         context = self.context.copy()
-        context['domain'] = self.domain
+        context['host'] = self.host
         return render_to_string('hosts/panel.html', context)
 
     def process_request(self, request):
-        self.domain = request.COOKIES.get('_domain')
+        self.host = request.COOKIES.get('_host')
 
         request.META.pop('HTTP_HOST', '')
-        if self.domain:
-            request.META['HTTP_HOST'] = self.domain
+        if self.host:
+            request.META['HTTP_HOST'] = self.host
 
             # django.http.utils.fix_location_header rewrites any relative
             # Location header to an absolute one. For example:

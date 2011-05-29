@@ -12,26 +12,27 @@ class HostsMiddleware(object):
     def __init__(self):
         self.host_patterns = get_host_patterns()
         try:
-            self.default = self.host_patterns[settings.DEFAULT_HOST]
+            self.default_host = self.host_patterns[settings.DEFAULT_HOST]
         except AttributeError:
             raise ImproperlyConfigured("Missing DEFAULT_HOST setting")
         except KeyError:
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting")
 
     def process_request(self, request):
-        host = request.get_host()
+        request_host = request.get_host()
         # Find best match, falling back to settings.DEFAULT_HOST
         for host in self.host_patterns.itervalues():
-            match = host['compiled_regex'].match(host)
+            match = host.compiled_regex.match(request_host)
             if match:
                 kwargs = match.groupdict()
                 break
         else:
-            host, kwargs = self.default, {}
-        urlconf, callback = host['urlconf'], host['callback']
-        request.urlconf = urlconf
+            host, kwargs = self.default_host, {}
+        request.urlconf = host.urlconf
         try:
-            set_urlconf(urlconf)
-            return callback(request, **kwargs)
+            set_urlconf(host.urlconf)
+            return host.callback(request, **kwargs)
         finally:
+            # Reset URLconf for this thread on the way out for complete
+            # isolation of request.urlconf
             set_urlconf(None)

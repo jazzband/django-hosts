@@ -1,5 +1,5 @@
 from django import forms
 
 class RedirectForm(forms.Form):
-    domain = forms.CharField()
+    host = forms.CharField()
     path = forms.CharField()
