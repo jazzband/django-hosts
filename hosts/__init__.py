@@ -1,1 +1,1 @@
-from .defaults import patterns, host
+from hosts.defaults import patterns, host

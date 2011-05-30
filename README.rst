@@ -5,7 +5,7 @@ This middleware routes requests to specific hosts to different URL
 schemes ("hostconf").
 
 For example, if you own ``example.com`` but want to serve specific content
-at ``api.example.com` and ``beta.example.com``, add the following to your
+at ``api.example.com`` and ``beta.example.com``, add the following to your
 ``hosts.py``::
 
     from hosts import patterns, host
@@ -21,6 +21,31 @@ URLconfs.
 
 Patterns are evaluated in order. If no pattern matches, the request is
 processed in the usual way, ie. using ``settings.ROOT_URLCONF``.
+
+Installation
+============
+
+- Install the app with your favorite package manager, e.g.::
+
+    pip install django-hosts
+
+- Add ``'hosts'`` to your ``INSTALLED_APPS`` setting.
+
+- Add ``'hosts.middleware.HostsMiddleware'`` to your ``MIDDLEWARE_CLASSES``
+  setting.
+
+- Create a module containing your default host patterns,
+  e.g. in the ``hosts.py`` file next to your ``urls.py``.
+
+- Set the ``ROOT_HOSTCONF`` setting to the dotted Python
+  import path of the module containing your default host patterns, e.g.::
+
+    ROOT_HOSTCONF = 'mysite.hosts'
+
+- Set the ``DEFAULT_HOST`` setting to the name of the host pattern you
+  want to refer to as the default pattern. It'll be used if no other
+  pattern matches or you don't give a name to the ``host_url`` template
+  tag (see below).
 
 Pattern format
 ==============
@@ -172,7 +197,12 @@ which will be rendered as::
     Your browser will automatically choose the currently used scheme.
     If you're on ``https://mysite.com/`` a link with an href
     of ``//mysite.com/about/`` would actually point to
-    ``https://mysite.com/about/``.
+    ``https://mysite.com/about/``. For more information see the
+    `The protocol-relative URL`_ article by Paul Irish or the
+    appropriate `section in RFC 3986`_.
+
+.. _The protocol-relative URL: http://paulirish.com/2010/the-protocol-relative-url/
+.. _section in RFC 3986: http://tools.ietf.org/html/rfc3986#section-4.2
 
 In case you want to append a default domain name to the domain part of
 the rendered URL you can simply set the ``PARENT_HOST``, e.g::
@@ -225,6 +255,23 @@ Notes
 
   * Don't forget to add ``handler404`` and ``handler500`` entries for your
     custom URLconfs.
+
+Changelog
+=========
+
+0.1.1 (2011/05/30)
+------------------
+
+- Fixed docs issues.
+
+- Use absolute imports where possible.
+
+
+0.1 (2011/05/29)
+----------------
+
+- Initial release with middleware, reverse and templatetags.
+
 
 Thanks
 ======

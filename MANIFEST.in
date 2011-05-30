@@ -1,1 +1,2 @@
+include README.rst
 include hosts/contrib/toolbar/templates/hosts/panel.html
