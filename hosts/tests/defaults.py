@@ -31,6 +31,14 @@ class PatternsTests(HostsTestCase):
         default_host = host(r'www', 'mysite.urls', name='default')
         self.assertRaises(ImproperlyConfigured, patterns, '', default_host)
 
+    def test_pattern_with_prefix(self):
+        host_patterns = patterns('mysite',
+            host(r'api', 'api.urls', name='api'),
+        )
+        self.assertEqual(len(host_patterns), 1)
+        self.assertTrue(isinstance(host_patterns['api'], host))
+        self.assertEqual(host_patterns['api'].urlconf, 'mysite.api.urls')
+
 
 class HostTests(HostsTestCase):
 
