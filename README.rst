@@ -256,6 +256,23 @@ Notes
   * Don't forget to add ``handler404`` and ``handler500`` entries for your
     custom URLconfs.
 
+Changelog
+=========
+
+0.1.1 (2011/05/30)
+------------------
+
+- Fixed docs issues.
+
+- Use absolute imports where possible.
+
+
+0.1 (2011/05/29)
+----------------
+
+- Initial release with middleware, reverse and templatetags.
+
+
 Thanks
 ======
 
