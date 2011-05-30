@@ -14,7 +14,7 @@ setup(
     license='BSD',
     packages=find_packages(),
     package_data={
-        'hosts': [
+        'django_hosts': [
             'contrib/toolbar/templates/hosts/*.html',
         ],
     },

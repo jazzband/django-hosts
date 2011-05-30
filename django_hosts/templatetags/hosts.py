@@ -1,12 +1,10 @@
-from __future__ import absolute_import
-
 import re
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils.encoding import smart_str
 
-from hosts.reverse import reverse_crossdomain
+from django_hosts.reverse import reverse_crossdomain
 
 register = template.Library()
 

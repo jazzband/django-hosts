@@ -93,7 +93,7 @@ class HostsTestCase(TestCase):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         self.old_root_urlconf = getattr(settings, 'ROOT_URLCONF', '')
-        settings.ROOT_URLCONF = 'hosts.tests.urls.root'
+        settings.ROOT_URLCONF = 'django_hosts.tests.urls.root'
 
     def tearDown(self):
         settings.ROOT_URLCONF = self.old_root_urlconf

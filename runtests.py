@@ -13,7 +13,7 @@ if not settings.configured:
     settings.configure(
         DATABASE_ENGINE='sqlite3',
         INSTALLED_APPS=[
-            'hosts',
+            'django_hosts',
         ],
     )
 
@@ -22,10 +22,10 @@ from django.test.simple import run_tests
 
 def runtests(*test_args):
     if not test_args:
-        test_args = ['hosts']
+        test_args = ['django_hosts']
     cov = coverage.coverage(branch=True,
-        include=[join(here, 'hosts', '*.py')],
-        omit=[join(here, 'hosts', 'tests', '*.py')])
+        include=[join(here, 'django_hosts', '*.py')],
+        omit=[join(here, 'django_hosts', 'tests', '*.py')])
     cov.load()
     cov.start()
     failures = run_tests(test_args, verbosity=1, interactive=True)

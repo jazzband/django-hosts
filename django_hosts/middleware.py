@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import set_urlconf
 
-from hosts.reverse import get_host_patterns
+from django_hosts.reverse import get_host_patterns
 
 class HostsMiddleware(object):
     """

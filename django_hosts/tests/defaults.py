@@ -1,10 +1,8 @@
-from __future__ import absolute_import, with_statement
-
 from django.core.exceptions import ImproperlyConfigured
 
-from hosts import patterns, host
-from hosts.reverse import get_host_patterns
-from hosts.tests.base import HostsTestCase
+from django_hosts.defaults import patterns, host
+from django_hosts.reverse import get_host_patterns
+from django_hosts.tests.base import HostsTestCase
 
 
 class PatternsTests(HostsTestCase):
@@ -51,5 +49,5 @@ class HostTests(HostsTestCase):
         self.assertEqual(api_host.urlconf, 'spam.eggs.api.urls')
 
     def test_host_string_callback(self):
-        api_host = host(r'api', 'api.urls', name='api', callback='hosts.reverse.get_host_patterns')
+        api_host = host(r'api', 'api.urls', name='api', callback='django_hosts.reverse.get_host_patterns')
         self.assertEqual(api_host.callback, get_host_patterns)
