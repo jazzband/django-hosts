@@ -11,7 +11,7 @@ from django.utils.regex_helper import normalize
 
 _hostconf_cache = {}
 _host_patterns_cache = {}
-
+_host_cache = {}
 
 def get_hostconf_module(hostconf=None):
     if hostconf is None:
@@ -19,6 +19,13 @@ def get_hostconf_module(hostconf=None):
     return import_module(hostconf)
 get_hostconf_module = memoize(get_hostconf_module, _hostconf_cache, 1)
 
+
+def get_host(name):
+    for host in get_host_patterns():
+        if host.name == name:
+            return host
+    raise NoReverseMatch("No host called '%s' exists" % name)
+get_host = memoize(get_host, _host_cache, 1)
 
 def get_host_patterns():
     try:
@@ -49,15 +56,10 @@ def reverse_host(name, args=None, kwargs=None):
     if kwargs is None:
         kwargs = {}
 
-    host_patterns = get_host_patterns()
-    try:
-        host = host_patterns[name]
-    except KeyError:
-        raise NoReverseMatch("No host called %s exists" % name)
-
     unicode_args = [force_unicode(x) for x in args]
     unicode_kwargs = dict(((k, force_unicode(v)) for (k, v) in kwargs.iteritems()))
 
+    host = get_host(name)
     for result, params in normalize(host.regex):
         if args:
             if len(args) != len(params):
@@ -75,13 +77,8 @@ def reverse_host(name, args=None, kwargs=None):
                          "keyword arguments '%s' not found."
                          % (name, args, kwargs))
 
-def reverse_crossdomain_part(host, path, host_args=None, host_kwargs=None):
-    if host_args is None:
-        host_args = ()
-    if host_kwargs is None:
-        host_kwargs = {}
-
-    host_part = reverse_host(host, args=host_args, kwargs=host_kwargs)
+def reverse_crossdomain_part(host, path, args=None, kwargs=None):
+    host_part = reverse_host(host, args=args, kwargs=kwargs)
 
     if getattr(settings, 'PARENT_HOST', False):
         host_part = '%s.%s' % (host_part, settings.PARENT_HOST.lstrip('.'))
@@ -99,12 +96,8 @@ def reverse_path(host, view, args=None, kwargs=None):
         args = ()
     if kwargs is None:
         kwargs = {}
-    host_patterns = get_host_patterns()
-    try:
-        urlconf = host_patterns[host].urlconf
-    except KeyError:
-        raise NoReverseMatch("No host called %s exists" % host)
-    return reverse(view, args=args, kwargs=kwargs, urlconf=urlconf)
+    host = get_host(host)
+    return reverse(view, args=args, kwargs=kwargs, urlconf=host.urlconf)
 
 def reverse_crossdomain(host, view, host_args=None, host_kwargs=None,
         view_args=None, view_kwargs=None):

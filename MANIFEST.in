@@ -1,2 +1,2 @@
 include README.rst
-include hosts/contrib/toolbar/templates/hosts/panel.html
+include django_hosts/contrib/toolbar/templates/django_hosts/panel.html

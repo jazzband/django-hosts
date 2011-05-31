@@ -30,7 +30,7 @@ class HostPanel(DebugPanel):
     def content(self):
         context = self.context.copy()
         context['host'] = self.host
-        return render_to_string('hosts/panel.html', context)
+        return render_to_string('django_hosts/panel.html', context)
 
     def process_request(self, request):
         self.host = request.COOKIES.get('_host')
