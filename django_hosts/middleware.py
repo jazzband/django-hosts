@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import set_urlconf
+from django.core.urlresolvers import NoReverseMatch, set_urlconf
 
-from django_hosts.reverse import get_host_patterns
+from django_hosts.reverse import get_host_patterns, get_host
 
 class HostsMiddleware(object):
     """
@@ -12,16 +12,16 @@ class HostsMiddleware(object):
     def __init__(self):
         self.host_patterns = get_host_patterns()
         try:
-            self.default_host = self.host_patterns[settings.DEFAULT_HOST]
+            self.default_host = get_host(settings.DEFAULT_HOST)
         except AttributeError:
             raise ImproperlyConfigured("Missing DEFAULT_HOST setting")
-        except KeyError:
-            raise ImproperlyConfigured("Invalid DEFAULT_HOST setting")
+        except NoReverseMatch, e:
+            raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" % e)
 
     def process_request(self, request):
         request_host = request.get_host()
         # Find best match, falling back to settings.DEFAULT_HOST
-        for host in self.host_patterns.itervalues():
+        for host in self.host_patterns:
             match = host.compiled_regex.match(request_host)
             if match:
                 kwargs = match.groupdict()

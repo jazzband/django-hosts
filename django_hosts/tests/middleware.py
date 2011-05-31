@@ -21,7 +21,8 @@ class MiddlewareTests(HostsTestCase):
         DEFAULT_HOST='boo')
     def test_wrong_default_hosts(self):
         self.assertRaisesWithMessage(ImproperlyConfigured,
-            'Invalid DEFAULT_HOST setting', HostsMiddleware)
+            "Invalid DEFAULT_HOST setting: No host called 'boo' exists",
+            HostsMiddleware)
 
     @override_settings(
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',

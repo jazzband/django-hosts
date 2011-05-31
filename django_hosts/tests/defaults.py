@@ -12,14 +12,14 @@ class PatternsTests(HostsTestCase):
             host(r'api', 'api.urls', name='api'),
         )
         self.assertEqual(len(host_patterns), 1)
-        self.assertTrue(isinstance(host_patterns['api'], host))
+        self.assertTrue(isinstance(host_patterns[0], host))
 
     def test_pattern_as_tuple(self):
         host_patterns = patterns('',
             (r'api', 'api.urls', 'api'),
         )
         self.assertEqual(len(host_patterns), 1)
-        self.assertTrue(isinstance(host_patterns['api'], host))
+        self.assertTrue(isinstance(host_patterns[0], host))
 
     def test_pattern_with_duplicate(self):
         api_host = host(r'api', 'api.urls', name='api')
@@ -34,8 +34,8 @@ class PatternsTests(HostsTestCase):
             host(r'api', 'api.urls', name='api'),
         )
         self.assertEqual(len(host_patterns), 1)
-        self.assertTrue(isinstance(host_patterns['api'], host))
-        self.assertEqual(host_patterns['api'].urlconf, 'mysite.api.urls')
+        self.assertTrue(isinstance(host_patterns[0], host))
+        self.assertEqual(host_patterns[0].urlconf, 'mysite.api.urls')
 
 
 class HostTests(HostsTestCase):

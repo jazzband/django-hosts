@@ -5,19 +5,18 @@ from django.utils.datastructures import SortedDict
 from django.utils.encoding import smart_str
 
 def patterns(prefix, *args):
-    hosts = SortedDict()
-
+    hosts = []
     for arg in args:
         if isinstance(arg, (list, tuple)):
             arg = host(prefix=prefix, *arg)
         elif isinstance(arg, host):
             arg.add_prefix(prefix)
         name = arg.name
-        if name in hosts:
+        if name in [h.name for h in hosts]:
             raise ImproperlyConfigured("Duplicate host name: %s" % name)
         if name == 'default':
             raise ImproperlyConfigured("Reserved host name: %s" % name)
-        hosts[name] = arg
+        hosts.append(arg)
     return hosts
 
 class host(object):
