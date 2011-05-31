@@ -15,7 +15,7 @@ setup(
     packages=find_packages(),
     package_data={
         'django_hosts': [
-            'contrib/toolbar/templates/hosts/*.html',
+            'contrib/toolbar/templates/django_hosts/*.html',
         ],
     },
     install_requires = ['django >= 1.1, <1.4'],
