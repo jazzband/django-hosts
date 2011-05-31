@@ -1,9 +1,9 @@
 from __future__ import absolute_import, with_statement
 
-from django.template import Template, Context, TemplateSyntaxError
+from django.template import Template, Context, TemplateSyntaxError, Parser
 
+from django_hosts.templatetags.hosts import HostURLNode
 from django_hosts.tests.base import override_settings, HostsTestCase
-
 
 class TemplateTagsTest(HostsTestCase):
 
@@ -18,6 +18,14 @@ class TemplateTagsTest(HostsTestCase):
     def test_host_url_tag_simple(self):
         rendered = self.render(
             "{% load hosts %}{% host_url simple-direct on www %}")
+        self.assertEqual(rendered, '//www.example.com/simple/')
+
+    @override_settings(
+        DEFAULT_HOST='www',
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
+    def test_host_url_tag_without_on(self):
+        rendered = self.render(
+            "{% load hosts %}{% host_url simple-direct %}")
         self.assertEqual(rendered, '//www.example.com/simple/')
 
     @override_settings(
@@ -52,3 +60,4 @@ class TemplateTagsTest(HostsTestCase):
     def test_raises_template_syntaxerror(self):
         self.assertRaises(TemplateSyntaxError, self.render, "{% load hosts %}{% host_url %}")
         self.assertRaises(TemplateSyntaxError, self.render, "{% load hosts %}{% host_url simple-direct on %}")
+        self.assertRaises(TemplateSyntaxError, HostURLNode.parse_args_kwargs, Parser(['']), "username=='johndoe'")

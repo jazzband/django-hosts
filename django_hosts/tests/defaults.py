@@ -49,5 +49,24 @@ class HostTests(HostsTestCase):
         self.assertEqual(api_host.urlconf, 'spam.eggs.api.urls')
 
     def test_host_string_callback(self):
-        api_host = host(r'api', 'api.urls', name='api', callback='django_hosts.reverse.get_host_patterns')
+        api_host = host(r'api', 'api.urls', name='api',
+            callback='django_hosts.reverse.get_host_patterns')
         self.assertEqual(api_host.callback, get_host_patterns)
+
+    def test_host_callable_callback(self):
+        api_host = host(r'api', 'api.urls', name='api', callback=get_host_patterns)
+        self.assertEqual(api_host.callback, get_host_patterns)
+
+    def test_host_nonexistent_callback(self):
+        api_host = host(r'api', 'api.urls', name='api', callback='whatever.non_existent')
+        self.assertRaisesWithMessage(
+            ImproperlyConfigured,
+            "Could not import 'whatever'. Error was: No module named whatever",
+            lambda: api_host.callback)
+
+        api_host = host(r'api', 'api.urls', name='api', callback='django_hosts.non_existent')
+        self.assertRaisesWithMessage(
+            ImproperlyConfigured,
+            "Tried 'non_existent' in module 'django_hosts'. "
+            "Error was: 'module' object has no attribute 'non_existent'",
+            lambda: api_host.callback)

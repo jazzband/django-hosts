@@ -77,12 +77,8 @@ def reverse_host(name, args=None, kwargs=None):
                          "keyword arguments '%s' not found."
                          % (name, args, kwargs))
 
-def reverse_crossdomain_part(host, path, host_args=None, host_kwargs=None):
-    if host_args is None:
-        host_args = ()
-    if host_kwargs is None:
-        host_kwargs = {}
-    host_part = reverse_host(host, args=host_args, kwargs=host_kwargs)
+def reverse_crossdomain_part(host, path, args=None, kwargs=None):
+    host_part = reverse_host(host, args=args, kwargs=kwargs)
 
     if getattr(settings, 'PARENT_HOST', False):
         host_part = '%s.%s' % (host_part, settings.PARENT_HOST.lstrip('.'))

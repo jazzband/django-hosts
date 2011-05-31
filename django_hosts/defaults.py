@@ -45,16 +45,16 @@ class host(object):
         except ImportError, e:
             mod_name, _ = get_mod_func(self._callback_str)
             raise ImproperlyConfigured(
-                "Could not import %s. Error was: %s" % (mod_name, str(e)))
+                "Could not import '%s'. Error was: %s" % (mod_name, str(e)))
         except AttributeError, e:
             mod_name, func_name = get_mod_func(self._callback_str)
             raise ImproperlyConfigured(
-                "Tried %s in module %s. Error was: %s"
+                "Tried '%s' in module '%s'. Error was: %s"
                 % (func_name, mod_name, str(e)))
         return self._callback
 
     def __repr__(self):
-        return smart_str(u'<%s %s %s>'
+        return smart_str(u'<%s %s %r>'
                          % (self.__class__.__name__, self.name, self.regex))
 
     def add_prefix(self, prefix=''):
