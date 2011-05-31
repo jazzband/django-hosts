@@ -8,7 +8,7 @@ For example, if you own ``example.com`` but want to serve specific content
 at ``api.example.com`` and ``beta.example.com``, add the following to your
 ``hosts.py``::
 
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('path.to',
         host(r'api', 'api.urls', name='api'),
@@ -29,10 +29,10 @@ Installation
 
     pip install django-hosts
 
-- Add ``'hosts'`` to your ``INSTALLED_APPS`` setting.
+- Add ``'django_hosts'`` to your ``INSTALLED_APPS`` setting.
 
-- Add ``'hosts.middleware.HostsMiddleware'`` to your ``MIDDLEWARE_CLASSES``
-  setting.
+- Add ``'django_hosts.middleware.HostsMiddleware'`` to your
+  ``MIDDLEWARE_CLASSES`` setting.
 
 - Create a module containing your default host patterns,
   e.g. in the ``hosts.py`` file next to your ``urls.py``.
@@ -56,7 +56,7 @@ and ``bar.example.com`` to the same URLconf.
 
 ::
 
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'(foo|bar)', 'path.to.urls', name='foo-or-bar'),
@@ -78,7 +78,7 @@ Patterns being regular expressions allows setups to feature dynamic (or
 "wildcard") host schemes::
 
     from django.conf import settings
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'www', settings.ROOT_URLCONF, name='www'),
@@ -94,7 +94,7 @@ destination.
 
 Alternatively, we could have used negative lookahead::
 
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'(?!www)\w+', 'path.to.custom_urls', name='wildcard'),
@@ -115,7 +115,7 @@ To remedy this, you can optionally specify a callback method to be called
 if your host matches::
 
     from django.conf import settings
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'www', settings.ROOT_URLCONF, name='www'),
@@ -166,7 +166,7 @@ you can use the included ``host_url`` template tag. So imagine having a
 host pattern of::
 
     from django.conf import settings
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'admin', settings.ROOT_URLCONF, name='our-admin'),
@@ -217,7 +217,7 @@ Alternatively -- in case you don't want to append this parent domain
 to all URLs you can also spell out the domain in the host pattern::
 
     from django.conf import settings
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'admin\.example\.com', settings.ROOT_URLCONF, name='admin'),
@@ -226,7 +226,7 @@ to all URLs you can also spell out the domain in the host pattern::
 If your host pattern contains an argument (or key argument), like::
 
     from django.conf import settings
-    from hosts import patterns, host
+    from django_hosts import patterns, host
 
     host_patterns = patterns('',
         host(r'www', settings.ROOT_URLCONF, name='homepage'),
@@ -259,13 +259,41 @@ Notes
 Changelog
 =========
 
+0.2 (2011/05/31)
+----------------
+
+- **BACKWARDS INCOMPATIBLE** Renamed the package to ``django_hosts``
+
+  Please change your import from::
+
+    from hosts import patterns, hosts
+
+  to::
+
+    from django_hosts import patterns, hosts
+
+- **BACKWARDS INCOMPATIBLE** Changed the data type that the
+  ``django_hosts.patterns`` function returns to be a list instead of a
+  SortedDict to follow conventions of Django's URL patterns.
+  You can use that for easy extension of the patterns, e.g.::
+
+    from django_hosts import patterns, host
+    from mytemplateproject.hosts import host_patterns
+
+    host_patterns += patterns('',
+        host('www2', 'mysite.urls.www2', name='www2')
+    )
+
+- Extended tests to have full coverage.
+
+- Fixed prefix handling.
+
 0.1.1 (2011/05/30)
 ------------------
 
 - Fixed docs issues.
 
 - Use absolute imports where possible.
-
 
 0.1 (2011/05/29)
 ----------------
