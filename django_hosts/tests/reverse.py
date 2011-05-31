@@ -5,7 +5,7 @@ from django.core.urlresolvers import NoReverseMatch
 
 from django_hosts.tests.base import override_settings, HostsTestCase
 from django_hosts.reverse import (get_hostconf_module, get_host_patterns,
-    get_host, reverse_host, reverse_path)
+    get_host, reverse_host, reverse_path, reverse_crossdomain_part)
 
 class ReverseTest(HostsTestCase):
 
@@ -22,6 +22,13 @@ class ReverseTest(HostsTestCase):
         self.assertEqual('/simple/',
             reverse_path('static', 'simple-direct', None, None))
 
+    @override_settings(
+        ROOT_HOSTCONF='django_hosts.tests.hosts.blank',
+        PARENT_HOST='spam.eggs')
+    def test_reverse_crossdomain_part(self):
+        self.assertEqual(
+            '//spam.eggs/yeah/',
+            reverse_crossdomain_part('blank', '/yeah/'))
 
 class UtilityTests(HostsTestCase):
 
