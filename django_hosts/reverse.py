@@ -85,7 +85,7 @@ def reverse_crossdomain_part(host, path, args=None, kwargs=None):
         host_part = (host_part and '%s.%s' % (
             host_part, parent_host.lstrip('.')) or settings.PARENT_HOST)
 
-    if getattr(settings, 'EMULATE_HOSTS', settings.DEBUG):
+    if getattr(settings, 'EMULATE_HOSTS', False):
         query_string = QueryDict('', mutable=True)
         query_string.update({'host': host_part, 'path': path})
         redirect_path = reverse('hosts-debug-redirect')
