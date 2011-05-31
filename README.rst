@@ -259,6 +259,14 @@ Notes
 Changelog
 =========
 
+0.2.1 (2011/05/31)
+------------------
+
+- Fixed issue related to the ``PARENT_HOST`` setting when used with
+  empty host patterns.
+
+- Stopped automatically emulating hosts in debug mode.
+
 0.2 (2011/05/31)
 ----------------
 
