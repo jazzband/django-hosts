@@ -7,7 +7,7 @@ setup(
     name='django-hosts',
     description="Dynamic and static hosts support for Django.",
     long_description=open(README).read(),
-    version='0.1.1',
+    version='0.2',
     url='https://github.com/jezdez/django-hosts',
     author='Jannis Leidel',
     author_email='jannis@leidel.info',
@@ -15,7 +15,7 @@ setup(
     packages=find_packages(),
     package_data={
         'django_hosts': [
-            'contrib/toolbar/templates/hosts/*.html',
+            'contrib/toolbar/templates/django_hosts/*.html',
         ],
     },
     install_requires = ['django >= 1.1, <1.4'],
