@@ -5,6 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django_hosts.middleware import HostsMiddleware
 from django_hosts.tests.base import override_settings, HostsTestCase, RequestFactory
 
+
 class MiddlewareTests(HostsTestCase):
 
     def test_missing_hostconf_setting(self):

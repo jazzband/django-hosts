@@ -10,21 +10,22 @@ register = template.Library()
 
 kwarg_re = re.compile(r"(?:(\w+)=)?(.+)")
 
-class HostURLNode(template.Node):
 
-    @staticmethod
-    def parse_args_kwargs(parser, bits):
-        args, kwargs = [], {}
-        for bit in bits:
-            match = kwarg_re.match(bit)
-            if not match:
-                raise TemplateSyntaxError('Malformed arguments to host_url tag')
-            name, value = match.groups()
-            if name:
-                kwargs[name] = parser.compile_filter(value)
-            else:
-                args.append(parser.compile_filter(value))
-        return args, kwargs
+def parse_args_kwargs(parser, bits):
+    args, kwargs = [], {}
+    for bit in bits:
+        match = kwarg_re.match(bit)
+        if not match:
+            raise TemplateSyntaxError('Malformed arguments to host_url tag')
+        name, value = match.groups()
+        if name:
+            kwargs[name] = parser.compile_filter(value)
+        else:
+            args.append(parser.compile_filter(value))
+    return args, kwargs
+
+
+class HostURLNode(template.Node):
 
     @classmethod
     def handle_token(cls, parser, token):
@@ -32,26 +33,27 @@ class HostURLNode(template.Node):
         if len(bits) < 2:
             raise TemplateSyntaxError("'%s' takes at least 1 argument" % bits[0])
         view = bits[1]
-        bits = bits[1:] # Strip off view
+        bits = bits[1:]  # Strip off view
         try:
             pivot = bits.index('on')
             try:
-                host = bits[pivot+1]
+                host = bits[pivot + 1]
             except IndexError:
                 raise TemplateSyntaxError(
                     "'%s' arguments must include a host after 'on'" % bits[0])
-            view_args, view_kwargs = cls.parse_args_kwargs(parser, bits[1:pivot])
-            host_args, host_kwargs = cls.parse_args_kwargs(parser, bits[pivot+2:])
+            view_args, view_kwargs = parse_args_kwargs(parser, bits[1:pivot])
+            host_args, host_kwargs = parse_args_kwargs(parser, bits[pivot + 2:])
 
         except ValueError:
             # No "on <host>" was specified so use the default host
             host = settings.DEFAULT_HOST
-            view_args, view_kwargs = cls.parse_args_kwargs(parser, bits[1:])
+            view_args, view_kwargs = parse_args_kwargs(parser, bits[1:])
             host_args, host_kwargs = (), {}
 
         return cls(host, view, host_args, host_kwargs, view_args, view_kwargs)
 
-    def __init__(self, host, view, host_args, host_kwargs, view_args, view_kwargs):
+    def __init__(self, host, view,
+                 host_args, host_kwargs, view_args, view_kwargs):
         self.host = host
         self.view = view
         self.host_args = host_args

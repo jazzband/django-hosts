@@ -8,6 +8,7 @@ from django.utils.functional import wraps
 
 from ..reverse import clear_host_caches
 
+
 class override_settings(object):
     """
     Acts as either a decorator, or a context manager.  If it's a decorator it
@@ -42,7 +43,8 @@ class override_settings(object):
         settings._wrapped = self.wrapped
 
 
-# Adapted from Simon Willison's snippet: http://djangosnippets.org/snippets/963/.
+# Adapted from Simon Willison's snippet:
+# http://djangosnippets.org/snippets/963/.
 class RequestFactory(Client):
     """
     Class that lets you create mock Request objects for use in testing.
@@ -87,6 +89,7 @@ class RequestFactory(Client):
                                 "request middleware returned a response")
         return request
 
+
 class HostsTestCase(TestCase):
 
     def setUp(self):
@@ -99,7 +102,8 @@ class HostsTestCase(TestCase):
         settings.ROOT_URLCONF = self.old_root_urlconf
         clear_host_caches()
 
-    def assertRaisesWithMessage(self, error, message, callable, *args, **kwargs):
+    def assertRaisesWithMessage(self, error,
+                                message, callable, *args, **kwargs):
         self.assertRaises(error, callable, *args, **kwargs)
         try:
             callable(*args, **kwargs)

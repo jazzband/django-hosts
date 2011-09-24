@@ -1,8 +1,8 @@
 import re
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import get_callable, get_mod_func
-from django.utils.datastructures import SortedDict
 from django.utils.encoding import smart_str
+
 
 def patterns(prefix, *args):
     hosts = []
@@ -18,6 +18,7 @@ def patterns(prefix, *args):
             raise ImproperlyConfigured("Reserved host name: %s" % name)
         hosts.append(arg)
     return hosts
+
 
 class host(object):
 
@@ -54,8 +55,8 @@ class host(object):
         return self._callback
 
     def __repr__(self):
-        return smart_str(u'<%s %s %r>'
-                         % (self.__class__.__name__, self.name, self.regex))
+        return smart_str(u'<%s %s %r>' %
+                         (self.__class__.__name__, self.name, self.regex))
 
     def add_prefix(self, prefix=''):
         """

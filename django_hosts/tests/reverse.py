@@ -7,6 +7,7 @@ from django_hosts.tests.base import override_settings, HostsTestCase
 from django_hosts.reverse import (get_hostconf_module, get_host_patterns,
     get_host, reverse_host, reverse_path, reverse_crossdomain_part)
 
+
 class ReverseTest(HostsTestCase):
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
@@ -30,6 +31,7 @@ class ReverseTest(HostsTestCase):
             '//spam.eggs/yeah/',
             reverse_crossdomain_part('blank', '/yeah/'))
 
+
 class UtilityTests(HostsTestCase):
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
@@ -39,7 +41,8 @@ class UtilityTests(HostsTestCase):
 
     def test_get_hostconf_module_no_default(self):
         from django_hosts.tests.hosts import simple
-        self.assertEqual(get_hostconf_module('django_hosts.tests.hosts.simple'), simple)
+        self.assertEqual(
+            get_hostconf_module('django_hosts.tests.hosts.simple'), simple)
 
     def test_get_host_patterns(self):
         self.assertRaisesWithMessage(ImproperlyConfigured,
@@ -47,7 +50,8 @@ class UtilityTests(HostsTestCase):
 
         with self.settings(ROOT_HOSTCONF='django_hosts.tests.hosts'):
             self.assertRaisesWithMessage(ImproperlyConfigured,
-                "Missing host_patterns in 'django_hosts.tests.hosts'", get_host_patterns)
+                "Missing host_patterns in 'django_hosts.tests.hosts'",
+                get_host_patterns)
 
         with self.settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple'):
             from django_hosts.tests.hosts import simple
@@ -62,5 +66,3 @@ class UtilityTests(HostsTestCase):
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.appended')
     def test_appended_patterns(self):
         self.assertEqual(get_host('special').name, 'special')
-
-

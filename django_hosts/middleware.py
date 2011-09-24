@@ -4,6 +4,7 @@ from django.core.urlresolvers import NoReverseMatch, set_urlconf
 
 from django_hosts.reverse import get_host_patterns, get_host
 
+
 class HostsMiddleware(object):
     """
     Adjust incoming request's urlconf based on hosts defined in

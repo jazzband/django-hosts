@@ -13,6 +13,7 @@ _hostconf_cache = {}
 _host_patterns_cache = {}
 _host_cache = {}
 
+
 def get_hostconf_module(hostconf=None):
     if hostconf is None:
         hostconf = settings.ROOT_HOSTCONF
@@ -26,6 +27,7 @@ def get_host(name):
             return host
     raise NoReverseMatch("No host called '%s' exists" % name)
 get_host = memoize(get_host, _host_cache, 1)
+
 
 def get_host_patterns():
     try:
@@ -57,7 +59,8 @@ def reverse_host(name, args=None, kwargs=None):
         kwargs = {}
 
     unicode_args = [force_unicode(x) for x in args]
-    unicode_kwargs = dict(((k, force_unicode(v)) for (k, v) in kwargs.iteritems()))
+    unicode_kwargs = dict(((k, force_unicode(v))
+                          for (k, v) in kwargs.iteritems()))
 
     host = get_host(name)
     for result, params in normalize(host.regex):
@@ -77,6 +80,7 @@ def reverse_host(name, args=None, kwargs=None):
                          "keyword arguments '%s' not found."
                          % (name, args, kwargs))
 
+
 def reverse_crossdomain_part(host, path, args=None, kwargs=None):
     host_part = reverse_host(host, args=args, kwargs=kwargs)
 
@@ -93,6 +97,7 @@ def reverse_crossdomain_part(host, path, args=None, kwargs=None):
 
     return u'//%s%s' % (host_part, path)
 
+
 def reverse_path(host, view, args=None, kwargs=None):
     if args is None:
         args = ()
@@ -100,6 +105,7 @@ def reverse_path(host, view, args=None, kwargs=None):
         kwargs = {}
     host = get_host(host)
     return reverse(view, args=args, kwargs=kwargs, urlconf=host.urlconf)
+
 
 def reverse_crossdomain(host, view, host_args=None, host_kwargs=None,
         view_args=None, view_kwargs=None):
