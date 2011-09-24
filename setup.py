@@ -7,8 +7,8 @@ read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
 setup(
     name='django-hosts',
     description="Dynamic and static hosts support for Django.",
-    version='0.2.1',
     long_description=read(path.join(path.dirname(__file__), 'README.rst')),
+    version=':versiontools:django_hosts:',
     url='https://github.com/jezdez/django-hosts',
     author='Jannis Leidel',
     author_email='jannis@leidel.info',
@@ -31,5 +31,8 @@ setup(
         'Programming Language :: Python :: 2.5',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+    ],
+    setup_requires=[
+        'versiontools >= 1.6',
     ],
 )
