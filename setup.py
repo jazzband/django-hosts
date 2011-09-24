@@ -1,13 +1,14 @@
+import codecs
 from os import path
 from setuptools import setup, find_packages
 
-README = path.abspath(path.join(path.dirname(__file__), 'README.rst'))
+read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
 
 setup(
     name='django-hosts',
     description="Dynamic and static hosts support for Django.",
-    long_description=open(README).read(),
     version='0.2.1',
+    long_description=read(path.join(path.dirname(__file__), 'README.rst')),
     url='https://github.com/jezdez/django-hosts',
     author='Jannis Leidel',
     author_email='jannis@leidel.info',
