@@ -12,7 +12,8 @@ class HostSiteManager(models.Manager):
         on_site = HostSiteManager()
         on_site = HostSiteManager("package__site")
         on_site = HostSiteManager("release__package__site")
-        on_site = HostSiteManager("release__package__site", select_related=False)
+        on_site = HostSiteManager("release__package__site",
+                                  select_related=False)
 
     """
     def __init__(self, field_name=None, select_related=True):
