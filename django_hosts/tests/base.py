@@ -95,11 +95,8 @@ class HostsTestCase(TestCase):
     def setUp(self):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
-        self.old_root_urlconf = getattr(settings, 'ROOT_URLCONF', '')
-        settings.ROOT_URLCONF = 'django_hosts.tests.urls.root'
 
     def tearDown(self):
-        settings.ROOT_URLCONF = self.old_root_urlconf
         clear_host_caches()
 
     def assertRaisesWithMessage(self, error,

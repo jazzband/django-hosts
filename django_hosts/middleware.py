@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import NoReverseMatch, set_urlconf
+from django.core.urlresolvers import NoReverseMatch, set_urlconf, get_urlconf
 
 from django_hosts.reverse import get_host_patterns, get_host
 
@@ -19,21 +19,23 @@ class HostsMiddleware(object):
         except NoReverseMatch, e:
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" % e)
 
-    def process_request(self, request):
-        request_host = request.get_host()
-        # Find best match, falling back to settings.DEFAULT_HOST
+    def get_host(self, request_host):
         for host in self.host_patterns:
             match = host.compiled_regex.match(request_host)
             if match:
-                kwargs = match.groupdict()
-                break
-        else:
-            host, kwargs = self.default_host, {}
+                return host, match.groupdict()
+        return self.default_host, {}
+
+    def process_request(self, request):
+        # Find best match, falling back to settings.DEFAULT_HOST
+        host, kwargs = self.get_host(request.get_host())
         request.urlconf = host.urlconf
+        request.host = host
         try:
+            current_urlconf = get_urlconf
             set_urlconf(host.urlconf)
             return host.callback(request, **kwargs)
         finally:
             # Reset URLconf for this thread on the way out for complete
             # isolation of request.urlconf
-            set_urlconf(None)
+            set_urlconf(current_urlconf)
