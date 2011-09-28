@@ -9,7 +9,7 @@ def patterns(prefix, *args):
     for arg in args:
         if isinstance(arg, (list, tuple)):
             arg = host(prefix=prefix, *arg)
-        elif isinstance(arg, host):
+        else:
             arg.add_prefix(prefix)
         name = arg.name
         if name in [h.name for h in hosts]:
@@ -35,6 +35,10 @@ class host(object):
             self._callback, self._callback_str = None, callback
         self.add_prefix(prefix)
 
+    def __repr__(self):
+        return smart_str(u'<%s %s: %s (%r)>' %
+            (self.__class__.__name__, self.name, self.urlconf, self.regex))
+
     @property
     def callback(self):
         if self._callback is not None:
@@ -45,18 +49,15 @@ class host(object):
             self._callback = get_callable(self._callback_str)
         except ImportError, e:
             mod_name, _ = get_mod_func(self._callback_str)
-            raise ImproperlyConfigured(
-                "Could not import '%s'. Error was: %s" % (mod_name, str(e)))
+            raise ImproperlyConfigured("Could not import '%s'. "
+                                       "Error was: %s" %
+                                       (mod_name, str(e)))
         except AttributeError, e:
             mod_name, func_name = get_mod_func(self._callback_str)
-            raise ImproperlyConfigured(
-                "Tried '%s' in module '%s'. Error was: %s"
-                % (func_name, mod_name, str(e)))
+            raise ImproperlyConfigured("Tried '%s' in module '%s'. "
+                                       "Error was: %s" %
+                                       (func_name, mod_name, str(e)))
         return self._callback
-
-    def __repr__(self):
-        return smart_str(u'<%s %s %r>' %
-                         (self.__class__.__name__, self.name, self.regex))
 
     def add_prefix(self, prefix=''):
         """

@@ -32,7 +32,7 @@ class HostsMiddleware(object):
         request.urlconf = host.urlconf
         request.host = host
         try:
-            current_urlconf = get_urlconf
+            current_urlconf = get_urlconf()
             set_urlconf(host.urlconf)
             return host.callback(request, **kwargs)
         finally:

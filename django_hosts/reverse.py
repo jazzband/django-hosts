@@ -3,7 +3,6 @@ import re
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch, reverse
-from django.http import QueryDict
 from django.utils.encoding import force_unicode
 from django.utils.functional import memoize
 from django.utils.importlib import import_module
@@ -73,21 +72,23 @@ def reverse_host(name, args=None, kwargs=None):
                 continue
             candidate = result % unicode_kwargs
 
-        if re.match(host.regex, candidate, re.UNICODE):
+        if re.match(host.regex, candidate, re.UNICODE):  # pragma: no cover
             return candidate
 
-    raise NoReverseMatch("Reverse host for '%s' with arguments '%s' and "
-                         "keyword arguments '%s' not found."
-                         % (name, args, kwargs))
+    raise NoReverseMatch("Reverse host for '%s' with arguments '%s' "
+                         "and keyword arguments '%s' not found." %
+                         (name, args, kwargs))
 
 
 def reverse_crossdomain_part(host, path, args=None, kwargs=None):
     host_part = reverse_host(host, args=args, kwargs=kwargs)
 
-    parent_host = getattr(settings, 'PARENT_HOST', '')
+    parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
     if parent_host:
-        host_part = (host_part and '%s.%s' % (
-            host_part, parent_host.lstrip('.')) or settings.PARENT_HOST)
+        if host_part:
+            host_part = '%s.%s' % (host_part, parent_host)
+        else:
+            host_part = parent_host
     return u'//%s%s' % (host_part, path)
 
 
