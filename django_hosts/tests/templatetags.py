@@ -48,6 +48,15 @@ class TemplateTagsTest(HostsTestCase):
 
     @override_settings(
         DEFAULT_HOST='www',
+        PARENT_HOST='eggs.spam',
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
+    def test_host_url_tag_with_view_kwargs(self):
+        rendered = self.render("{% load hosts %}"
+            "{% host_url complex-direct template='test' on with_view_kwargs subdomain='test' %}")
+        self.assertEqual(rendered, '//test.eggs.spam/template/test/')
+
+    @override_settings(
+        DEFAULT_HOST='www',
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         PARENT_HOST='eggs.spam')
     def test_host_url_tag_parent_host(self):

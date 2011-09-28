@@ -5,4 +5,5 @@ host_patterns = patterns('',
     host(r'static', 'django_hosts.tests.urls.simple', name='static'),
     host(r'(\w+)', 'django_hosts.tests.urls.simple', name='with_args'),
     host(r'(?P<username>\w+)', 'django_hosts.tests.urls.simple', name='with_kwargs'),
+    host(r'(?P<subdomain>\w+)', 'django_hosts.tests.urls.complex', name='with_view_kwargs'),
 )
