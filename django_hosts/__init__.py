@@ -1,6 +1,7 @@
-try:
+try:  # pragma: no cover
     from django_hosts.defaults import patterns, host
-except ImportError:
+    from django_hosts.reverse import reverse_host, reverse_path
+except ImportError:  # pragma: no cover
     pass
 
 # following PEP 386, versiontools will pick it up
