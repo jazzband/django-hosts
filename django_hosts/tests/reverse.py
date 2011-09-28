@@ -14,6 +14,10 @@ class ReverseTest(HostsTestCase):
     def test_reverse_host(self):
         self.assertRaises(ValueError,
             reverse_host, 'with_kwargs', ['spam'], dict(eggs='spam'))
+        self.assertRaises(NoReverseMatch,
+            reverse_host, 'with_kwargs', ['spam', 'eggs'])
+        self.assertRaises(NoReverseMatch,
+            reverse_host, 'with_kwargs', [], dict(eggs='spam', spam='eggs'))
         self.assertEqual('johndoe',
             reverse_host('with_kwargs', None, dict(username='johndoe')))
         self.assertEqual(reverse_host('with_args', ['johndoe']), 'johndoe')
@@ -27,8 +31,7 @@ class ReverseTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.blank',
         PARENT_HOST='spam.eggs')
     def test_reverse_crossdomain_part(self):
-        self.assertEqual(
-            '//spam.eggs/yeah/',
+        self.assertEqual('//spam.eggs/yeah/',
             reverse_crossdomain_part('blank', '/yeah/'))
 
 

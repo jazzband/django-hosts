@@ -2,7 +2,7 @@ from __future__ import absolute_import, with_statement
 
 from django.template import Template, Context, TemplateSyntaxError, Parser
 
-from django_hosts.templatetags.hosts import HostURLNode, parse_args_kwargs
+from django_hosts.templatetags.hosts import HostURLNode
 from django_hosts.tests.base import override_settings, HostsTestCase
 
 
@@ -52,7 +52,8 @@ class TemplateTagsTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_host_url_tag_with_view_kwargs(self):
         rendered = self.render("{% load hosts %}"
-            "{% host_url complex-direct template='test' on with_view_kwargs subdomain='test2000' %}")
+            "{% host_url complex-direct template='test' on with_view_kwargs "
+            "subdomain='test2000' %}")
         self.assertEqual(rendered, '//stest2000.eggs.spam/template/test/')
 
     @override_settings(
@@ -73,5 +74,5 @@ class TemplateTagsTest(HostsTestCase):
         self.assertRaises(TemplateSyntaxError,
                           self.render,
                           "{% load hosts %}{% host_url simple-direct on %}")
-        self.assertRaises(TemplateSyntaxError, parse_args_kwargs,
+        self.assertRaises(TemplateSyntaxError, HostURLNode.parse_params,
                           Parser(['']), "username=='johndoe'")

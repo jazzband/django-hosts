@@ -4,7 +4,8 @@ from __future__ import absolute_import
 from django.core.exceptions import ImproperlyConfigured
 
 from django_hosts.middleware import HostsMiddleware
-from django_hosts.tests.base import override_settings, HostsTestCase, RequestFactory
+from django_hosts.tests.base import (override_settings, HostsTestCase,
+                                     RequestFactory)
 
 
 class MiddlewareTests(HostsTestCase):
