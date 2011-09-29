@@ -41,13 +41,11 @@ class HostURLNode(template.Node):
                                           "a host after 'on'" % name)
             view_args, view_kwargs = cls.parse_params(parser, bits[1:pivot])
             host_args, host_kwargs = cls.parse_params(parser, bits[pivot + 2:])
-
         except ValueError:
-            # No "on <host>" was specified so use the default host
+            # No host was given so use the default host
             host = settings.DEFAULT_HOST
             view_args, view_kwargs = cls.parse_params(parser, bits[1:])
             host_args, host_kwargs = (), {}
-
         return cls(host, view, host_args, host_kwargs, view_args, view_kwargs)
 
     def __init__(self, host, view,
@@ -77,6 +75,8 @@ def host_url(parser, token):
 
     {% host_url url-name on host-name  %}
     {% host_url url-name on host-name 'spam' %}
+    {% host_url url-name varg1=vvalue1 on host-name 'spam' 'hvalue1' %}
+    {% host_url url-name vvalue2 on host-name 'spam' harg2=hvalue2 %}
 
     """
     return HostURLNode.handle_token(parser, token)

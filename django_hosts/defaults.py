@@ -23,8 +23,10 @@ def patterns(prefix, *args):
 class host(object):
 
     def __init__(self, regex, urlconf, name, callback=None, prefix=''):
-        # Compile hosts. We add a literal fullstop to the end of every
-        # pattern to avoid rather unwieldy escaping in every definition.
+        """
+        Compile hosts. We add a literal fullstop to the end of every
+        pattern to avoid rather unwieldy escaping in every definition.
+        """
         self.regex = regex
         self.compiled_regex = re.compile(r'%s(\.|$)' % regex)
         self.urlconf = urlconf

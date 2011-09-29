@@ -59,6 +59,23 @@ def clear_host_caches():
 
 
 def reverse_host(host, args=None, kwargs=None):
+    """
+    Given the host name and the appropriate parameters,
+    reverses the host, e.g.::
+
+        >>> from django.conf import settings
+        >>> settings.ROOT_HOSTCONF = 'mysite.hosts'
+        >>> settings.PARENT_HOST = 'example.com'
+        >>> from django_hosts.reverse import reverse_host
+        >>> reverse_host('with_username', 'jezdez')
+        'jezdez.example.com'
+
+    :param name: the name of the host as specified in the hostconf
+    :args: the host arguments to use to find a matching entry in the hostconf
+    :kwargs: similar to args but key value arguments
+    :raises django.core.urlresolvers.NoReverseMatch: if no host matches
+    :rtype: reversed hostname
+    """
     if args and kwargs:
         raise ValueError("Don't mix *args and **kwargs in call to reverse()!")
 
@@ -99,6 +116,25 @@ def reverse_host(host, args=None, kwargs=None):
 def reverse_full(host, view,
                  host_args=None, host_kwargs=None,
                  view_args=None, view_kwargs=None):
+    """
+    Given the host and view name and the appropriate parameters,
+    reverses the fully qualified URL, e.g.::
+
+        >>> from django.conf import settings
+        >>> settings.ROOT_HOSTCONF = 'mysite.hosts'
+        >>> settings.PARENT_HOST = 'example.com'
+        >>> from django_hosts.reverse import reverse_full
+        >>> reverse_full('www', 'about')
+        '//www.example.com/about/'
+
+    :param host: the name of the host
+    :param view: the name of the view
+    :host_args: the host arguments
+    :host_kwargs: the host keyed arguments
+    :view_args: the arguments of the view
+    :view_kwargs: the keyed arguments of the view
+    :rtype: fully qualified URL with path
+    """
     host = get_host(host)
     host_part = reverse_host(host,
                              args=host_args,
