@@ -28,10 +28,6 @@ class PatternsTests(HostsTestCase):
         self.assertRaises(ImproperlyConfigured,
                           patterns, '', api_host, api_host)
 
-    def test_pattern_with_default(self):
-        default_host = host(r'www', 'mysite.urls', name='default')
-        self.assertRaises(ImproperlyConfigured, patterns, '', default_host)
-
     def test_pattern_with_prefix(self):
         host_patterns = patterns('mysite',
             host(r'api', 'api.urls', name='api'),

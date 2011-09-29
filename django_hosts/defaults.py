@@ -14,8 +14,6 @@ def patterns(prefix, *args):
         name = arg.name
         if name in [h.name for h in hosts]:
             raise ImproperlyConfigured("Duplicate host name: %s" % name)
-        if name == 'default':
-            raise ImproperlyConfigured("Reserved host name: %s" % name)
         hosts.append(arg)
     return hosts
 
