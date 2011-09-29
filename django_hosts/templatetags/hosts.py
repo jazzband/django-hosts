@@ -4,7 +4,7 @@ from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils.encoding import smart_str
 
-from django_hosts.reverse import reverse_crossdomain
+from django_hosts.reverse import reverse_full
 
 register = template.Library()
 
@@ -37,8 +37,8 @@ class HostURLNode(template.Node):
             try:
                 host = bits[pivot + 1]
             except IndexError:
-                raise TemplateSyntaxError(
-                    "'%s' arguments must include a host after 'on'" % name)
+                raise TemplateSyntaxError("'%s' arguments must include "
+                                          "a host after 'on'" % name)
             view_args, view_kwargs = cls.parse_params(parser, bits[1:pivot])
             host_args, host_kwargs = cls.parse_params(parser, bits[pivot + 2:])
 
@@ -66,8 +66,8 @@ class HostURLNode(template.Node):
         view_args = [x.resolve(context) for x in self.view_args]
         view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
                             for k, v in self.view_kwargs.iteritems())
-        return reverse_crossdomain(self.host, self.view,
-            host_args, host_kwargs, view_args, view_kwargs)
+        return reverse_full(self.host, self.view,
+                            host_args, host_kwargs, view_args, view_kwargs)
 
 
 @register.tag

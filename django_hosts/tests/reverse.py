@@ -5,7 +5,7 @@ from django.core.urlresolvers import NoReverseMatch
 
 from django_hosts.tests.base import override_settings, HostsTestCase
 from django_hosts.reverse import (get_hostconf_module, get_host_patterns,
-    get_host, reverse_host, reverse_path, reverse_crossdomain_part)
+    get_host, reverse_host, reverse_full)
 
 
 class ReverseTest(HostsTestCase):
@@ -21,18 +21,16 @@ class ReverseTest(HostsTestCase):
         self.assertEqual('johndoe',
             reverse_host('with_kwargs', None, dict(username='johndoe')))
         self.assertEqual(reverse_host('with_args', ['johndoe']), 'johndoe')
-
-    @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
-    def test_reverse_path(self):
-        self.assertEqual('/simple/',
-            reverse_path('static', 'simple-direct', None, None))
+        with self.settings(PARENT_HOST='spam.eggs'):
+            self.assertEqual(reverse_host('with_args', ['johndoe']),
+                             'johndoe.spam.eggs')
 
     @override_settings(
-        ROOT_HOSTCONF='django_hosts.tests.hosts.blank',
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         PARENT_HOST='spam.eggs')
-    def test_reverse_crossdomain_part(self):
-        self.assertEqual('//spam.eggs/yeah/',
-            reverse_crossdomain_part('blank', '/yeah/'))
+    def test_reverse_full(self):
+        self.assertEqual(reverse_full('static', 'simple-direct'),
+                         '//static.spam.eggs/simple/')
 
 
 class UtilityTests(HostsTestCase):
@@ -47,18 +45,20 @@ class UtilityTests(HostsTestCase):
         self.assertEqual(
             get_hostconf_module('django_hosts.tests.hosts.simple'), simple)
 
-    def test_get_host_patterns(self):
+    def test_missing_host_patterns(self):
         self.assertRaisesWithMessage(ImproperlyConfigured,
             'Missing ROOT_HOSTCONF setting', get_host_patterns)
 
-        with self.settings(ROOT_HOSTCONF='django_hosts.tests.hosts'):
-            self.assertRaisesWithMessage(ImproperlyConfigured,
-                "Missing host_patterns in 'django_hosts.tests.hosts'",
-                get_host_patterns)
+    @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts')
+    def test_missing_host_patterns_in_module(self):
+        self.assertRaisesWithMessage(ImproperlyConfigured,
+            "Missing host_patterns in 'django_hosts.tests.hosts'",
+            get_host_patterns)
 
-        with self.settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple'):
-            from django_hosts.tests.hosts import simple
-            self.assertEqual(get_host_patterns(), simple.host_patterns)
+    @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
+    def test_get_working_host_patterns(self):
+        from django_hosts.tests.hosts import simple
+        self.assertEqual(get_host_patterns(), simple.host_patterns)
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_get_host(self):

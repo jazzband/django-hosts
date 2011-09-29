@@ -1,6 +1,6 @@
 try:  # pragma: no cover
     from django_hosts.defaults import patterns, host
-    from django_hosts.reverse import reverse_host, reverse_path
+    from django_hosts.reverse import reverse_host, reverse_full
 except ImportError:  # pragma: no cover
     pass
 

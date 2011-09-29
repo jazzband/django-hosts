@@ -8,6 +8,8 @@ from django.utils.functional import memoize
 from django.utils.importlib import import_module
 from django.utils.regex_helper import normalize
 
+from django_hosts.defaults import host as host_cls
+
 _hostconf_cache = {}
 _hostconf_module_cache = {}
 _host_patterns_cache = {}
@@ -56,20 +58,20 @@ def clear_host_caches():
     _host_cache.clear()
 
 
-def reverse_host(name, args=None, kwargs=None):
+def reverse_host(host, args=None, kwargs=None):
     if args and kwargs:
         raise ValueError("Don't mix *args and **kwargs in call to reverse()!")
 
-    if args is None:
-        args = ()
-    if kwargs is None:
-        kwargs = {}
+    args = args or ()
+    kwargs = kwargs or {}
+
+    if not isinstance(host, host_cls):
+        host = get_host(host)
 
     unicode_args = [force_unicode(x) for x in args]
     unicode_kwargs = dict(((k, force_unicode(v))
                           for (k, v) in kwargs.iteritems()))
 
-    host = get_host(name)
     for result, params in normalize(host.regex):
         if args:
             if len(args) != len(params):
@@ -81,35 +83,28 @@ def reverse_host(name, args=None, kwargs=None):
             candidate = result % unicode_kwargs
 
         if re.match(host.regex, candidate, re.UNICODE):  # pragma: no cover
+            parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
+            if parent_host:
+                if candidate:
+                    candidate = '%s.%s' % (candidate, parent_host)
+                else:
+                    candidate = parent_host
             return candidate
 
     raise NoReverseMatch("Reverse host for '%s' with arguments '%s' "
                          "and keyword arguments '%s' not found." %
-                         (name, args, kwargs))
+                         (host.name, args, kwargs))
 
 
-def reverse_crossdomain_part(host, path, args=None, kwargs=None):
-    host_part = reverse_host(host, args=args, kwargs=kwargs)
-
-    parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
-    if parent_host:
-        if host_part:
-            host_part = '%s.%s' % (host_part, parent_host)
-        else:
-            host_part = parent_host
-    return u'//%s%s' % (host_part, path)
-
-
-def reverse_path(host, view, args=None, kwargs=None):
-    if args is None:
-        args = ()
-    if kwargs is None:
-        kwargs = {}
+def reverse_full(host, view,
+                 host_args=None, host_kwargs=None,
+                 view_args=None, view_kwargs=None):
     host = get_host(host)
-    return reverse(view, args=args, kwargs=kwargs, urlconf=host.urlconf)
-
-
-def reverse_crossdomain(host, view, host_args=None, host_kwargs=None,
-        view_args=None, view_kwargs=None):
-    path = reverse_path(host, view, view_args, view_kwargs)
-    return reverse_crossdomain_part(host, path, host_args, host_kwargs)
+    host_part = reverse_host(host,
+                             args=host_args,
+                             kwargs=host_kwargs)
+    path_part = reverse(view,
+                        args=view_args or (),
+                        kwargs=view_kwargs or {},
+                        urlconf=host.urlconf)
+    return u'//%s%s' % (host_part, path_part)
