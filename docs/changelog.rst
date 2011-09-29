@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.3 (2011/XX/XX)
+----------------
+
+- Consolidated reversal internals.
+
+- Removed unfinished support for the Django Debug Toolbar.
+
+- Extended tests to fully cover the code.
+
+- Added docs at http://django-hosts.rtfd.org
+
 0.2.1 (2011/05/31)
 ------------------
 

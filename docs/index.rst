@@ -67,6 +67,12 @@ Contents
    changelog
 
 
+Issues
+------
+
+For any bug reports and feature requests, please use the
+`Github issue tracker`_.
+
 Thanks
 ------
 
@@ -75,3 +81,4 @@ django-dynamic-subdomains_ app, which was the inspiration for this app.
 
 .. _playfire: http://code.playfire.com/
 .. _django-dynamic-subdomains: https://github.com/playfire/django-dynamic-subdomains/
+.. _`Github issue tracker`: https://github.com/ennio/django-hosts/issues

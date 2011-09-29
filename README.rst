@@ -50,6 +50,8 @@ First, install the app with your favorite package manager, e.g.::
 
     pip install django-hosts
 
+Alternatively, use the `repository on Github`_.
+
 Then configure your Django site to use the app:
 
 #. Add ``'django_hosts'`` to your ``INSTALLED_APPS`` setting.
@@ -69,3 +71,5 @@ Then configure your Django site to use the app:
    want to refer to as the default pattern. It'll be used if no other
    pattern matches or you don't give a name to the ``host_url`` template
    tag.
+
+.. _`repository on Github`: https://github.com/ennio/django-hosts
