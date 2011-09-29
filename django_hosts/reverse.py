@@ -9,15 +9,24 @@ from django.utils.importlib import import_module
 from django.utils.regex_helper import normalize
 
 _hostconf_cache = {}
+_hostconf_module_cache = {}
 _host_patterns_cache = {}
 _host_cache = {}
 
 
+def get_hostconf():
+    try:
+        return settings.ROOT_HOSTCONF
+    except AttributeError:
+        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting")
+get_hostconf = memoize(get_hostconf, _hostconf_cache, 0)
+
+
 def get_hostconf_module(hostconf=None):
     if hostconf is None:
-        hostconf = settings.ROOT_HOSTCONF
+        hostconf = get_hostconf()
     return import_module(hostconf)
-get_hostconf_module = memoize(get_hostconf_module, _hostconf_cache, 1)
+get_hostconf_module = memoize(get_hostconf_module, _hostconf_module_cache, 1)
 
 
 def get_host(name):
@@ -29,23 +38,22 @@ get_host = memoize(get_host, _host_cache, 1)
 
 
 def get_host_patterns():
+    hostconf = get_hostconf()
+    module = get_hostconf_module(hostconf)
     try:
-        hostconf = settings.ROOT_HOSTCONF
-    except AttributeError:
-        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting")
-    hostconf_module = get_hostconf_module(hostconf)
-    try:
-        return hostconf_module.host_patterns
+        return module.host_patterns
     except AttributeError:
         raise ImproperlyConfigured("Missing host_patterns in '%s'" % hostconf)
 get_host_patterns = memoize(get_host_patterns, _host_patterns_cache, 0)
 
 
 def clear_host_caches():
-    global _hostconf_cache
-    global _host_patterns_cache
+    global _hostconf_cache, _hostconf_module_cache, \
+           _host_patterns_cache, _host_cache
     _hostconf_cache.clear()
+    _hostconf_module_cache.clear()
     _host_patterns_cache.clear()
+    _host_cache.clear()
 
 
 def reverse_host(name, args=None, kwargs=None):
