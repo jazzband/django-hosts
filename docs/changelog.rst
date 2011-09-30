@@ -1,16 +1,23 @@
 Changelog
 =========
 
-0.3 (2011/XX/XX)
+0.3 (2011/09/30)
 ----------------
 
 - Consolidated reversal internals.
 
 - Removed unfinished support for the Django Debug Toolbar.
 
-- Extended tests to fully cover the code.
+- Added a custom callback which uses Django's sites_ app to retrieve
+  a ``Site`` instance matching the current host, setting ``request.site``.
+
+- Extended tests dramatically (100% coverage).
 
 - Added docs at http://django-hosts.rtfd.org
+
+- Stopped preventing the name 'default' for hosts.
+
+.. _sites: https://docs.djangoproject.com/en/dev/ref/contrib/sites/
 
 0.2.1 (2011/05/31)
 ------------------

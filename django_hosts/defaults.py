@@ -5,6 +5,21 @@ from django.utils.encoding import smart_str
 
 
 def patterns(prefix, *args):
+    """
+    The function to define the list of hosts (aka host confs), e.g.::
+
+        from django_hosts import patterns
+
+        host_patterns = patterns('path.to',
+            (r'www', 'urls.default', 'default'),
+            (r'api', 'urls.api', 'api'),
+        )
+
+    :param prefix: the URLconf prefix to pass to the host object
+    :type prefix: str
+    :param \*args: a list of :class:`~django_hosts.defaults.hosts` instances
+                   or an iterable thereof
+    """
     hosts = []
     for arg in args:
         if isinstance(arg, (list, tuple)):
@@ -19,7 +34,28 @@ def patterns(prefix, *args):
 
 
 class host(object):
+    """
+    The host object used in host conf together with the
+    :func:`django_hosts.defaults.patterns` function, e.g.::
 
+        from django_hosts import patterns, host
+
+        host_patterns = patterns('path.to',
+            host(r'www', 'urls.default', name='default'),
+            host(r'api', 'urls.api', name='api'),
+        )
+
+    :param regex: a regular expression to be used to match the request's
+                  host.
+    :type regex: str
+    :param urlconf: the dotted path of a URLconf module of the host
+    :type urlconf: str
+    :param callback: a callable or the dotted path of a callable to be used
+                     when matching has happened
+    :type callback: callable or str
+    :param prefix: the prefix to apply to the ``urlconf`` parameter
+    :type prefix: str
+    """
     def __init__(self, regex, urlconf, name, callback=None, prefix=''):
         """
         Compile hosts. We add a literal fullstop to the end of every

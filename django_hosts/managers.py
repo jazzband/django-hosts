@@ -5,15 +5,31 @@ from django.db.models.fields import FieldDoesNotExist
 
 class HostSiteManager(models.Manager):
     """
-    Use this to limit objects to those associated with a site.
+    A model manager to limit objects to those associated with a site.
 
-    Usage::
+    :param field_name: the name of the related field pointing at the
+                       :class:`~django.contrib.sites.models.Site` model,
+                       or a series of relations using the
+                       ``field1__field2__field3`` notation. Falls back
+                       to looking for 'site' and 'sites' fields.
+    :param select_related: a boolean specifying whether to use
+                           :meth:`~django.db.models.QuerySet.select_related`
+                           when querying the database
 
-        on_site = HostSiteManager()
-        on_site = HostSiteManager("package__site")
-        on_site = HostSiteManager("release__package__site")
-        on_site = HostSiteManager("release__package__site",
+    Define a manager instance in your model class with one
+    of the following notations::
+
+        on_site = HostSiteManager()  # automatically looks for site and sites
+        on_site = HostSiteManager("author__site")
+        on_site = HostSiteManager("author__blog__site")
+        on_site = HostSiteManager("author__blog__site",
                                   select_related=False)
+
+    Then query against it with one of the manager methods::
+
+        def home_page(request):
+            blog_posts = BlogPost.on_site.by_request(request).all()
+            return render(request, 'home_page.html', {'blog_posts': blog_posts})
 
     """
     def __init__(self, field_name=None, select_related=True):
@@ -72,12 +88,34 @@ class HostSiteManager(models.Manager):
         return qs.filter(**{'%s__id__exact' % self._field_name: site_id})
 
     def by_id(self, site_id=None):
+        """
+        Returns a queryset matching the given site id. If not given
+        this falls back to the ``SITE_ID`` setting.
+
+        :param site_id: the ID of the site
+        :rtype: :class:`~django.db.models.query.QuerySet`
+        """
         return self.get_query_set(site_id)
 
     def by_request(self, request):
+        """
+        Returns a queryset matching the given request's site
+        attribute.
+
+        :param request: the current request
+        :type request: :class:`~django.http.HttpRequest`
+        :rtype: :class:`~django.db.models.query.QuerySet`
+        """
         if not hasattr(request, "site") or request.site is None:
             return self.none()
         return self.by_site(request.site)
 
     def by_site(self, site):
+        """
+        Returns a queryset matching the given site.
+
+        :param site: a site instance
+        :type site: :class:`~django.contrib.sites.models.Site`
+        :rtype: :class:`~django.db.models.query.QuerySet`
+        """
         return self.by_id(site.id)
