@@ -9,7 +9,7 @@ setup(
     description="Dynamic and static hosts support for Django.",
     long_description=read(path.join(path.dirname(__file__), 'README.rst')),
     version=':versiontools:django_hosts:',
-    url='https://django-hosts.rtfd.org/',
+    url='http://django-hosts.rtfd.org/',
     author='Jannis Leidel',
     author_email='jannis@leidel.info',
     license='BSD',
