@@ -72,4 +72,8 @@ Then configure your Django site to use the app:
    pattern matches or you don't give a name to the ``host_url`` template
    tag.
 
+``django-hosts`` uses versiontools_ to manage version numbers following
+:pep:`386`.
+
 .. _`repository on Github`: https://github.com/ennio/django-hosts
+.. _versiontools: http://pypi.python.org/pypi/versiontools
