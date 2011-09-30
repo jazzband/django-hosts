@@ -13,6 +13,8 @@ class PatternsTests(HostsTestCase):
         )
         self.assertEqual(len(host_patterns), 1)
         self.assertTrue(isinstance(host_patterns[0], host))
+        self.assertEqual(repr(host_patterns[0]),
+                         "<host api: api.urls ('api')>")
 
     def test_pattern_as_tuple(self):
         host_patterns = patterns('',
@@ -23,11 +25,8 @@ class PatternsTests(HostsTestCase):
 
     def test_pattern_with_duplicate(self):
         api_host = host(r'api', 'api.urls', name='api')
-        self.assertRaises(ImproperlyConfigured, patterns, '', api_host, api_host)
-
-    def test_pattern_with_default(self):
-        default_host = host(r'www', 'mysite.urls', name='default')
-        self.assertRaises(ImproperlyConfigured, patterns, '', default_host)
+        self.assertRaises(ImproperlyConfigured,
+                          patterns, '', api_host, api_host)
 
     def test_pattern_with_prefix(self):
         host_patterns = patterns('mysite',
@@ -54,19 +53,20 @@ class HostTests(HostsTestCase):
         self.assertEqual(api_host.callback, get_host_patterns)
 
     def test_host_callable_callback(self):
-        api_host = host(r'api', 'api.urls', name='api', callback=get_host_patterns)
+        api_host = host(r'api', 'api.urls', name='api',
+                        callback=get_host_patterns)
         self.assertEqual(api_host.callback, get_host_patterns)
 
     def test_host_nonexistent_callback(self):
-        api_host = host(r'api', 'api.urls', name='api', callback='whatever.non_existent')
-        self.assertRaisesWithMessage(
-            ImproperlyConfigured,
+        api_host = host(r'api', 'api.urls', name='api',
+                        callback='whatever.non_existent')
+        self.assertRaisesWithMessage(ImproperlyConfigured,
             "Could not import 'whatever'. Error was: No module named whatever",
             lambda: api_host.callback)
 
-        api_host = host(r'api', 'api.urls', name='api', callback='django_hosts.non_existent')
-        self.assertRaisesWithMessage(
-            ImproperlyConfigured,
+        api_host = host(r'api', 'api.urls', name='api',
+                        callback='django_hosts.non_existent')
+        self.assertRaisesWithMessage(ImproperlyConfigured,
             "Tried 'non_existent' in module 'django_hosts'. "
             "Error was: 'module' object has no attribute 'non_existent'",
             lambda: api_host.callback)

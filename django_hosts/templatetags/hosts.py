@@ -4,22 +4,20 @@ from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils.encoding import smart_str
 
-from django_hosts.reverse import reverse_crossdomain
+from django_hosts.reverse import reverse_full
 
 register = template.Library()
 
 kwarg_re = re.compile(r"(?:(\w+)=)?(.+)")
 
+
 class HostURLNode(template.Node):
 
-    @staticmethod
-    def parse_args_kwargs(parser, bits):
+    @classmethod
+    def parse_params(cls, parser, bits):
         args, kwargs = [], {}
         for bit in bits:
-            match = kwarg_re.match(bit)
-            if not match:
-                raise TemplateSyntaxError('Malformed arguments to host_url tag')
-            name, value = match.groups()
+            name, value = kwarg_re.match(bit).groups()
             if name:
                 kwargs[name] = parser.compile_filter(value)
             else:
@@ -29,29 +27,29 @@ class HostURLNode(template.Node):
     @classmethod
     def handle_token(cls, parser, token):
         bits = token.split_contents()
+        name = bits[0]
         if len(bits) < 2:
-            raise TemplateSyntaxError("'%s' takes at least 1 argument" % bits[0])
+            raise TemplateSyntaxError("'%s' takes at least 1 argument" % name)
         view = bits[1]
-        bits = bits[1:] # Strip off view
+        bits = bits[1:]  # Strip off view
         try:
             pivot = bits.index('on')
             try:
-                host = bits[pivot+1]
+                host = bits[pivot + 1]
             except IndexError:
-                raise TemplateSyntaxError(
-                    "'%s' arguments must include a host after 'on'" % bits[0])
-            view_args, view_kwargs = cls.parse_args_kwargs(parser, bits[1:pivot])
-            host_args, host_kwargs = cls.parse_args_kwargs(parser, bits[pivot+2:])
-
+                raise TemplateSyntaxError("'%s' arguments must include "
+                                          "a host after 'on'" % name)
+            view_args, view_kwargs = cls.parse_params(parser, bits[1:pivot])
+            host_args, host_kwargs = cls.parse_params(parser, bits[pivot + 2:])
         except ValueError:
-            # No "on <host>" was specified so use the default host
+            # No host was given so use the default host
             host = settings.DEFAULT_HOST
-            view_args, view_kwargs = cls.parse_args_kwargs(parser, bits[1:])
+            view_args, view_kwargs = cls.parse_params(parser, bits[1:])
             host_args, host_kwargs = (), {}
-
         return cls(host, view, host_args, host_kwargs, view_args, view_kwargs)
 
-    def __init__(self, host, view, host_args, host_kwargs, view_args, view_kwargs):
+    def __init__(self, host, view,
+                 host_args, host_kwargs, view_args, view_kwargs):
         self.host = host
         self.view = view
         self.host_args = host_args
@@ -66,8 +64,8 @@ class HostURLNode(template.Node):
         view_args = [x.resolve(context) for x in self.view_args]
         view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
                             for k, v in self.view_kwargs.iteritems())
-        return reverse_crossdomain(self.host, self.view,
-            host_args, host_kwargs, view_args, view_kwargs)
+        return reverse_full(self.host, self.view,
+                            host_args, host_kwargs, view_args, view_kwargs)
 
 
 @register.tag
@@ -77,6 +75,8 @@ def host_url(parser, token):
 
     {% host_url url-name on host-name  %}
     {% host_url url-name on host-name 'spam' %}
+    {% host_url url-name varg1=vvalue1 on host-name 'spam' 'hvalue1' %}
+    {% host_url url-name vvalue2 on host-name 'spam' harg2=hvalue2 %}
 
     """
     return HostURLNode.handle_token(parser, token)
