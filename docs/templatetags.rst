@@ -55,7 +55,7 @@ which will be rendered as:
 Setting a context variable
 --------------------------
 
-.. versionadded: 0.4.0
+.. versionadded:: 0.4.0
 
 If you'd like to retrieve a URL without displaying it, you can save the
 result of the template tag in a template variable and use it later on, e.g.:
