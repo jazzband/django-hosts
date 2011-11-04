@@ -32,6 +32,15 @@ class HostURLNode(template.Node):
             raise TemplateSyntaxError("'%s' takes at least 1 argument" % name)
         view = bits[1]
         bits = bits[1:]  # Strip off view
+        asvar = None
+        if 'as' in bits:
+            pivot = bits.index('as')
+            try:
+                asvar = bits[pivot + 1]
+            except IndexError:
+                raise TemplateSyntaxError("'%s' arguments must include "
+                                          "a variable name after 'as'" % name)
+            del bits[pivot:pivot + 2]
         try:
             pivot = bits.index('on')
             try:
@@ -46,16 +55,17 @@ class HostURLNode(template.Node):
             host = settings.DEFAULT_HOST
             view_args, view_kwargs = cls.parse_params(parser, bits[1:])
             host_args, host_kwargs = (), {}
-        return cls(host, view, host_args, host_kwargs, view_args, view_kwargs)
+        return cls(host, view, host_args, host_kwargs, view_args, view_kwargs, asvar)
 
     def __init__(self, host, view,
-                 host_args, host_kwargs, view_args, view_kwargs):
+                 host_args, host_kwargs, view_args, view_kwargs, asvar):
         self.host = host
         self.view = view
         self.host_args = host_args
         self.host_kwargs = host_kwargs
         self.view_args = view_args
         self.view_kwargs = view_kwargs
+        self.asvar = asvar
 
     def render(self, context):
         host_args = [x.resolve(context) for x in self.host_args]
@@ -64,8 +74,13 @@ class HostURLNode(template.Node):
         view_args = [x.resolve(context) for x in self.view_args]
         view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
                             for k, v in self.view_kwargs.iteritems())
-        return reverse_full(self.host, self.view,
+        url = reverse_full(self.host, self.view,
                             host_args, host_kwargs, view_args, view_kwargs)
+        if self.asvar:
+            context[self.asvar] = url
+            return ''
+        else:
+            return url
 
 
 @register.tag
@@ -74,6 +89,7 @@ def host_url(parser, token):
     Simple tag to reverse the URL inclusing a host.
 
     {% host_url url-name on host-name  %}
+    {% host_url url-name on host-name as url_on_host_variable %}
     {% host_url url-name on host-name 'spam' %}
     {% host_url url-name varg1=vvalue1 on host-name 'spam' 'hvalue1' %}
     {% host_url url-name vvalue2 on host-name 'spam' harg2=hvalue2 %}

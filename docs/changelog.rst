@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.4 (2011/11/04)
+----------------
+
+- Added ability to :ref:`save the result<asvar>` of
+  :func:`~django_hosts.templatetags.hosts.host_url` template tag in a
+  template context variable.
+
 0.3 (2011/09/30)
 ----------------
 

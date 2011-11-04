@@ -1,2 +1,3 @@
+include AUTHORS
 include README.rst
 recursive-include docs *
