@@ -20,6 +20,10 @@ class TemplateTagsTest(HostsTestCase):
         rendered = self.render(
             "{% load hosts %}{% host_url simple-direct on www %}")
         self.assertEqual(rendered, '//www.example.com/simple/')
+        rendered = self.render(
+            "{% load hosts %}{% host_url simple-direct on www as "
+            "simple_direct_url %}{{ simple_direct_url }} ")
+        self.assertEqual(rendered, '//www.example.com/simple/')
 
     @override_settings(
         DEFAULT_HOST='www',
@@ -35,6 +39,10 @@ class TemplateTagsTest(HostsTestCase):
     def test_host_url_tag_with_args(self):
         rendered = self.render("{% load hosts %}"
             "{% host_url simple-direct on with_args 'www.eggs.spam' %}")
+        self.assertEqual(rendered, '//www.eggs.spam/simple/')
+        rendered = self.render("{% load hosts %}"
+            "{% host_url simple-direct as yeah on with_args "
+            "'www.eggs.spam' %}{{ yeah }}")
         self.assertEqual(rendered, '//www.eggs.spam/simple/')
 
     @override_settings(
@@ -74,5 +82,8 @@ class TemplateTagsTest(HostsTestCase):
         self.assertRaises(TemplateSyntaxError,
                           self.render,
                           "{% load hosts %}{% host_url simple-direct on %}")
+        self.assertRaises(TemplateSyntaxError,
+                          self.render,
+                          "{% load hosts %}{% host_url simple-direct as %}")
         self.assertRaises(TemplateSyntaxError, HostURLNode.parse_params,
                           Parser(['']), "username=='johndoe'")

@@ -3,7 +3,7 @@ Template tags
 
 .. currentmodule:: django_hosts.templatetags.hosts
 
-.. function:: host_url(view_name, [view_args, view_kwargs], host_name, [host_args, host_kwargs])
+.. function:: host_url(view_name, [view_args, view_kwargs], host_name, [host_args, host_kwargs, as_var])
 
 Now if you want to actually refer to the full URLs in your templates
 you can use the included ``host_url`` template tag. So imagine having a
@@ -50,6 +50,23 @@ which will be rendered as:
     For more information see the `The protocol-relative URL`_ article
     by Paul Irish or the appropriate `section in RFC 3986`_.
 
+.. _asvar:
+
+Setting a context variable
+--------------------------
+
+.. versionadded: 0.4.0
+
+If you'd like to retrieve a URL without displaying it, you can save the
+result of the template tag in a template variable and use it later on, e.g.:
+
+.. code-block:: html+django
+
+    {% load hosts %}
+
+    {% host_url homepage as homepage_url %}
+    <a href="{{ homepage_url }}" title="Go back to {{ homepage_url }}">Home</a>
+
 .. _fqdn:
 
 Fully qualified domain names (FQDN)
@@ -77,7 +94,10 @@ to all URLs you can also spell out the domain in the host pattern::
         host(r'admin\.example\.com', settings.ROOT_URLCONF, name='admin'),
     )
 
-If your host pattern contains an argument (or key argument), like::
+Host and URL parameters
+-----------------------
+
+If your host pattern contains an parameter (or keyed parameter), like::
 
     from django.conf import settings
     from django_hosts import patterns, host
@@ -88,7 +108,7 @@ If your host pattern contains an argument (or key argument), like::
         host(r'(?P<username>\w+)', 'path.to.user_urls', name='user-area'),
     )
 
-you can also easily pass arguments to the
+you can also easily pass parameters to the
 :func:`~django_hosts.templatetags.hosts.host_url` template tag:
 
 .. code-block:: html+django
