@@ -33,14 +33,14 @@ class HostURLNode(template.Node):
         view = bits[1]
         bits = bits[1:]  # Strip off view
         asvar = None
-        if bits.count('as') == 1:
+        if 'as' in bits:
             pivot = bits.index('as')
             try:
-               asvar = bits[pivot +1]
+                asvar = bits[pivot + 1]
             except IndexError:
-               raise TemplateSyntaxError("'%s' arguments must include "
+                raise TemplateSyntaxError("'%s' arguments must include "
                                           "a variable name after 'as'" % name)
-            del bits[pivot:pivot+2]
+            del bits[pivot:pivot + 2]
         try:
             pivot = bits.index('on')
             try:
@@ -81,7 +81,7 @@ class HostURLNode(template.Node):
             return ''
         else:
             return url
- 
+
 
 @register.tag
 def host_url(parser, token):
