@@ -1,6 +1,14 @@
 Changelog
 =========
 
+in development
+--------------
+
+- Added :func:`~django_hosts.callbacks.cached_host_site` callback which
+  stores the matching :class:`~django.contrib.sites.models.Site` instance
+  in the default cache backend (also see new 
+  :attr:`~django.conf.settings.HOST_SITE_TIMEOUT` setting).
+
 0.4 (2011/11/04)
 ----------------
 
