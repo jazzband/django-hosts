@@ -28,8 +28,8 @@ class HostSiteManager(models.Manager):
     Then query against it with one of the manager methods::
 
         def home_page(request):
-            blog_posts = BlogPost.on_site.by_request(request).all()
-            return render(request, 'home_page.html', {'blog_posts': blog_posts})
+            posts = BlogPost.on_site.by_request(request).all()
+            return render(request, 'home_page.html', {'posts': posts})
 
     """
     def __init__(self, field_name=None, select_related=True):
