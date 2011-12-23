@@ -8,6 +8,12 @@ from django_hosts.tests.base import (override_settings, HostsTestCase,
 from django_hosts.tests.models import Author, BlogPost, WikiPage
 
 
+try:  # pragma: no cover
+    from django.utils.functional import empty
+except ImportError:  # pragma: no cover
+    empty = None
+
+
 class SitesTests(HostsTestCase):
 
     def setUp(self):
@@ -15,6 +21,7 @@ class SitesTests(HostsTestCase):
         self.site1 = Site.objects.create(domain='wiki.site1', name='site1')
         self.site2 = Site.objects.create(domain='wiki.site2', name='site2')
         self.site3 = Site.objects.create(domain='wiki.site3', name='site3')
+        self.site4 = Site.objects.create(domain='admin.site4', name='site4')
         self.page1 = WikiPage.objects.create(content='page1', site=self.site1)
         self.page2 = WikiPage.objects.create(content='page2', site=self.site1)
         self.page3 = WikiPage.objects.create(content='page3', site=self.site2)
@@ -40,7 +47,28 @@ class SitesTests(HostsTestCase):
         middleware = HostsMiddleware()
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'django_hosts.tests.urls.simple')
-        self.assertEqual(request.site, self.site1)
+        self.assertEqual(request.site.pk, self.site1.pk)
+
+    @override_settings(
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        DEFAULT_HOST='www')
+    def test_sites_cached_callback(self):
+        rf = RequestFactory(HTTP_HOST='admin.site4')
+        request = rf.get('/simple/')
+        middleware = HostsMiddleware()
+        middleware.process_request(request)
+
+        get_site = lambda: request.site.domain
+
+        # first checking if there is a db query
+        self.assertEqual(request.site._wrapped, empty)
+        self.assertNumQueries(1, get_site)
+        self.assertEqual(request.site._wrapped, self.site4)
+
+        # resetting the wrapped site instance to check the cache value
+        request.site._wrapped = empty
+        self.assertNumQueries(0, get_site)
+        self.assertEqual(request.site.pk, self.site4.pk)
 
     @override_settings(
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
@@ -51,7 +79,7 @@ class SitesTests(HostsTestCase):
         middleware = HostsMiddleware()
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'django_hosts.tests.urls.simple')
-        self.assertEqual(request.site, self.site2)
+        self.assertEqual(request.site.pk, self.site2.pk)
 
     @override_settings(
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
@@ -62,7 +90,7 @@ class SitesTests(HostsTestCase):
         middleware = HostsMiddleware()
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'django_hosts.tests.urls.simple')
-        self.assertEqual(request.site, self.site2)
+        self.assertEqual(request.site.pk, self.site2.pk)
         self.assertEqual(list(WikiPage.on_site.by_request(request)),
                          [self.page3])
 

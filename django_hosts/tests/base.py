@@ -107,6 +107,30 @@ class HostsTestCase(TestCase):
         except error, e:
             self.assertEqual(message, str(e))
 
+    def assertNumQueries(self, num, callable, *args, **kwargs):
+        from django.db import connection
+        if hasattr(connection, 'use_debug_cursor'):
+            old_use_debug_cursor = connection.use_debug_cursor
+            connection.use_debug_cursor = True
+            old_debug = None
+        else:
+            old_use_debug_cursor = None
+            old_debug = settings.DEBUG
+            settings.DEBUG = True
+        starting_queries = len(connection.queries)
+        try:
+            callable(*args, **kwargs)
+        finally:
+            final_queries = len(connection.queries)
+            if old_use_debug_cursor is not None:
+                connection.use_debug_cursor = old_use_debug_cursor
+            elif old_debug is not None:
+                settings.DEBUG = old_debug
+            executed = final_queries - starting_queries
+            self.assertEqual(executed, num,
+                             "%s queries executed, %s expected" %
+                             (executed, num))
+
     def settings(self, **kwargs):
         """
         A context manager that temporarily sets a setting and reverts

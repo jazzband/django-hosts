@@ -1,6 +1,20 @@
 Changelog
 =========
 
+0.4.1 (2011/12/23)
+------------------
+
+- Added :func:`~django_hosts.callbacks.cached_host_site` callback which
+  stores the matching :class:`~django.contrib.sites.models.Site` instance
+  in the default cache backend (also see new
+  :attr:`~django.conf.settings.HOST_SITE_TIMEOUT` setting).
+
+- Throw warning if django-debug-toolbar is used together with the
+  ``django_hosts`` and the order of the ``MIDDLEWARE_CLASSES`` setting
+  isn't correct.
+
+- Added CI server at https://jenkins.shiningpanda.com/enn.io/job/django-hosts/
+
 0.4 (2011/11/04)
 ----------------
 

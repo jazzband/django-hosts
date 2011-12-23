@@ -73,7 +73,8 @@ class host(object):
 
     def __repr__(self):
         return smart_str(u'<%s %s: %s (%r)>' %
-            (self.__class__.__name__, self.name, self.urlconf, self.regex))
+                         (self.__class__.__name__, self.name,
+                          self.urlconf, self.regex))
 
     @property
     def callback(self):

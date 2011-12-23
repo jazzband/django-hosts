@@ -54,6 +54,11 @@ Settings
     (e.g. using the :func:`~django_hosts.templatetags.hosts.host_url`
     template tag).
 
+.. attribute:: HOST_SITE_TIMEOUT (optional)
+
+    The time to cache the host in the default cache backend, in seconds,
+    when using the :func:`~django_hosts.callbacks.cached_host_site` callback.
+    Defaults to ``3600``.
 
 Contents
 --------

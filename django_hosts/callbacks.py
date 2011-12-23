@@ -1,15 +1,43 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404
-from django.utils.functional import SimpleLazyObject
+from django.utils.functional import LazyObject
 
 from django_hosts.reverse import reverse_host
 
+HOST_SITE_TIMEOUT = getattr(settings, "HOST_SITE_TIMEOUT", 3600)
 
-def get_site(request, *args, **kwargs):
-    if not hasattr(request, '_cached_site'):  # pragma: no cover
+
+class LazySite(LazyObject):
+
+    def __init__(self, request, *args, **kwargs):
+        super(LazySite, self).__init__()
+        self.__dict__.update({
+            'name': request.host.name,
+            'args': args,
+            'kwargs': kwargs,
+        })
+
+    def _setup(self):
+        host = reverse_host(self.name, args=self.args, kwargs=self.kwargs)
         from django.contrib.sites.models import Site
-        host = reverse_host(request.host.name, args=args, kwargs=kwargs)
-        request._cached_site = get_object_or_404(Site, domain__iexact=host)
-    return request._cached_site
+        site = get_object_or_404(Site, domain__iexact=host)
+        self._wrapped = site
+
+
+class CachedLazySite(LazySite):
+
+    def _setup(self):
+        host = reverse_host(self.name, args=self.args, kwargs=self.kwargs)
+        cache_key = "hosts:%s" % host
+        from django.core.cache import cache
+        site = cache.get(cache_key, None)
+        if site is not None:
+            self._wrapped = site
+            return
+        from django.contrib.sites.models import Site
+        site = get_object_or_404(Site, domain__iexact=host)
+        cache.set(cache_key, site, HOST_SITE_TIMEOUT)
+        self._wrapped = site
 
 
 def host_site(request, *args, **kwargs):
@@ -55,4 +83,18 @@ def host_site(request, *args, **kwargs):
     Later, in your views, you can nicely refer to the current site
     as ``request.site`` for further site-specific functionality.
     """
-    request.site = SimpleLazyObject(lambda: get_site(request, *args, **kwargs))
+    request.site = LazySite(request, *args, **kwargs)
+
+
+def cached_host_site(request, *args, **kwargs):
+    """
+    A callback function similar to :func:`~django_hosts.callbacks.host_site`
+    which caches the resulting :class:`~django.contrib.sites.models.Site`
+    instance in the default cache backend for the time specfified as
+    :attr:`~django.conf.settings.HOST_SITE_TIMEOUT`.
+
+    :param request: the request object passed from the middleware
+    :param \*args: the parameters as matched by the host patterns
+    :param \*\*kwargs: the keyed parameters as matched by the host patterns
+    """
+    request.site = CachedLazySite(request, *args, **kwargs)

@@ -76,5 +76,6 @@ Included callbacks
 
 .. autofunction:: django_hosts.callbacks.host_site(request, *args, **kwargs)
 
+.. autofunction:: django_hosts.callbacks.cached_host_site(request, *args, **kwargs)
 
 .. _DRY: http://de.wikipedia.org/wiki/Don’t_repeat_yourself
