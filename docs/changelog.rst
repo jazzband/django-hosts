@@ -13,7 +13,7 @@ Changelog
   ``django_hosts`` and the order of the ``MIDDLEWARE_CLASSES`` setting
   isn't correct.
 
-- Added CI server at https://jenkins.shiningpanda.com/enn.io/job/django-hosts/
+- Added CI server at https://ci.enn.io/job/django-hosts/
 
 0.4 (2011/11/04)
 ----------------
