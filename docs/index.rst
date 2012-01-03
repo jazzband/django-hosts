@@ -70,7 +70,7 @@ Contents
    templatetags
    reference
    changelog
-
+   faq
 
 Issues
 ------
