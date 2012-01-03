@@ -95,9 +95,12 @@ class HostsTestCase(TestCase):
     def setUp(self):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
+        self.old_apps = settings.INSTALLED_APPS
+        settings.INSTALLED_APPS = tuple(settings.INSTALLED_APPS) + ('django_hosts.tests',)
 
     def tearDown(self):
         clear_host_caches()
+        settings.INSTALLED_APPS = self.old_apps
 
     def assertRaisesWithMessage(self, error,
                                 message, callable, *args, **kwargs):
