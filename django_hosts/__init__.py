@@ -4,5 +4,5 @@ try:  # pragma: no cover
 except ImportError:  # pragma: no cover
     pass
 
-# following PEP 386, versiontools will pick it up
-__version__ = (0, 4, 1, "final", 0)
+# following PEP 386
+__version__ = "0.5"
