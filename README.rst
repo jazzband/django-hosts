@@ -52,6 +52,8 @@ First, install the app with your favorite package manager, e.g.::
 
 Alternatively, use the `repository on Github`_.
 
+You can find the full docs here: `django-hosts.rtfd.org`_
+
 Then configure your Django site to use the app:
 
 #. Add ``'django_hosts'`` to your ``INSTALLED_APPS`` setting.
@@ -72,8 +74,5 @@ Then configure your Django site to use the app:
    pattern matches or you don't give a name to the ``host_url`` template
    tag.
 
-``django-hosts`` uses versiontools_ to manage version numbers following
-:pep:`386`.
-
 .. _`repository on Github`: https://github.com/ennio/django-hosts
-.. _versiontools: http://pypi.python.org/pypi/versiontools
+.. _`django-hosts.rtfd.org`: http://django-hosts.readthedocs.org/
