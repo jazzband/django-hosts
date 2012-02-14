@@ -18,10 +18,7 @@ the middleware of django-hosts, e.g.:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 
-Also, currently (2012/01/01) django-hosts only works well
-together with the `development version`_ (the upcoming 0.9.X) of
-Django Debug toolbar.
-
+Also, you've at least installed `django-debug-toolbar 0.9.X`_ or higher.
 
 .. _`Django Debug toolbar`: https://github.com/django-debug-toolbar/django-debug-toolbar/
-.. _`development version`: https://github.com/django-debug-toolbar/django-debug-toolbar/
+.. _`django-debug-toolbar 0.9.X`: http://pypi.python.org/pypi/django-debug-toolbar
