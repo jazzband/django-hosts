@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.4.2 (2012/02/14)
+------------------
+
+- Removed a unneeded installation time requirement for Django <= 1.4.
+
+- Removed the use of versiontools due to unwanted installation time side
+  effects.
+
+- Refactored tests slightly.
+
 0.4.1 (2011/12/23)
 ------------------
 
