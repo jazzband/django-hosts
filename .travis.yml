@@ -10,7 +10,7 @@ install:
   - pip install -e .
   - pip install -r requirements/tests.txt Django==$DJANGO
 before_script:
-  - flake8 dbtemplates --ignore=E501
+  - flake8 django_hosts --ignore=E501
 script:
   - django-admin.py test --settings=django_hosts.test_settings django_hosts
 env:
