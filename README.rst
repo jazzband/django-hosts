@@ -1,6 +1,10 @@
 django-hosts
 ============
 
+.. image:: https://secure.travis-ci.org/ennio/django-hosts.png?branch=develop
+    :alt: Build Status
+    :target: http://travis-ci.org/ennio/django-hosts
+
 This Django app routes requests for specific hosts to different URL schemes
 defined in modules called "hostconfs".
 

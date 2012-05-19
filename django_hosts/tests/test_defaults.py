@@ -1,4 +1,4 @@
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
 
 from django_hosts.defaults import patterns, host
 from django_hosts.reverse import get_host_patterns
@@ -66,7 +66,7 @@ class HostTests(HostsTestCase):
 
         api_host = host(r'api', 'api.urls', name='api',
                         callback='django_hosts.non_existent')
-        self.assertRaisesWithMessage(ImproperlyConfigured,
-            "Tried 'non_existent' in module 'django_hosts'. "
-            "Error was: 'module' object has no attribute 'non_existent'",
+        self.assertRaisesWithMessage(ViewDoesNotExist,
+            "Could not import django_hosts.non_existent. "
+            "View does not exist in module django_hosts.",
             lambda: api_host.callback)

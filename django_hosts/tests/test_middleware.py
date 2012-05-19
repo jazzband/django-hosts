@@ -46,3 +46,13 @@ class MiddlewareTests(HostsTestCase):
         middleware = HostsMiddleware()
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'django_hosts.tests.urls.complex')
+
+    @override_settings(
+        ROOT_HOSTCONF='django_hosts.tests.hosts.multiple',
+        DEFAULT_HOST='www')
+    def test_multiple_subdomains(self):
+        rf = RequestFactory(HTTP_HOST='bb.aa.tt.localhost.tld')
+        request = rf.get('/multiple/')
+        middleware = HostsMiddleware()
+        middleware.process_request(request)
+        self.assertEqual(request.urlconf, 'django_hosts.tests.urls.multiple')
