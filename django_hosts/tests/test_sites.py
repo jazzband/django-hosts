@@ -11,7 +11,7 @@ from django_hosts.tests.models import Author, BlogPost, WikiPage
 try:  # pragma: no cover
     from django.utils.functional import empty
 except ImportError:  # pragma: no cover
-    empty = None
+    empty = None  # noqa
 
 
 class SitesTests(HostsTestCase):
