@@ -1,4 +1,4 @@
 unittest2
 flake8
-django-nose
 coverage
+django-discover-runner
