@@ -66,7 +66,7 @@ class HostTests(HostsTestCase):
 
         api_host = host(r'api', 'api.urls', name='api',
                         callback='django_hosts.non_existent')
-        self.assertRaisesWithMessage(ViewDoesNotExist,
+        self.assertRaisesWithMessage(ImproperlyConfigured,
             "Could not import django_hosts.non_existent. "
-            "View does not exist in module django_hosts.",
+            "Callable does not exist in module django_hosts.",
             lambda: api_host.callback)
