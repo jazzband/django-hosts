@@ -1,4 +1,4 @@
-from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
+from django.core.exceptions import ImproperlyConfigured
 
 from django_hosts.defaults import patterns, host
 from django_hosts.reverse import get_host_patterns
