@@ -102,7 +102,8 @@ def reverse_host(host, args=None, kwargs=None):
         if re.match(host.regex, candidate, re.UNICODE):  # pragma: no cover
             parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
             if parent_host:
-                if candidate:
+                # only add the parent host when needed (aka www-less domain)
+                if candidate and candidate != parent_host:
                     candidate = '%s.%s' % (candidate, parent_host)
                 else:
                     candidate = parent_host

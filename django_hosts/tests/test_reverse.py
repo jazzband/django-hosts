@@ -32,6 +32,13 @@ class ReverseTest(HostsTestCase):
         self.assertEqual(reverse_full('static', 'simple-direct'),
                          '//static.spam.eggs/simple/')
 
+    @override_settings(
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        PARENT_HOST='example.com')
+    def test_reverse_full2(self):
+        self.assertEqual(reverse_full('without_www', 'simple-direct'),
+                         '//example.com/simple/')
+
 
 class UtilityTests(HostsTestCase):
 
