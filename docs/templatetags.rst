@@ -105,7 +105,7 @@ If your host pattern contains an parameter (or keyed parameter), like::
     host_patterns = patterns('',
         host(r'www', settings.ROOT_URLCONF, name='homepage'),
         host(r'(\w+)', 'path.to.support_urls', name='wildcard'),
-        host(r'(?P<username>\w+)', 'path.to.user_urls', name='user-area'),
+        host(r'(?P<username>\w+).users', 'path.to.user_urls', name='user-area'),
     )
 
 you can also easily pass parameters to the
