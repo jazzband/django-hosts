@@ -50,6 +50,11 @@ which will be rendered as:
     For more information see the `The protocol-relative URL`_ article
     by Paul Irish or the appropriate `section in RFC 3986`_.
 
+    .. versionchanged:: 0.5
+
+    You can override the used scheme with the
+    :attr:`~django.conf.settings.HOST_SCHEME` setting.
+
 .. _asvar:
 
 Setting a context variable

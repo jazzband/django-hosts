@@ -35,9 +35,22 @@ class ReverseTest(HostsTestCase):
     @override_settings(
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         PARENT_HOST='example.com')
-    def test_reverse_full2(self):
+    def test_reverse_full_without_www(self):
         self.assertEqual(reverse_full('without_www', 'simple-direct'),
                          '//example.com/simple/')
+
+    @override_settings(
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        PARENT_HOST='spam.eggs')
+    def test_reverse_custom_scheme(self):
+        from django_hosts import reverse
+        try:
+            old = reverse.HOST_SCHEME
+            reverse.HOST_SCHEME = 'https://'
+            self.assertEqual(reverse_full('static', 'simple-direct'),
+                             'https://static.spam.eggs/simple/')
+        finally:
+            reverse.HOST_SCHEME = old
 
 
 class UtilityTests(HostsTestCase):

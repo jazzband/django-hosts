@@ -60,6 +60,12 @@ Settings
     when using the :func:`~django_hosts.callbacks.cached_host_site` callback.
     Defaults to ``3600``.
 
+.. attribute:: HOST_SCHEME (optional)
+
+    The scheme to prepend host names with during reversing, e.g. when
+    using the :func:`~django_hosts.templatetags.hosts.host_url` template tag.
+    Defaults to ``//``.
+
 Contents
 --------
 
