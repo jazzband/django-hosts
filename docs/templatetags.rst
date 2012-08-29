@@ -50,6 +50,11 @@ which will be rendered as:
     For more information see the `The protocol-relative URL`_ article
     by Paul Irish or the appropriate `section in RFC 3986`_.
 
+    .. versionchanged:: 0.5
+
+    You can override the used scheme with the
+    :attr:`~django.conf.settings.HOST_SCHEME` setting.
+
 .. _asvar:
 
 Setting a context variable
@@ -105,7 +110,7 @@ If your host pattern contains an parameter (or keyed parameter), like::
     host_patterns = patterns('',
         host(r'www', settings.ROOT_URLCONF, name='homepage'),
         host(r'(\w+)', 'path.to.support_urls', name='wildcard'),
-        host(r'(?P<username>\w+)', 'path.to.user_urls', name='user-area'),
+        host(r'(?P<username>\w+).users', 'path.to.user_urls', name='user-area'),
     )
 
 you can also easily pass parameters to the
@@ -123,7 +128,7 @@ Which will be rendered (with a :attr:`~django.conf.settings.PARENT_HOST` of
 
 .. code-block:: html+django
 
-    <a href="//johndoe.example.com/">John's dashboard</a>
+    <a href="//johndoe.users.example.com/">John's dashboard</a>
     <a href="//help.example.com/faq/">FAQ</a>
 
 .. _The protocol-relative URL: http://paulirish.com/2010/the-protocol-relative-url/

@@ -1,0 +1,4 @@
+unittest2
+flake8
+coverage
+django-discover-runner

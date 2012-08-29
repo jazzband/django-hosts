@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.5 (2012/08/29)
+----------------
+
+- Fixed host reversing when the ``PARENT_HOST`` equals
+
+- Added ``HOST_SCHEME`` setting to be able to override the default URL scheme
+  when reversing hosts.
+
 0.4.2 (2012/02/14)
 ------------------
 

@@ -74,6 +74,15 @@ class TemplateTagsTest(HostsTestCase):
         self.assertEqual(rendered, '//static.eggs.spam/simple/')
 
     @override_settings(
+        DEFAULT_HOST='without_www',
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        PARENT_HOST='example.com')
+    def test_host_url_no_www(self):
+        rendered = self.render(
+            "{% load hosts %}{% host_url simple-direct on without_www %}")
+        self.assertEqual(rendered, '//example.com/simple/')
+
+    @override_settings(
         DEFAULT_HOST='www',
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_raises_template_syntaxerror(self):

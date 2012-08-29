@@ -67,6 +67,6 @@ class HostTests(HostsTestCase):
         api_host = host(r'api', 'api.urls', name='api',
                         callback='django_hosts.non_existent')
         self.assertRaisesWithMessage(ImproperlyConfigured,
-            "Tried 'non_existent' in module 'django_hosts'. "
-            "Error was: 'module' object has no attribute 'non_existent'",
+            "Could not import django_hosts.non_existent. "
+            "Callable does not exist in module django_hosts.",
             lambda: api_host.callback)

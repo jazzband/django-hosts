@@ -14,7 +14,7 @@
 import sys
 import os
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'django_hosts.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'django_hosts.test_settings'
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the

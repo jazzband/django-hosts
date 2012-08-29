@@ -3,9 +3,6 @@ import re
 from os import path
 from setuptools import setup, find_packages
 
-read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
-
-
 def read(*parts):
     return open(path.join(path.dirname(__file__), *parts)).read()
 
