@@ -123,7 +123,7 @@ Which will be rendered (with a :attr:`~django.conf.settings.PARENT_HOST` of
 
 .. code-block:: html+django
 
-    <a href="//johndoe.example.com/">John's dashboard</a>
+    <a href="//johndoe.users.example.com/">John's dashboard</a>
     <a href="//help.example.com/faq/">FAQ</a>
 
 .. _The protocol-relative URL: http://paulirish.com/2010/the-protocol-relative-url/
