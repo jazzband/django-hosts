@@ -15,12 +15,6 @@ _hostconf_module_cache = {}
 _host_patterns_cache = {}
 _host_cache = {}
 
-HOST_SCHEME = getattr(settings, 'HOST_SCHEME', '//')
-if HOST_SCHEME.endswith(':'):
-    HOST_SCHEME = u'%s//' % HOST_SCHEME
-if '//' not in HOST_SCHEME:
-    HOST_SCHEME = u'%s://' % HOST_SCHEME
-
 
 def get_hostconf():
     try:
@@ -134,8 +128,7 @@ def reverse_full(host, view,
         >>> reverse_full('www', 'about')
         '//www.example.com/about/'
 
-    You can override the used scheme with the
-    :attr:`~django.conf.settings.HOST_SCHEME` setting.
+    You can set the used scheme in the host object.
 
     :param host: the name of the host
     :param view: the name of the view
@@ -153,4 +146,4 @@ def reverse_full(host, view,
                         args=view_args or (),
                         kwargs=view_kwargs or {},
                         urlconf=host.urlconf)
-    return u'%s%s%s' % (HOST_SCHEME, host_part, path_part)
+    return u'%s%s%s' % (host.scheme, host_part, path_part)
