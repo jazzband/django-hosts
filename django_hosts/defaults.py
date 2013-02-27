@@ -3,6 +3,7 @@ import os
 import re
 import sys
 
+from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import get_mod_func
 from django.utils.encoding import smart_str
@@ -10,6 +11,13 @@ from django.utils.functional import memoize
 from django.utils.importlib import import_module
 
 _callable_cache = {}  # Maps view and url pattern names to their view functions.
+
+
+HOST_SCHEME = getattr(settings, 'HOST_SCHEME', '//')
+if HOST_SCHEME.endswith(':'):
+    HOST_SCHEME = u'%s//' % HOST_SCHEME
+if '//' not in HOST_SCHEME:
+    HOST_SCHEME = u'%s://' % HOST_SCHEME
 
 
 def module_has_submodule(package, module_name):
@@ -165,8 +173,13 @@ class host(object):
     :type callback: callable or str
     :param prefix: the prefix to apply to the ``urlconf`` parameter
     :type prefix: str
+    :param scheme: the scheme to prepend host names with during reversing,
+                   e.g.  when using the host_url() template tag. Defaults to
+                   :attr:`~django.conf.settings.HOST_SCHEME`.
+    :type scheme: str
     """
-    def __init__(self, regex, urlconf, name, callback=None, prefix=''):
+    def __init__(self, regex, urlconf, name, callback=None, prefix='',
+                 scheme=HOST_SCHEME):
         """
         Compile hosts. We add a literal fullstop to the end of every
         pattern to avoid rather unwieldy escaping in every definition.
@@ -175,6 +188,7 @@ class host(object):
         self.compiled_regex = re.compile(r'%s(\.|$)' % regex)
         self.urlconf = urlconf
         self.name = name
+        self.scheme = scheme
         if callable(callback):
             self._callback = callback
         else:
