@@ -51,13 +51,13 @@ def get_host_patterns():
     try:
         return module.host_patterns
     except AttributeError:
-        raise ImproperlyConfigured("Missing host_patterns in '%s'" % hostconf)
+        raise ImproperlyConfigured("Missing host_patterns in '%s'" %
+                                   hostconf)
 get_host_patterns = memoize(get_host_patterns, _host_patterns_cache, 0)
 
 
 def clear_host_caches():
-    global _hostconf_cache, _hostconf_module_cache, \
-           _host_patterns_cache, _host_cache
+    global _hostconf_cache, _hostconf_module_cache, _host_patterns_cache, _host_cache
     _hostconf_cache.clear()
     _hostconf_module_cache.clear()
     _host_patterns_cache.clear()
