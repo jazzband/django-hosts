@@ -15,4 +15,6 @@ host_patterns = patterns('',
     host(r'(?P<username>\w+)', 'django_hosts.tests.urls.simple',
          name='with_kwargs'),
     host(r'(\w+)', 'django_hosts.tests.urls.simple', name='with_args'),
+    host(r'scheme', 'django_hosts.tests.urls.simple', name='scheme',
+         scheme='https://'),
 )
