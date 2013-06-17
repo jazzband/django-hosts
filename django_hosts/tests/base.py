@@ -111,8 +111,16 @@ class HostsTestCase(TestCase):
         self.assertRaises(error, callable, *args, **kwargs)
         try:
             callable(*args, **kwargs)
-        except error, e:
+        except error as e:
             self.assertEqual(message, str(e))
+
+    def assertRaisesWithMessageIn(self, error,
+                                  message, callable, *args, **kwargs):
+        self.assertRaises(error, callable, *args, **kwargs)
+        try:
+            callable(*args, **kwargs)
+        except error as e:
+            self.assertIn(message, str(e))
 
     def assertNumQueries(self, num, callable, *args, **kwargs):
         from django.db import connection

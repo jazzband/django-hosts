@@ -3,8 +3,11 @@ import re
 from os import path
 from setuptools import setup, find_packages
 
+
 def read(*parts):
-    return open(path.join(path.dirname(__file__), *parts)).read()
+    filename = path.join(path.dirname(__file__), *parts)
+    with codecs.open(filename, encoding='utf-8') as fp:
+        return fp.read()
 
 
 def find_version(*file_paths):
@@ -34,8 +37,9 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.5',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
     ],
 )

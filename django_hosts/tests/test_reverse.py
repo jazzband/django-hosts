@@ -43,14 +43,8 @@ class ReverseTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         PARENT_HOST='spam.eggs')
     def test_reverse_custom_scheme(self):
-        from django_hosts import reverse
-        try:
-            old = reverse.HOST_SCHEME
-            reverse.HOST_SCHEME = 'https://'
-            self.assertEqual(reverse_full('static', 'simple-direct'),
-                             'https://static.spam.eggs/simple/')
-        finally:
-            reverse.HOST_SCHEME = old
+        self.assertEqual(reverse_full('scheme', 'simple-direct'),
+                         'https://scheme.spam.eggs/simple/')
 
 
 class UtilityTests(HostsTestCase):

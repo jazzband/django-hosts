@@ -3,7 +3,8 @@ import re
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch, reverse
-from django.utils.encoding import force_unicode
+from django.utils import six
+from django.utils.encoding import force_text
 from django.utils.functional import memoize
 from django.utils.importlib import import_module
 from django.utils.regex_helper import normalize
@@ -14,12 +15,6 @@ _hostconf_cache = {}
 _hostconf_module_cache = {}
 _host_patterns_cache = {}
 _host_cache = {}
-
-HOST_SCHEME = getattr(settings, 'HOST_SCHEME', '//')
-if HOST_SCHEME.endswith(':'):
-    HOST_SCHEME = u'%s//' % HOST_SCHEME
-if '//' not in HOST_SCHEME:
-    HOST_SCHEME = u'%s://' % HOST_SCHEME
 
 
 def get_hostconf():
@@ -51,13 +46,13 @@ def get_host_patterns():
     try:
         return module.host_patterns
     except AttributeError:
-        raise ImproperlyConfigured("Missing host_patterns in '%s'" % hostconf)
+        raise ImproperlyConfigured("Missing host_patterns in '%s'" %
+                                   hostconf)
 get_host_patterns = memoize(get_host_patterns, _host_patterns_cache, 0)
 
 
 def clear_host_caches():
-    global _hostconf_cache, _hostconf_module_cache, \
-           _host_patterns_cache, _host_cache
+    global _hostconf_cache, _hostconf_module_cache, _host_patterns_cache, _host_cache
     _hostconf_cache.clear()
     _hostconf_module_cache.clear()
     _host_patterns_cache.clear()
@@ -91,9 +86,9 @@ def reverse_host(host, args=None, kwargs=None):
     if not isinstance(host, host_cls):
         host = get_host(host)
 
-    unicode_args = [force_unicode(x) for x in args]
-    unicode_kwargs = dict(((k, force_unicode(v))
-                          for (k, v) in kwargs.iteritems()))
+    unicode_args = [force_text(x) for x in args]
+    unicode_kwargs = dict(((k, force_text(v))
+                          for (k, v) in six.iteritems(kwargs)))
 
     for result, params in normalize(host.regex):
         if args:
@@ -134,8 +129,7 @@ def reverse_full(host, view,
         >>> reverse_full('www', 'about')
         '//www.example.com/about/'
 
-    You can override the used scheme with the
-    :attr:`~django.conf.settings.HOST_SCHEME` setting.
+    You can set the used scheme in the host object.
 
     :param host: the name of the host
     :param view: the name of the view
@@ -153,4 +147,4 @@ def reverse_full(host, view,
                         args=view_args or (),
                         kwargs=view_kwargs or {},
                         urlconf=host.urlconf)
-    return u'%s%s%s' % (HOST_SCHEME, host_part, path_part)
+    return '%s%s%s' % (host.scheme, host_part, path_part)

@@ -19,7 +19,7 @@ class HostsMiddleware(object):
             self.default_host = get_host(settings.DEFAULT_HOST)
         except AttributeError:
             raise ImproperlyConfigured("Missing DEFAULT_HOST setting")
-        except NoReverseMatch, e:
+        except NoReverseMatch as e:
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" % e)
 
         middlewares = list(settings.MIDDLEWARE_CLASSES)
