@@ -68,5 +68,5 @@ class HostTests(HostsTestCase):
                         callback='django_hosts.non_existent')
         self.assertRaisesWithMessageIn(ImproperlyConfigured,
             "Could not import django_hosts.non_existent. "
-            "Callable does not exist in module.",
+            "Callable does not exist in module",
             lambda: api_host.callback)
