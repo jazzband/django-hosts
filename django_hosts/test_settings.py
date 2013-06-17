@@ -20,4 +20,7 @@ SITE_ID = 1
 
 SECRET_KEY = 'something-something'
 
-TEST_RUNNER = 'discover_runner.DiscoverRunner'
+import django
+
+if django.VERSION[:2] < (1, 6):
+    TEST_RUNNER = 'discover_runner.DiscoverRunner'
