@@ -88,7 +88,7 @@ def reverse_host(host, args=None, kwargs=None):
 
     unicode_args = [force_text(x) for x in args]
     unicode_kwargs = dict(((k, force_text(v))
-                          for (k, v) in six.iteritems(kwargs))
+                          for (k, v) in six.iteritems(kwargs)))
 
     for result, params in normalize(host.regex):
         if args:
