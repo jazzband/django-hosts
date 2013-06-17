@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.6 (2013/06/17)
+----------------
+
+- Support for Django 1.5.x and Python > 3.2.
+
+- Dropped support for Python 2.5 and Django 1.3.
+
+- Optionally allow setting the scheme per host instead of only using
+  the ``HOST_SCHEME`` setting.
+
 0.5 (2012/08/29)
 ----------------
 

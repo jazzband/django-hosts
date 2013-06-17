@@ -161,6 +161,7 @@ class host(object):
         host_patterns = patterns('path.to',
             host(r'www', 'urls.default', name='default'),
             host(r'api', 'urls.api', name='api'),
+            host(r'admin', 'urls.admin', name='admin', scheme='https://'),
         )
 
     :param regex: a regular expression to be used to match the request's
