@@ -6,4 +6,4 @@ except ImportError:  # pragma: no cover
     pass
 
 # following PEP 386
-__version__ = "0.5"
+__version__ = "0.6"
