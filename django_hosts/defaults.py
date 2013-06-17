@@ -15,9 +15,9 @@ _callable_cache = {}  # Maps view and url pattern names to their view functions.
 
 HOST_SCHEME = getattr(settings, 'HOST_SCHEME', '//')
 if HOST_SCHEME.endswith(':'):
-    HOST_SCHEME = u'%s//' % HOST_SCHEME
+    HOST_SCHEME = '%s//' % HOST_SCHEME
 if '//' not in HOST_SCHEME:
-    HOST_SCHEME = u'%s://' % HOST_SCHEME
+    HOST_SCHEME = '%s://' % HOST_SCHEME
 
 
 def module_has_submodule(package, module_name):
@@ -196,7 +196,7 @@ class host(object):
         self.add_prefix(prefix)
 
     def __repr__(self):
-        return smart_str(u'<%s %s: %s (%r)>' %
+        return smart_str('<%s %s: %s (%r)>' %
                          (self.__class__.__name__, self.name,
                           self.urlconf, self.regex))
 

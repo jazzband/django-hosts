@@ -146,4 +146,4 @@ def reverse_full(host, view,
                         args=view_args or (),
                         kwargs=view_kwargs or {},
                         urlconf=host.urlconf)
-    return u'%s%s%s' % (host.scheme, host_part, path_part)
+    return '%s%s%s' % (host.scheme, host_part, path_part)
