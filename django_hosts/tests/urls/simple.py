@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('django.views.generic.simple',
+urlpatterns = patterns('',
     url(r'^simple/$', 'django.shortcuts.render', name='simple-direct'),
 )
