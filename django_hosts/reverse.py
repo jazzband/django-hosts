@@ -3,7 +3,7 @@ import re
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch, reverse
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.utils.functional import memoize
 from django.utils.importlib import import_module
 from django.utils.regex_helper import normalize
@@ -85,8 +85,8 @@ def reverse_host(host, args=None, kwargs=None):
     if not isinstance(host, host_cls):
         host = get_host(host)
 
-    unicode_args = [force_unicode(x) for x in args]
-    unicode_kwargs = dict(((k, force_unicode(v))
+    unicode_args = [force_text(x) for x in args]
+    unicode_kwargs = dict(((k, force_text(v))
                           for (k, v) in kwargs.iteritems()))
 
     for result, params in normalize(host.regex):
