@@ -111,7 +111,7 @@ class HostsTestCase(TestCase):
         self.assertRaises(error, callable, *args, **kwargs)
         try:
             callable(*args, **kwargs)
-        except error, e:
+        except error as e:
             self.assertEqual(message, str(e))
 
     def assertNumQueries(self, num, callable, *args, **kwargs):

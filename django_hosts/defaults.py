@@ -208,12 +208,12 @@ class host(object):
             return lambda *args, **kwargs: None
         try:
             self._callback = get_callable(self._callback_str)
-        except ImportError, e:
+        except ImportError as e:
             mod_name, _ = get_mod_func(self._callback_str)
             raise ImproperlyConfigured("Could not import '%s'. "
                                        "Error was: %s" %
                                        (mod_name, str(e)))
-        except AttributeError, e:
+        except AttributeError as e:
             mod_name, func_name = get_mod_func(self._callback_str)
             raise ImproperlyConfigured("Tried '%s' in module '%s'. "
                                        "Error was: %s" %

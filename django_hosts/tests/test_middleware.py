@@ -41,7 +41,7 @@ class MiddlewareTests(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         DEFAULT_HOST='with_view_kwargs')
     def test_fallback_to_defaulthost(self):
-        rf = RequestFactory(HTTP_HOST=u'ss.example.com')
+        rf = RequestFactory(HTTP_HOST='ss.example.com')
         request = rf.get('/template/test/')
         middleware = HostsMiddleware()
         middleware.process_request(request)
