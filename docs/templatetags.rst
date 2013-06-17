@@ -18,7 +18,7 @@ host pattern of::
 
 and a ``ROOT_URLCONF`` of::
 
-    from django.conf.urls.defaults import patterns, url
+    from django.conf.urls import patterns, url
 
     urlpatterns = patterns('mysite.admin',
         url(r'^dashboard/$', 'dashboard', name='dashboard'),
