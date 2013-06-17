@@ -2,6 +2,7 @@ import re
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
+from django.utils import six
 from django.utils.encoding import smart_str
 
 from django_hosts.reverse import reverse_full
@@ -70,12 +71,12 @@ class HostURLNode(template.Node):
     def render(self, context):
         host_args = [x.resolve(context) for x in self.host_args]
         host_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
-                            for k, v in self.host_kwargs.iteritems())
+                           for k, v in six.iteritems(self.host_kwargs))
         view_args = [x.resolve(context) for x in self.view_args]
         view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
-                            for k, v in self.view_kwargs.iteritems())
+                           for k, v in six.iteritems(self.view_kwargs))
         url = reverse_full(self.host, self.view,
-                            host_args, host_kwargs, view_args, view_kwargs)
+                           host_args, host_kwargs, view_args, view_kwargs)
         if self.asvar:
             context[self.asvar] = url
             return ''
