@@ -15,7 +15,7 @@ script: make test
 env:
   - DJANGO=1.4.5
   - DJANGO=1.5.1
-  - DJANGO=master
+  - DJANGO=stable/1.6.x
 matrix:
   exclude:
     - python: 3.2
