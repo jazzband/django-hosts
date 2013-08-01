@@ -1,9 +1,9 @@
 django-hosts
 ============
 
-.. image:: https://secure.travis-ci.org/ennio/django-hosts.png?branch=develop
+.. image:: https://secure.travis-ci.org/jezdez/django-hosts.png?branch=develop
     :alt: Build Status
-    :target: http://travis-ci.org/ennio/django-hosts
+    :target: http://travis-ci.org/jezdez/django-hosts
 
 This Django app routes requests for specific hosts to different URL schemes
 defined in modules called "hostconfs".
@@ -78,5 +78,5 @@ Then configure your Django site to use the app:
    pattern matches or you don't give a name to the ``host_url`` template
    tag.
 
-.. _`repository on Github`: https://github.com/ennio/django-hosts
+.. _`repository on Github`: https://github.com/jezdez/django-hosts
 .. _`django-hosts.rtfd.org`: http://django-hosts.readthedocs.org/
