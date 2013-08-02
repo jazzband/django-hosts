@@ -4,8 +4,8 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch, reverse
 from django.utils import six
-from django.utils.encoding import force_text
-from django.utils.functional import memoize
+from django.utils.encoding import iri_to_uri, force_text
+from django.utils.functional import memoize, lazy
 from django.utils.importlib import import_module
 from django.utils.regex_helper import normalize
 
@@ -147,4 +147,6 @@ def reverse_full(host, view,
                         args=view_args or (),
                         kwargs=view_kwargs or {},
                         urlconf=host.urlconf)
-    return '%s%s%s' % (host.scheme, host_part, path_part)
+    return iri_to_uri('%s%s%s' % (host.scheme, host_part, path_part))
+
+reverse_full_lazy = lazy(reverse_full, str)
