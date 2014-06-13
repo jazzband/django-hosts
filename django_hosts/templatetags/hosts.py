@@ -31,7 +31,14 @@ class HostURLNode(template.Node):
         name = bits[0]
         if len(bits) < 2:
             raise TemplateSyntaxError("'%s' takes at least 1 argument" % name)
-        view = bits[1]
+
+        try:
+            view_name = parser.compile_filter(bits[1])
+        except TemplateSyntaxError as exc:
+            exc.args = (exc.args[0] + ". "
+                    "The syntax of 'url' changed in Django 1.5, see the docs."),
+            raise
+
         bits = bits[1:]  # Strip off view
         asvar = None
         if 'as' in bits:
@@ -56,12 +63,12 @@ class HostURLNode(template.Node):
             host = settings.DEFAULT_HOST
             view_args, view_kwargs = cls.parse_params(parser, bits[1:])
             host_args, host_kwargs = (), {}
-        return cls(host, view, host_args, host_kwargs, view_args, view_kwargs, asvar)
+        return cls(host, view_name, host_args, host_kwargs, view_args, view_kwargs, asvar)
 
-    def __init__(self, host, view,
+    def __init__(self, host, view_name,
                  host_args, host_kwargs, view_args, view_kwargs, asvar):
         self.host = host
-        self.view = view
+        self.view_name = view_name
         self.host_args = host_args
         self.host_kwargs = host_kwargs
         self.view_args = view_args
@@ -72,10 +79,12 @@ class HostURLNode(template.Node):
         host_args = [x.resolve(context) for x in self.host_args]
         host_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
                            for k, v in six.iteritems(self.host_kwargs))
+        self.view_name = self.view_name.resolve(context)
         view_args = [x.resolve(context) for x in self.view_args]
         view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
                            for k, v in six.iteritems(self.view_kwargs))
-        url = reverse_full(self.host, self.view,
+
+        url = reverse_full(self.host, self.view_name,
                            host_args, host_kwargs, view_args, view_kwargs)
         if self.asvar:
             context[self.asvar] = url
