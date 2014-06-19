@@ -8,12 +8,13 @@ hosts_middleware = "django_hosts.middleware.HostsMiddleware"
 toolbar_middleware = "debug_toolbar.middleware.DebugToolbarMiddleware"
 
 
-class HostsMiddleware(object):
+class BaseHostsMiddleware(object):
     """
     Adjust incoming request's urlconf based on hosts defined in
     settings.ROOT_HOSTCONF module.
     """
     def __init__(self):
+        self.current_urlconf = None
         self.host_patterns = get_host_patterns()
         try:
             self.default_host = get_host(settings.DEFAULT_HOST)
@@ -42,6 +43,8 @@ class HostsMiddleware(object):
                 return host, match.groupdict()
         return self.default_host, {}
 
+
+class HostsMiddlewareRequest(BaseHostsMiddleware):
     def process_request(self, request):
         # Find best match, falling back to settings.DEFAULT_HOST
         host, kwargs = self.get_host(request.get_host())
@@ -59,3 +62,29 @@ class HostsMiddleware(object):
             # Reset URLconf for this thread on the way out for complete
             # isolation of request.urlconf
             set_urlconf(current_urlconf)
+
+
+class HostsMiddlewareResponse(BaseHostsMiddleware):
+    def process_response(self, request, response):
+        # Django resets the base urlconf when it starts to process
+        # the response, so we need to set this again, in case
+        # any of our middleware makes use of host, etc URLs.
+        
+        # Find best match, falling back to settings.DEFAULT_HOST
+        host, kwargs = self.get_host(request.get_host())
+        # This is the main part of this middleware
+        request.urlconf = host.urlconf
+        request.host = host
+
+        set_urlconf(host.urlconf)
+        return response
+
+
+class HostsMiddleware(HostsMiddlewareRequest):
+    """
+    Provided for backwards-compatibility.
+    """
+    import warnings
+    warnings.warn("django_hosts.middleware.HostsMiddleware has been split into HostsMiddlewareRequest and HostsMiddlewareResponse. Please consult the documentation and update your middleware settings.",
+        DeprecationWarning
+    )
