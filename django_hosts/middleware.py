@@ -69,7 +69,7 @@ class HostsMiddlewareResponse(BaseHostsMiddleware):
         # Django resets the base urlconf when it starts to process
         # the response, so we need to set this again, in case
         # any of our middleware makes use of host, etc URLs.
-        
+
         # Find best match, falling back to settings.DEFAULT_HOST
         host, kwargs = self.get_host(request.get_host())
         # This is the main part of this middleware
