@@ -3,6 +3,7 @@ from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils import six
+from django.template.base import FilterExpression
 from django.utils.encoding import smart_str
 
 from django_hosts.reverse import reverse_full
@@ -76,12 +77,20 @@ class HostURLNode(template.Node):
         self.asvar = asvar
 
     def render(self, context):
-        host_args = [x.resolve(context) for x in self.host_args]
-        host_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
+        def _resolve(o):
+            # Item may have already been resolved
+            # in e.g. a LoopNode, so we only resolve()
+            # if needed.
+            if isinstance(o, FilterExpression):
+                return o.resolve(context)
+            return o
+
+        host_args = [_resolve(x) for x in self.host_args]
+        host_kwargs = dict((smart_str(k, 'ascii'), _resolve(v))
                            for k, v in six.iteritems(self.host_kwargs))
-        self.view_name = self.view_name.resolve(context)
-        view_args = [x.resolve(context) for x in self.view_args]
-        view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
+        self.view_name = _resolve(self.view_name)
+        view_args = [_resolve(x) for x in self.view_args]
+        view_kwargs = dict((smart_str(k, 'ascii'), _resolve(v))
                            for k, v in six.iteritems(self.view_kwargs))
 
         url = reverse_full(self.host, self.view_name,
