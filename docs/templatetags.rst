@@ -30,7 +30,7 @@ then this example will create a link to the admin dashboard:
 
     {% load hosts %}
 
-    <a href="{% host_url dashboard on our-admin %}">Admin dashboard</a>
+    <a href="{% host_url 'dashboard' on our-admin %}">Admin dashboard</a>
 
 which will be rendered as:
 
@@ -69,7 +69,7 @@ result of the template tag in a template variable and use it later on, e.g.:
 
     {% load hosts %}
 
-    {% host_url homepage as homepage_url %}
+    {% host_url 'homepage' as homepage_url %}
     <a href="{{ homepage_url }}" title="Go back to {{ homepage_url }}">Home</a>
 
 .. _fqdn:
@@ -120,8 +120,8 @@ you can also easily pass parameters to the
 
     {% load hosts %}
 
-    <a href="{% host_url user-dashboard on user-area username='johndoe' %}">John's dashboard</a>
-    <a href="{% host_url faq-index on wildcard 'help' %}">FAQ</a>
+    <a href="{% host_url 'user-dashboard' on user-area username='johndoe' %}">John's dashboard</a>
+    <a href="{% host_url 'faq-index' on wildcard 'help' %}">FAQ</a>
 
 Which will be rendered (with a :attr:`~django.conf.settings.PARENT_HOST` of
 ``'example.com'``) as:

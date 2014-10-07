@@ -3,6 +3,7 @@ from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils import six
+from django.template.base import FilterExpression
 from django.utils.encoding import smart_str
 
 from django_hosts.reverse import reverse_full
@@ -31,7 +32,14 @@ class HostURLNode(template.Node):
         name = bits[0]
         if len(bits) < 2:
             raise TemplateSyntaxError("'%s' takes at least 1 argument" % name)
-        view = bits[1]
+
+        try:
+            view_name = parser.compile_filter(bits[1])
+        except TemplateSyntaxError as exc:
+            exc.args = (exc.args[0] + ". "
+                    "The syntax of 'url' changed in Django 1.5, see the docs."),
+            raise
+
         bits = bits[1:]  # Strip off view
         asvar = None
         if 'as' in bits:
@@ -56,12 +64,12 @@ class HostURLNode(template.Node):
             host = settings.DEFAULT_HOST
             view_args, view_kwargs = cls.parse_params(parser, bits[1:])
             host_args, host_kwargs = (), {}
-        return cls(host, view, host_args, host_kwargs, view_args, view_kwargs, asvar)
+        return cls(host, view_name, host_args, host_kwargs, view_args, view_kwargs, asvar)
 
-    def __init__(self, host, view,
+    def __init__(self, host, view_name,
                  host_args, host_kwargs, view_args, view_kwargs, asvar):
         self.host = host
-        self.view = view
+        self.view_name = view_name
         self.host_args = host_args
         self.host_kwargs = host_kwargs
         self.view_args = view_args
@@ -69,13 +77,23 @@ class HostURLNode(template.Node):
         self.asvar = asvar
 
     def render(self, context):
-        host_args = [x.resolve(context) for x in self.host_args]
-        host_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
+        def _resolve(o):
+            # Item may have already been resolved
+            # in e.g. a LoopNode, so we only resolve()
+            # if needed.
+            if isinstance(o, FilterExpression):
+                return o.resolve(context)
+            return o
+
+        host_args = [_resolve(x) for x in self.host_args]
+        host_kwargs = dict((smart_str(k, 'ascii'), _resolve(v))
                            for k, v in six.iteritems(self.host_kwargs))
-        view_args = [x.resolve(context) for x in self.view_args]
-        view_kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
+        self.view_name = _resolve(self.view_name)
+        view_args = [_resolve(x) for x in self.view_args]
+        view_kwargs = dict((smart_str(k, 'ascii'), _resolve(v))
                            for k, v in six.iteritems(self.view_kwargs))
-        url = reverse_full(self.host, self.view,
+
+        url = reverse_full(self.host, self.view_name,
                            host_args, host_kwargs, view_args, view_kwargs)
         if self.asvar:
             context[self.asvar] = url

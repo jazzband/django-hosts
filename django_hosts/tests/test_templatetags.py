@@ -18,10 +18,10 @@ class TemplateTagsTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_host_url_tag_simple(self):
         rendered = self.render(
-            "{% load hosts %}{% host_url simple-direct on www %}")
+            "{% load hosts %}{% host_url 'simple-direct' on www %}")
         self.assertEqual(rendered, '//www.example.com/simple/')
         rendered = self.render(
-            "{% load hosts %}{% host_url simple-direct on www as "
+            "{% load hosts %}{% host_url 'simple-direct' on www as "
             "simple_direct_url %}{{ simple_direct_url }} ")
         self.assertEqual(rendered, '//www.example.com/simple/')
 
@@ -30,7 +30,7 @@ class TemplateTagsTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_host_url_tag_without_on(self):
         rendered = self.render(
-            "{% load hosts %}{% host_url simple-direct %}")
+            "{% load hosts %}{% host_url 'simple-direct' %}")
         self.assertEqual(rendered, '//www.example.com/simple/')
 
     @override_settings(
@@ -38,10 +38,10 @@ class TemplateTagsTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_host_url_tag_with_args(self):
         rendered = self.render("{% load hosts %}"
-            "{% host_url simple-direct on with_args 'www.eggs.spam' %}")
+            "{% host_url 'simple-direct' on with_args 'www.eggs.spam' %}")
         self.assertEqual(rendered, '//www.eggs.spam/simple/')
         rendered = self.render("{% load hosts %}"
-            "{% host_url simple-direct as yeah on with_args "
+            "{% host_url 'simple-direct' as yeah on with_args "
             "'www.eggs.spam' %}{{ yeah }}")
         self.assertEqual(rendered, '//www.eggs.spam/simple/')
 
@@ -51,7 +51,7 @@ class TemplateTagsTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_host_url_tag_with_kwargs(self):
         rendered = self.render("{% load hosts %}"
-            "{% host_url simple-direct on with_kwargs username='johndoe' %}")
+            "{% host_url 'simple-direct' on with_kwargs username='johndoe' %}")
         self.assertEqual(rendered, '//johndoe.eggs.spam/simple/')
 
     @override_settings(
@@ -60,7 +60,7 @@ class TemplateTagsTest(HostsTestCase):
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_host_url_tag_with_view_kwargs(self):
         rendered = self.render("{% load hosts %}"
-            "{% host_url complex-direct template='test' on with_view_kwargs "
+            "{% host_url 'complex-direct' template='test' on with_view_kwargs "
             "subdomain='test2000' %}")
         self.assertEqual(rendered, '//stest2000.eggs.spam/template/test/')
 
@@ -70,7 +70,7 @@ class TemplateTagsTest(HostsTestCase):
         PARENT_HOST='eggs.spam')
     def test_host_url_tag_parent_host(self):
         rendered = self.render(
-            "{% load hosts %}{% host_url simple-direct on static %}")
+            "{% load hosts %}{% host_url 'simple-direct' on static %}")
         self.assertEqual(rendered, '//static.eggs.spam/simple/')
 
     @override_settings(
@@ -79,7 +79,7 @@ class TemplateTagsTest(HostsTestCase):
         PARENT_HOST='example.com')
     def test_host_url_no_www(self):
         rendered = self.render(
-            "{% load hosts %}{% host_url simple-direct on without_www %}")
+            "{% load hosts %}{% host_url 'simple-direct' on without_www %}")
         self.assertEqual(rendered, '//example.com/simple/')
 
     @override_settings(
@@ -90,9 +90,9 @@ class TemplateTagsTest(HostsTestCase):
                           self.render, "{% load hosts %}{% host_url %}")
         self.assertRaises(TemplateSyntaxError,
                           self.render,
-                          "{% load hosts %}{% host_url simple-direct on %}")
+                          "{% load hosts %}{% host_url 'simple-direct' on %}")
         self.assertRaises(TemplateSyntaxError,
                           self.render,
-                          "{% load hosts %}{% host_url simple-direct as %}")
+                          "{% load hosts %}{% host_url 'simple-direct' as %}")
         self.assertRaises(TemplateSyntaxError, HostURLNode.parse_params,
                           Parser(['']), "username=='johndoe'")
