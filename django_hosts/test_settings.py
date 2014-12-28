@@ -24,3 +24,6 @@ import django
 
 if django.VERSION[:2] < (1, 6):
     TEST_RUNNER = 'discover_runner.DiscoverRunner'
+
+
+MIDDLEWARE_CLASSES = []
