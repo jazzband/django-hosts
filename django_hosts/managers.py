@@ -77,14 +77,12 @@ class HostSiteManager(models.Manager):
                               self.model._meta.object_name))
         self._is_validated = True
 
-    def get_query_set(self, site_id=None):
+    def get_queryset(self, site_id=None):
         if site_id is None:
             site_id = settings.SITE_ID
         if not self._is_validated:
             self._validate_field_name()
-        qs = super(HostSiteManager, self).get_query_set()
-        if self._select_related:
-            qs = qs.select_related(depth=self._depth)
+        qs = super(HostSiteManager, self).get_queryset()
         return qs.filter(**{'%s__id__exact' % self._field_name: site_id})
 
     def by_id(self, site_id=None):
@@ -95,7 +93,7 @@ class HostSiteManager(models.Manager):
         :param site_id: the ID of the site
         :rtype: :class:`~django.db.models.query.QuerySet`
         """
-        return self.get_query_set(site_id)
+        return self.get_queryset(site_id)
 
     def by_request(self, request):
         """
