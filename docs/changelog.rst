@@ -17,7 +17,7 @@ Changelog
 - Moved ``django_hosts.reverse.reverse_full`` to
   :func:`django_hosts.resolvers.reverse` and
   ``django_hosts.reverse.reverse_host`` to
-  :func:`~django_hosts.resolvers.reverse_lazy`. This is a cleanup process to
+  :func:`django_hosts.resolvers.reverse_host`. This is a cleanup process to
   easier map Django's features and normalize the call signatures. The old
   functions are now pending deprecation and will be removed in the 1.2 release.
 
