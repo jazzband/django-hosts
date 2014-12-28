@@ -12,12 +12,8 @@ from django.utils.importlib import import_module
 
 _callable_cache = {}  # Maps view and url pattern names to their view functions.
 
+from .utils import normalize_scheme
 
-HOST_SCHEME = getattr(settings, 'HOST_SCHEME', '//')
-if HOST_SCHEME.endswith(':'):
-    HOST_SCHEME = '%s//' % HOST_SCHEME
-if '//' not in HOST_SCHEME:
-    HOST_SCHEME = '%s://' % HOST_SCHEME
 
 
 def module_has_submodule(package, module_name):
@@ -84,6 +80,7 @@ def module_has_submodule(package, module_name):
     else:
         # Exhausted the search, so the module cannot be found.
         return False
+HOST_SCHEME = normalize_scheme(getattr(settings, 'HOST_SCHEME', '//'))
 
 
 def get_callable(lookup_view, can_fail=False):
