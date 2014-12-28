@@ -5,3 +5,5 @@ docs/_build
 *.egg
 .coverage
 reports/
+build/
+dist/
