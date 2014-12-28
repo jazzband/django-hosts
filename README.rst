@@ -62,13 +62,13 @@ Then configure your Django site to use the app:
 
 #. Add ``'django_hosts'`` to your ``INSTALLED_APPS`` setting.
 
-#. Add ``'django_hosts.middleware.HostsMiddlewareRequest'`` to the *beginning* of your
+#. Add ``'django_hosts.middleware.HostsRequestMiddleware'`` to the **beginning** of your
    ``MIDDLEWARE_CLASSES`` setting.
 
-#. Add ``'django_hosts.middleware.HostsMiddlewareResponse'`` to the *end of your
+#. Add ``'django_hosts.middleware.HostsResponseMiddleware'`` to the **end** of your
    ``MIDDLEWARE_CLASSES`` setting.
 
-#. Create a module containing your default host patterns,
+#. Create a new module containing your default host patterns,
    e.g. in the ``hosts.py`` file next to your ``urls.py``.
 
 #. Set the ``ROOT_HOSTCONF`` setting to the dotted Python
@@ -76,7 +76,7 @@ Then configure your Django site to use the app:
 
        ROOT_HOSTCONF = 'mysite.hosts'
 
-#. Set the ``DEFAULT_HOST`` setting to the *name* of the host pattern you
+#. Set the ``DEFAULT_HOST`` setting to the **name** of the host pattern you
    want to refer to as the default pattern. It'll be used if no other
    pattern matches or you don't give a name to the ``host_url`` template
    tag.

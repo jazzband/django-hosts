@@ -7,8 +7,7 @@ from django_hosts.reverse import get_host_patterns, get_host
 hosts_middleware = "django_hosts.middleware.HostsMiddleware"
 toolbar_middleware = "debug_toolbar.middleware.DebugToolbarMiddleware"
 
-
-class BaseHostsMiddleware(object):
+class HostsBaseMiddleware(object):
     """
     Adjust incoming request's urlconf based on hosts defined in
     settings.ROOT_HOSTCONF module.
@@ -44,7 +43,7 @@ class BaseHostsMiddleware(object):
         return self.default_host, {}
 
 
-class HostsMiddlewareRequest(BaseHostsMiddleware):
+class HostsRequestMiddleware(HostsBaseMiddleware):
     def process_request(self, request):
         # Find best match, falling back to settings.DEFAULT_HOST
         host, kwargs = self.get_host(request.get_host())
@@ -64,7 +63,7 @@ class HostsMiddlewareRequest(BaseHostsMiddleware):
             set_urlconf(current_urlconf)
 
 
-class HostsMiddlewareResponse(BaseHostsMiddleware):
+class HostsResponseMiddleware(HostsBaseMiddleware):
     def process_response(self, request, response):
         # Django resets the base urlconf when it starts to process
         # the response, so we need to set this again, in case
@@ -80,11 +79,15 @@ class HostsMiddlewareResponse(BaseHostsMiddleware):
         return response
 
 
-class HostsMiddleware(HostsMiddlewareRequest):
+class HostsMiddleware(HostsRequestMiddleware):  # pragma: no cover
     """
     Provided for backwards-compatibility.
     """
-    import warnings
-    warnings.warn("django_hosts.middleware.HostsMiddleware has been split into HostsMiddlewareRequest and HostsMiddlewareResponse. Please consult the documentation and update your middleware settings.",
-        DeprecationWarning
-    )
+    def __init__(self):
+        import warnings
+        warnings.warn("The 'django_hosts.middleware.HostsMiddleware' "
+                      "middleware has been split into HostsRequestMiddleware "
+                      "and HostsResponseMiddleware. Please consult the "
+                      "documentation and update your middleware settings.",
+                      DeprecationWarning)
+        super(HostsMiddleware, self).__init__()

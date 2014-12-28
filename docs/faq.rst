@@ -7,15 +7,15 @@ Does django-hosts work with the Django Debug Toolbar?
 
 Yes, django-hosts works with `Django Debug toolbar`_ with the only
 limitation that the toolbar's middleware has to be come *after*
-the middleware of django-hosts, e.g.:
+django-hosts' ``HostsRequestMiddleware`` middleware, e.g.:
 
 .. code-block:: python
 
     MIDDLEWARE_CLASSES = (
+        'django_hosts.middleware.HostsRequestMiddleware',
         # your other middlewares..
-
-        'django_hosts.middleware.HostsMiddleware',
         'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'django_hosts.middleware.HostsResponseMiddleware',
     )
 
 Also, you have to install `django-debug-toolbar 0.9.X`_ or higher.
