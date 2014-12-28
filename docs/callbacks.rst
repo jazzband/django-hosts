@@ -1,5 +1,5 @@
-Per-host callbacks
-==================
+Callbacks
+=========
 
 Parsing the host from
 :meth:`request.get_host() <django.http.HttpRequest.get_host>` and lookup
@@ -72,7 +72,8 @@ Callbacks may return either ``None`` or an
 Included callbacks
 ------------------
 
-``django-hosts`` includes the following callbacks:
+``django-hosts`` includes the following callbacks for use with the Django
+contrib app ``django.contrib.sites``:
 
 .. autofunction:: django_hosts.callbacks.host_site(request, *args, **kwargs)
 

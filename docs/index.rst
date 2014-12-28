@@ -30,6 +30,39 @@ of the ``ROOT_URLCONF`` setting::
         host(r'(?!www)\w+', 'path.to.custom_urls', name='wildcard'),
     )
 
+In your templates you can use the
+:func:`~django_hosts.templatetags.hosts.host_url` template tag to reverse
+a URL the way you're used to it with Django's url template tag:
+
+.. code-block:: html+django
+
+    {% load hosts %}
+    <a href="{% host_url 'homepage' host 'www' %}">Home</a> |
+    <a href="{% host_url 'account' host 'wildcard' request.user.username %}">Your Account</a> |
+
+Since the template tag will always automatically fall back to your default
+host (as defined by :attr:`~django.conf.settings.DEFAULT_HOST`) you can leave
+off the ``host`` parameter as well.
+
+You can even :ref:`override the url tag<url_override>` that comes with Django
+to simplify reversing URLs in your templates:
+
+.. code-block:: html+django
+
+    <a href="{% url 'homepage' %}">Home</a> |
+    <a href="{% url 'account' host 'wildcard' request.user.username %}">Your Account</a> |
+
+On the Python side of things like your views you can easily do the same as
+with Django's own reverse function. Simply use the
+:func:`~django_hosts.resolvers.reverse` function for that::
+
+    from django.shortcuts import render
+    from django_hosts.resolvers import reverse
+
+    def homepage(request):
+        homepage_url = reverse('homepage', host='www')
+        return render(request, 'homepage.html', {'homepage_url': homepage_url})
+
 Settings
 --------
 
@@ -54,29 +87,45 @@ Settings
     (e.g. using the :func:`~django_hosts.templatetags.hosts.host_url`
     template tag).
 
+.. attribute:: HOST_SCHEME (optional)
+
+    The scheme to prepend host names with during reversing, e.g. when
+    using the :func:`~django_hosts.templatetags.hosts.host_url` template tag.
+    Defaults to ``'//'``.
+
+.. attribute:: HOST_PORT (optional)
+
+    .. versionadded:: 1.0
+
+    The port to append to host names during reversing, e.g. when
+    using the :func:`~django_hosts.templatetags.hosts.host_url` template tag.
+    Defaults to ``''`` (empty string).
+
 .. attribute:: HOST_SITE_TIMEOUT (optional)
 
     The time to cache the host in the default cache backend, in seconds,
     when using the :func:`~django_hosts.callbacks.cached_host_site` callback.
     Defaults to ``3600``.
 
-.. attribute:: HOST_SCHEME (optional)
+.. attribute:: HOST_OVERRIDE_URL_TAG (optional)
 
-    The scheme to prepend host names with during reversing, e.g. when
-    using the :func:`~django_hosts.templatetags.hosts.host_url` template tag.
-    Defaults to ``//``.
+    .. versionadded:: 1.0
 
-Contents
---------
+    Whether or not to automatically override Django's default url template tag.
+    Defaults to ``False``.
+
+
+More docs
+---------
 
 .. toctree::
    :maxdepth: 2
 
-   callbacks
    templatetags
    reference
-   changelog
+   callbacks
    faq
+   changelog
 
 Issues
 ------
@@ -92,4 +141,4 @@ django-dynamic-subdomains_ app, which was the inspiration for this app.
 
 .. _playfire: http://code.playfire.com/
 .. _django-dynamic-subdomains: https://github.com/playfire/django-dynamic-subdomains/
-.. _`Github issue tracker`: https://github.com/ennio/django-hosts/issues
+.. _`Github issue tracker`: https://github.com/jezdez/django-hosts/issues

@@ -1,89 +1,17 @@
-import imp
-import os
+"""
+When defining hostconfs you need to use the ``patterns`` and ``host`` helpers
+"""
 import re
-import sys
-
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import get_mod_func
+from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
+from django.core.urlresolvers import (get_mod_func,
+                                      get_callable as actual_get_callable)
 from django.utils.encoding import smart_str
-from django.utils.functional import memoize
-from django.utils.importlib import import_module
+from django.utils.functional import cached_property
 
-_callable_cache = {}  # Maps view and url pattern names to their view functions.
+from .utils import normalize_scheme, normalize_port
 
-
-HOST_SCHEME = getattr(settings, 'HOST_SCHEME', '//')
-if HOST_SCHEME.endswith(':'):
-    HOST_SCHEME = '%s//' % HOST_SCHEME
-if '//' not in HOST_SCHEME:
-    HOST_SCHEME = '%s://' % HOST_SCHEME
-
-
-def module_has_submodule(package, module_name):
-    """See if 'module' is in 'package'."""
-    name = ".".join([package.__name__, module_name])
-    try:
-        # None indicates a cached miss; see mark_miss() in Python/import.c.
-        return sys.modules[name] is not None
-    except KeyError:
-        pass
-    try:
-        package_path = package.__path__   # No __path__, then not a package.
-    except AttributeError:
-        # Since the remainder of this function assumes that we're dealing with
-        # a package (module with a __path__), so if it's not, then bail here.
-        return False
-    for finder in sys.meta_path:
-        if finder.find_module(name, package_path):
-            return True
-    for entry in package_path:
-        try:
-            # Try the cached finder.
-            finder = sys.path_importer_cache[entry]
-            if finder is None:
-                # Implicit import machinery should be used.
-                try:
-                    file_, _, _ = imp.find_module(module_name, [entry])
-                    if file_:
-                        file_.close()
-                    return True
-                except ImportError:
-                    continue
-            # Else see if the finder knows of a loader.
-            elif finder.find_module(name):
-                return True
-            else:
-                continue
-        except KeyError:
-            # No cached finder, so try and make one.
-            for hook in sys.path_hooks:
-                try:
-                    finder = hook(entry)
-                    # XXX Could cache in sys.path_importer_cache
-                    if finder.find_module(name):
-                        return True
-                    else:
-                        # Once a finder is found, stop the search.
-                        break
-                except ImportError:
-                    # Continue the search for a finder.
-                    continue
-            else:
-                # No finder found.
-                # Try the implicit import machinery if searching a directory.
-                if os.path.isdir(entry):
-                    try:
-                        file_, _, _ = imp.find_module(module_name, [entry])
-                        if file_:
-                            file_.close()
-                        return True
-                    except ImportError:
-                        pass
-                # XXX Could insert None or NullImporter
-    else:
-        # Exhausted the search, so the module cannot be found.
-        return False
+_callable_cache = {}  # Maps view and url pattern names to their view functions
 
 
 def get_callable(lookup_view, can_fail=False):
@@ -96,35 +24,15 @@ def get_callable(lookup_view, can_fail=False):
     If can_fail is True, lookup_view might be a URL pattern label, so errors
     during the import fail and the string is returned.
     """
-    if not callable(lookup_view):
-        mod_name, func_name = get_mod_func(lookup_view)
-        try:
-            if func_name != '':
-                lookup_view = getattr(import_module(mod_name), func_name)
-                if not callable(lookup_view):
-                    raise ImproperlyConfigured("Could not import %s.%s." %
-                                               (mod_name, func_name))
-        except AttributeError:
-            if not can_fail:
-                raise ImproperlyConfigured("Could not import %s. Callable "
-                                           "does not exist in module %s." %
-                                           (lookup_view, mod_name))
-        except ImportError:
-            parentmod, submod = get_mod_func(mod_name)
-            if (not can_fail and submod != '' and
-                    not module_has_submodule(import_module(parentmod), submod)):
-                raise ImproperlyConfigured("Could not import %s. Parent "
-                                           "module %s does not exist." %
-                                           (lookup_view, mod_name))
-            if not can_fail:
-                raise
-    return lookup_view
-get_callable = memoize(get_callable, _callable_cache, 1)
+    try:
+        return actual_get_callable(lookup_view, can_fail)
+    except ViewDoesNotExist as exc:
+        raise ImproperlyConfigured(exc.args[0].replace('View', 'Callable'))
 
 
 def patterns(prefix, *args):
     """
-    The function to define the list of hosts (aka host confs), e.g.::
+    The function to define the list of hosts (aka hostconfs), e.g.::
 
         from django_hosts import patterns
 
@@ -175,12 +83,15 @@ class host(object):
     :param prefix: the prefix to apply to the ``urlconf`` parameter
     :type prefix: str
     :param scheme: the scheme to prepend host names with during reversing,
-                   e.g.  when using the host_url() template tag. Defaults to
+                   e.g. when using the host_url() template tag. Defaults to
                    :attr:`~django.conf.settings.HOST_SCHEME`.
+    :param port: the port to append to host names during reversing,
+                 e.g. when using the host_url() template tag. Defaults to
+                 :attr:`~django.conf.settings.HOST_PORT`.
     :type scheme: str
     """
     def __init__(self, regex, urlconf, name, callback=None, prefix='',
-                 scheme=HOST_SCHEME):
+                 scheme=None, port=None):
         """
         Compile hosts. We add a literal fullstop to the end of every
         pattern to avoid rather unwieldy escaping in every definition.
@@ -189,7 +100,8 @@ class host(object):
         self.compiled_regex = re.compile(r'%s(\.|$)' % regex)
         self.urlconf = urlconf
         self.name = name
-        self.scheme = scheme
+        self._scheme = scheme
+        self._port = port
         if callable(callback):
             self._callback = callback
         else:
@@ -197,9 +109,21 @@ class host(object):
         self.add_prefix(prefix)
 
     def __repr__(self):
-        return smart_str('<%s %s: %s (%r)>' %
-                         (self.__class__.__name__, self.name,
-                          self.urlconf, self.regex))
+        return smart_str('<%s %s: regex=%r urlconf=%r scheme=%r port=%r>' %
+                         (self.__class__.__name__, self.name, self.regex,
+                          self.urlconf, self.scheme, self.port))
+
+    @cached_property
+    def scheme(self):
+        if self._scheme is None:
+            self._scheme = getattr(settings, 'HOST_SCHEME', '//')
+        return normalize_scheme(self._scheme)
+
+    @cached_property
+    def port(self):
+        if self._port is None:
+            self._port = getattr(settings, 'HOST_PORT', '')
+        return normalize_port(self._port)
 
     @property
     def callback(self):
@@ -209,16 +133,16 @@ class host(object):
             return lambda *args, **kwargs: None
         try:
             self._callback = get_callable(self._callback_str)
-        except ImportError as e:
+        except ImportError as exc:
             mod_name, _ = get_mod_func(self._callback_str)
             raise ImproperlyConfigured("Could not import '%s'. "
                                        "Error was: %s" %
-                                       (mod_name, str(e)))
-        except AttributeError as e:
+                                       (mod_name, str(exc)))
+        except AttributeError as exc:
             mod_name, func_name = get_mod_func(self._callback_str)
-            raise ImproperlyConfigured("Tried '%s' in module '%s'. "
-                                       "Error was: %s" %
-                                       (func_name, mod_name, str(e)))
+            raise ImproperlyConfigured("Tried importing '%s' from module "
+                                       "'%s' but failed. Error was: %s" %
+                                       (func_name, mod_name, str(exc)))
         return self._callback
 
     def add_prefix(self, prefix=''):

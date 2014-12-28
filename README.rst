@@ -1,9 +1,18 @@
 django-hosts
 ============
 
-.. image:: https://secure.travis-ci.org/ennio/django-hosts.png?branch=develop
-    :alt: Build Status
-    :target: http://travis-ci.org/ennio/django-hosts
+.. image:: https://img.shields.io/pypi/v/django-hosts.svg
+   :target: https://pypi.python.org/pypi/django-hosts
+
+.. image:: https://img.shields.io/travis/jezdez/django-hosts.svg
+    :target: https://travis-ci.org/jezdez/django-hosts
+
+.. image:: https://img.shields.io/coveralls/jezdez/django-hosts.svg
+   :target: https://coveralls.io/r/jezdez/django-hosts
+
+.. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=plastic
+   :target: http://django-hosts.readthedocs.org/en/latest/
+
 
 This Django app routes requests for specific hosts to different URL schemes
 defined in modules called "hostconfs".
@@ -40,6 +49,8 @@ and ``bar.example.com`` to the same URLconf.
 
 .. note:
 
+  Remember:
+
   * Patterns are matched against the extreme left of the requested host
 
   * It is implied that all patterns end either with a literal full stop
@@ -62,10 +73,13 @@ Then configure your Django site to use the app:
 
 #. Add ``'django_hosts'`` to your ``INSTALLED_APPS`` setting.
 
-#. Add ``'django_hosts.middleware.HostsMiddleware'`` to your
+#. Add ``'django_hosts.middleware.HostsRequestMiddleware'`` to the **beginning** of your
    ``MIDDLEWARE_CLASSES`` setting.
 
-#. Create a module containing your default host patterns,
+#. Add ``'django_hosts.middleware.HostsResponseMiddleware'`` to the **end** of your
+   ``MIDDLEWARE_CLASSES`` setting.
+
+#. Create a new module containing your default host patterns,
    e.g. in the ``hosts.py`` file next to your ``urls.py``.
 
 #. Set the ``ROOT_HOSTCONF`` setting to the dotted Python
@@ -73,10 +87,10 @@ Then configure your Django site to use the app:
 
        ROOT_HOSTCONF = 'mysite.hosts'
 
-#. Set the ``DEFAULT_HOST`` setting to the *name* of the host pattern you
+#. Set the ``DEFAULT_HOST`` setting to the **name** of the host pattern you
    want to refer to as the default pattern. It'll be used if no other
    pattern matches or you don't give a name to the ``host_url`` template
    tag.
 
-.. _`repository on Github`: https://github.com/ennio/django-hosts
+.. _`repository on Github`: https://github.com/jezdez/django-hosts
 .. _`django-hosts.rtfd.org`: http://django-hosts.readthedocs.org/

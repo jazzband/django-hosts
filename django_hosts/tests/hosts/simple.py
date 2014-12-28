@@ -17,4 +17,8 @@ host_patterns = patterns('',
     host(r'(\w+)', 'django_hosts.tests.urls.simple', name='with_args'),
     host(r'scheme', 'django_hosts.tests.urls.simple', name='scheme',
          scheme='https://'),
+    host(r'port', 'django_hosts.tests.urls.simple', name='port',
+         port='12345'),
+    host(r'port-tag', 'django_hosts.tests.urls.simple', name='port-tag',
+         port='12345'),
 )

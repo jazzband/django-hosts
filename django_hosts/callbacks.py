@@ -2,9 +2,9 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.utils.functional import LazyObject
 
-from django_hosts.reverse import reverse_host
+from .resolvers import reverse_host
 
-HOST_SITE_TIMEOUT = getattr(settings, "HOST_SITE_TIMEOUT", 3600)
+HOST_SITE_TIMEOUT = getattr(settings, 'HOST_SITE_TIMEOUT', 3600)
 
 
 class LazySite(LazyObject):
@@ -52,7 +52,7 @@ def host_site(request, *args, **kwargs):
     :param \*\*kwargs: the keyed parameters as matched by the host patterns
 
     It's important to note that this uses
-    :func:`~django_hosts.reverse.reverse_host` behind the scenes to
+    :func:`~django_hosts.resolvers.reverse_host` behind the scenes to
     reverse the host with the given arguments and keyed arguments to
     enable a flexible configuration of what will be used to retrieve
     the :class:`~django.contrib.sites.models.Site` instance -- in the end
@@ -77,7 +77,7 @@ def host_site(request, *args, **kwargs):
 
         request.site = Site.objects.get(domain__iexact='jezdez.example.com')
 
-    ..since the result of calling :func:`~django_hosts.reverse.reverse_host`
+    ..since the result of calling :func:`~django_hosts.resolvers.reverse_host`
     with the username ``'jezdez'`` is ``'jezdez.example.com'``.
 
     Later, in your views, you can nicely refer to the current site

@@ -2,10 +2,12 @@ from __future__ import absolute_import, with_statement
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
+from django.test.utils import override_settings
 
-from django_hosts.tests.base import override_settings, HostsTestCase
-from django_hosts.reverse import (get_hostconf_module, get_host_patterns,
-    get_host, reverse_host, reverse_full)
+from .base import HostsTestCase
+from .hosts import simple
+from ..resolvers import (get_hostconf_module, get_host_patterns,
+                         get_host, reverse_host, reverse)
 
 
 class ReverseTest(HostsTestCase):
@@ -28,56 +30,71 @@ class ReverseTest(HostsTestCase):
     @override_settings(
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         PARENT_HOST='spam.eggs')
-    def test_reverse_full(self):
-        self.assertEqual(reverse_full('static', 'simple-direct'),
+    def test_reverse(self):
+        self.assertEqual(reverse('simple-direct', host='static'),
                          '//static.spam.eggs/simple/')
 
     @override_settings(
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         PARENT_HOST='example.com')
-    def test_reverse_full_without_www(self):
-        self.assertEqual(reverse_full('without_www', 'simple-direct'),
+    def test_reverse_without_www(self):
+        self.assertEqual(reverse('simple-direct', host='without_www'),
+                         '//example.com/simple/')
+
+    @override_settings(
+        ROOT_HOSTCONF='django_hosts.tests.hosts.blank',
+        PARENT_HOST='example.com')
+    def test_reverse_blank(self):
+        self.assertEqual(reverse('simple-direct', host='blank_or_www'),
                          '//example.com/simple/')
 
     @override_settings(
         ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
         PARENT_HOST='spam.eggs')
     def test_reverse_custom_scheme(self):
-        self.assertEqual(reverse_full('scheme', 'simple-direct'),
+        self.assertEqual(reverse('simple-direct', host='scheme'),
                          'https://scheme.spam.eggs/simple/')
+        self.assertEqual(reverse('simple-direct', host='scheme', scheme='ftp'),
+                         'ftp://scheme.spam.eggs/simple/')
+
+    @override_settings(
+        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        PARENT_HOST='spam.eggs')
+    def test_reverse_custom_port(self):
+        self.assertEqual(reverse('simple-direct', host='port'),
+                         '//port.spam.eggs:12345/simple/')
+        self.assertEqual(reverse('simple-direct', host='port', port='1337'),
+                         '//port.spam.eggs:1337/simple/')
 
 
 class UtilityTests(HostsTestCase):
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_get_hostconf_module(self):
-        from django_hosts.tests.hosts import simple
         self.assertEqual(get_hostconf_module(), simple)
 
     def test_get_hostconf_module_no_default(self):
-        from django_hosts.tests.hosts import simple
         self.assertEqual(
             get_hostconf_module('django_hosts.tests.hosts.simple'), simple)
 
     def test_missing_host_patterns(self):
-        self.assertRaisesWithMessage(ImproperlyConfigured,
+        self.assertRaisesMessage(ImproperlyConfigured,
             'Missing ROOT_HOSTCONF setting', get_host_patterns)
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts')
     def test_missing_host_patterns_in_module(self):
-        self.assertRaisesWithMessage(ImproperlyConfigured,
+        self.assertRaisesMessage(ImproperlyConfigured,
             "Missing host_patterns in 'django_hosts.tests.hosts'",
             get_host_patterns)
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_get_working_host_patterns(self):
-        from django_hosts.tests.hosts import simple
         self.assertEqual(get_host_patterns(), simple.host_patterns)
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.simple')
     def test_get_host(self):
         self.assertEqual(get_host('static').name, 'static')
-        self.assertRaisesWithMessage(NoReverseMatch,
+        self.assertRaisesMessage(NoReverseMatch,
             "No host called 'non-existent' exists", get_host, 'non-existent')
 
     @override_settings(ROOT_HOSTCONF='django_hosts.tests.hosts.appended')
