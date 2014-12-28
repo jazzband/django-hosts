@@ -1,8 +1,8 @@
 from django.core.exceptions import ImproperlyConfigured
 
-from django_hosts.defaults import patterns, host
-from django_hosts.reverse import get_host_patterns
-from django_hosts.tests.base import HostsTestCase
+from .base import HostsTestCase
+from ..defaults import patterns, host
+from ..resolvers import get_host_patterns
 
 
 class PatternsTests(HostsTestCase):
@@ -14,7 +14,8 @@ class PatternsTests(HostsTestCase):
         self.assertEqual(len(host_patterns), 1)
         self.assertTrue(isinstance(host_patterns[0], host))
         self.assertEqual(repr(host_patterns[0]),
-                         "<host api: api.urls ('api')>")
+                         "<host api: regex='api' urlconf='api.urls' "
+                         "scheme='//' port=''>")
 
     def test_pattern_as_tuple(self):
         host_patterns = patterns('',
@@ -49,7 +50,7 @@ class HostTests(HostsTestCase):
 
     def test_host_string_callback(self):
         api_host = host(r'api', 'api.urls', name='api',
-            callback='django_hosts.reverse.get_host_patterns')
+                        callback='django_hosts.resolvers.get_host_patterns')
         self.assertEqual(api_host.callback, get_host_patterns)
 
     def test_host_callable_callback(self):
@@ -60,13 +61,17 @@ class HostTests(HostsTestCase):
     def test_host_nonexistent_callback(self):
         api_host = host(r'api', 'api.urls', name='api',
                         callback='whatever.non_existent')
-        self.assertRaisesWithMessageIn(ImproperlyConfigured,
+        self.assertRaisesMessageIn(ImproperlyConfigured,
             "Could not import 'whatever'. Error was: No module named",
             lambda: api_host.callback)
 
         api_host = host(r'api', 'api.urls', name='api',
                         callback='django_hosts.non_existent')
-        self.assertRaisesWithMessageIn(ImproperlyConfigured,
+        self.assertRaisesMessageIn(ImproperlyConfigured,
             "Could not import django_hosts.non_existent. "
             "Callable does not exist in module",
             lambda: api_host.callback)
+
+        api_host = host(r'api', 'api.urls', name='api',
+                        callback='django_hosts.tests.broken_module.yeah_yeah')
+        self.assertRaises(ImproperlyConfigured, lambda: api_host.callback)

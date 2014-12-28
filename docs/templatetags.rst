@@ -3,7 +3,16 @@ Template tags
 
 .. currentmodule:: django_hosts.templatetags.hosts
 
-.. function:: host_url(view_name, [view_args, view_kwargs], host_name, [host_args, host_kwargs, as_var])
+.. function:: host_url(view_name, [view_args, view_kwargs], host_name, [host_args, host_kwargs, as_var, scheme])
+
+.. versionchanged:: 1.0
+
+   The ``on`` argument is now called ``host`` but will continue to work in
+   a deprecation cycle of two releases.
+
+   The template tag expects the syntax of the Django's url template as
+   introduced in Django 1.5. See `the release notes`_ for more information.
+   That affects both the view name as well as the host name.
 
 Now if you want to actually refer to the full URLs in your templates
 you can use the included ``host_url`` template tag. So imagine having a
@@ -30,7 +39,7 @@ then this example will create a link to the admin dashboard:
 
     {% load hosts %}
 
-    <a href="{% host_url 'dashboard' on our-admin %}">Admin dashboard</a>
+    <a href="{% host_url 'dashboard' host 'our-admin' %}">Admin dashboard</a>
 
 which will be rendered as:
 
@@ -52,25 +61,32 @@ which will be rendered as:
 
     .. versionchanged:: 0.5
 
-    You can override the used scheme with the
+    You can override the used default scheme with the
     :attr:`~django.conf.settings.HOST_SCHEME` setting.
 
-.. _asvar:
+    .. versionchanged:: 1.0
 
-Setting a context variable
---------------------------
+    You can override the individually used scheme with the
+    :ref:`scheme<scheme>` parameter.
 
-.. versionadded:: 0.4.0
+.. _url_override:
 
-If you'd like to retrieve a URL without displaying it, you can save the
-result of the template tag in a template variable and use it later on, e.g.:
+Override the default url template tag
+-------------------------------------
 
-.. code-block:: html+django
+.. versionadded:: 1.0
 
-    {% load hosts %}
+In case you don't like adding ``{% load hosts %}`` to each and every template
+that you reverse an URL in you can automatically override the url template tag
+that is built into Django.
 
-    {% host_url 'homepage' as homepage_url %}
-    <a href="{{ homepage_url }}" title="Go back to {{ homepage_url }}">Home</a>
+Simply set the :attr:`~django.conf.settings.HOST_OVERRIDE_URL_TAG` setting
+to ``True``.
+
+It won't hurt to have some ``{% load hosts %}`` in some templates and the
+:func:`~django_hosts.templatetags.hosts.host_url` template tag will also still
+work. But that will at least enable the use of templates in 3rd party apps,
+for example.
 
 .. _fqdn:
 
@@ -99,8 +115,8 @@ to all URLs you can also spell out the domain in the host pattern::
         host(r'admin\.example\.com', settings.ROOT_URLCONF, name='admin'),
     )
 
-Host and URL parameters
------------------------
+Host and URL pattern parameters
+-------------------------------
 
 If your host pattern contains an parameter (or keyed parameter), like::
 
@@ -120,8 +136,8 @@ you can also easily pass parameters to the
 
     {% load hosts %}
 
-    <a href="{% host_url 'user-dashboard' on user-area username='johndoe' %}">John's dashboard</a>
-    <a href="{% host_url 'faq-index' on wildcard 'help' %}">FAQ</a>
+    <a href="{% host_url 'user-dashboard' host 'user-area' username='johndoe' %}">John's dashboard</a>
+    <a href="{% host_url 'faq-index' host 'wildcard' 'help' %}">FAQ</a>
 
 Which will be rendered (with a :attr:`~django.conf.settings.PARENT_HOST` of
 ``'example.com'``) as:
@@ -131,5 +147,50 @@ Which will be rendered (with a :attr:`~django.conf.settings.PARENT_HOST` of
     <a href="//johndoe.users.example.com/">John's dashboard</a>
     <a href="//help.example.com/faq/">FAQ</a>
 
+.. _scheme:
+
+Changing the scheme individually
+--------------------------------
+
+.. versionadded: 1.0
+
+It's not only possible to define the scheme in the hostconf but also on a
+case-by-case basis using the template tag:
+
+.. code-block:: html+django
+
+    {% load hosts %}
+
+    <a href="{% host_url 'user-dashboard' host 'user-area' username='johndoe' scheme 'https' %}">John's dashboard</a>
+    <a href="//help.example.com/faq/">FAQ</a>
+
+Which will be rendered (with a :attr:`~django.conf.settings.PARENT_HOST` of
+``'example.com'`` and a :attr:`~django.conf.settings.HOST_SCHEME` setting
+defaulting to ``'//'``) as:
+
+.. code-block:: html+django
+
+    <a href="https://johndoe.users.example.com/">John's dashboard</a>
+    <a href="//help.example.com/faq/">FAQ</a>
+
+.. _asvar:
+
+Storing the url in a context variable
+-------------------------------------
+
+.. versionadded:: 0.4
+
+If you'd like to retrieve a URL without displaying it, you can save the
+result of the template tag in a template variable and use it later on, e.g.:
+
+.. code-block:: html+django
+
+    {% load hosts %}
+
+    {% host_url 'homepage' as homepage_url %}
+    <a href="{{ homepage_url }}" title="Go back to {{ homepage_url }}">Home</a>
+
+
 .. _The protocol-relative URL: http://paulirish.com/2010/the-protocol-relative-url/
 .. _section in RFC 3986: http://tools.ietf.org/html/rfc3986#section-4.2
+.. _the release notes: https://docs.djangoproject.com/en/dev/releases/1.5/#overview

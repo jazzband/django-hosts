@@ -1,105 +1,112 @@
 import re
+import warnings
+
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils import six
 from django.template.base import FilterExpression
-from django.utils.encoding import smart_str
+from django.template.defaulttags import URLNode
+from django.utils.encoding import iri_to_uri, smart_str
+from django.core.urlresolvers import set_urlconf, get_urlconf
 
-from django_hosts.reverse import reverse_full
+from ..resolvers import reverse_host, get_host
+from ..utils import normalize_scheme, normalize_port
 
 register = template.Library()
 
 kwarg_re = re.compile(r"(?:(\w+)=)?(.+)")
 
 
-class HostURLNode(template.Node):
+class HostURLNode(URLNode):
 
-    @classmethod
-    def parse_params(cls, parser, bits):
-        args, kwargs = [], {}
-        for bit in bits:
-            name, value = kwarg_re.match(bit).groups()
-            if name:
-                kwargs[name] = parser.compile_filter(value)
-            else:
-                args.append(parser.compile_filter(value))
-        return args, kwargs
+    def __init__(self, *args, **kwargs):
+        self.host = kwargs.pop('host')
+        self.host_args = kwargs.pop('host_args')
+        self.host_kwargs = kwargs.pop('host_kwargs')
+        self.scheme = kwargs.pop('scheme')
+        self.port = kwargs.pop('port')
+        super(HostURLNode, self).__init__(*args, **kwargs)
 
-    @classmethod
-    def handle_token(cls, parser, token):
-        bits = token.split_contents()
-        name = bits[0]
-        if len(bits) < 2:
-            raise TemplateSyntaxError("'%s' takes at least 1 argument" % name)
-
-        try:
-            view_name = parser.compile_filter(bits[1])
-        except TemplateSyntaxError as exc:
-            exc.args = (exc.args[0] + ". "
-                    "The syntax of 'url' changed in Django 1.5, see the docs."),
-            raise
-
-        bits = bits[1:]  # Strip off view
-        asvar = None
-        if 'as' in bits:
-            pivot = bits.index('as')
-            try:
-                asvar = bits[pivot + 1]
-            except IndexError:
-                raise TemplateSyntaxError("'%s' arguments must include "
-                                          "a variable name after 'as'" % name)
-            del bits[pivot:pivot + 2]
-        try:
-            pivot = bits.index('on')
-            try:
-                host = bits[pivot + 1]
-            except IndexError:
-                raise TemplateSyntaxError("'%s' arguments must include "
-                                          "a host after 'on'" % name)
-            view_args, view_kwargs = cls.parse_params(parser, bits[1:pivot])
-            host_args, host_kwargs = cls.parse_params(parser, bits[pivot + 2:])
-        except ValueError:
-            # No host was given so use the default host
-            host = settings.DEFAULT_HOST
-            view_args, view_kwargs = cls.parse_params(parser, bits[1:])
-            host_args, host_kwargs = (), {}
-        return cls(host, view_name, host_args, host_kwargs, view_args, view_kwargs, asvar)
-
-    def __init__(self, host, view_name,
-                 host_args, host_kwargs, view_args, view_kwargs, asvar):
-        self.host = host
-        self.view_name = view_name
-        self.host_args = host_args
-        self.host_kwargs = host_kwargs
-        self.view_args = view_args
-        self.view_kwargs = view_kwargs
-        self.asvar = asvar
+    def maybe_resolve(self, var, context):
+        """
+        Variable may have already been resolved
+        in e.g. a LoopNode, so we only resolve()
+        if needed.
+        """
+        if isinstance(var, FilterExpression):
+            return var.resolve(context)
+        return var
 
     def render(self, context):
-        def _resolve(o):
-            # Item may have already been resolved
-            # in e.g. a LoopNode, so we only resolve()
-            # if needed.
-            if isinstance(o, FilterExpression):
-                return o.resolve(context)
-            return o
+        # print self.args, self.kwargs, self.view_name
+        host = get_host(self.maybe_resolve(self.host, context))
+        current_urlconf = get_urlconf()
+        try:
+            set_urlconf(host.urlconf)
+            path = super(HostURLNode, self).render(context)
+            if self.asvar:
+                path = context[self.asvar]
+        finally:
+            set_urlconf(current_urlconf)
 
-        host_args = [_resolve(x) for x in self.host_args]
-        host_kwargs = dict((smart_str(k, 'ascii'), _resolve(v))
+        host_args = [self.maybe_resolve(x, context) for x in self.host_args]
+
+        host_kwargs = dict((smart_str(k, 'ascii'),
+                            self.maybe_resolve(v, context))
                            for k, v in six.iteritems(self.host_kwargs))
-        self.view_name = _resolve(self.view_name)
-        view_args = [_resolve(x) for x in self.view_args]
-        view_kwargs = dict((smart_str(k, 'ascii'), _resolve(v))
-                           for k, v in six.iteritems(self.view_kwargs))
 
-        url = reverse_full(self.host, self.view_name,
-                           host_args, host_kwargs, view_args, view_kwargs)
+        if self.scheme:
+            scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))
+        else:
+            scheme = host.scheme
+
+        if self.port:
+            port = normalize_port(self.maybe_resolve(self.port, context))
+        else:
+            port = host.port
+
+        hostname = reverse_host(host, args=host_args, kwargs=host_kwargs)
+
+        uri = iri_to_uri('%s%s%s%s' % (scheme, hostname, port, path))
+
         if self.asvar:
-            context[self.asvar] = url
+            context[self.asvar] = uri
             return ''
         else:
-            return url
+            return uri
+
+
+def parse_params(name, parser, bits):
+    args = []
+    kwargs = {}
+    for bit in bits:
+        match = kwarg_re.match(bit)
+        if not match:
+            raise TemplateSyntaxError("Malformed arguments to %s tag" % name)
+        name, value = match.groups()
+        if name:
+            kwargs[name] = parser.compile_filter(value)
+        else:
+            args.append(parser.compile_filter(value))
+    return args, kwargs
+
+
+def fetch_arg(name, arg, bits, consume=True):
+    try:
+        pivot = bits.index(arg)
+        try:
+            value = bits[pivot + 1]
+        except IndexError:
+            raise TemplateSyntaxError("'%s' arguments must include "
+                                      "a variable name after '%s'" %
+                                      (name, arg))
+        else:
+            if consume:
+                del bits[pivot:pivot + 2]
+            return value, pivot, bits
+    except ValueError:
+        return None, None, bits
 
 
 @register.tag
@@ -107,11 +114,55 @@ def host_url(parser, token):
     """
     Simple tag to reverse the URL inclusing a host.
 
-    {% host_url url-name on host-name  %}
-    {% host_url url-name on host-name as url_on_host_variable %}
-    {% host_url url-name on host-name 'spam' %}
-    {% host_url url-name varg1=vvalue1 on host-name 'spam' 'hvalue1' %}
-    {% host_url url-name vvalue2 on host-name 'spam' harg2=hvalue2 %}
-
+    {% host_url 'view-name' host 'host-name'  %}
+    {% host_url 'view-name' host 'host-name' 'spam' %}
+    {% host_url 'view-name' host 'host-name' scheme 'https' %}
+    {% host_url 'view-name' host 'host-name' as url_on_host_variable %}
+    {% host_url 'view-name' varg1=vvalue1 host 'host-name' 'spam' 'hvalue1' %}
+    {% host_url 'view-name' vvalue2 host 'host-name' 'spam' harg2=hvalue2 %}
     """
-    return HostURLNode.handle_token(parser, token)
+    bits = token.split_contents()
+    name = bits[0]
+    if len(bits) < 2:
+        raise TemplateSyntaxError("'%s' takes at least one argument"
+                                  " (path to a view)" % name)
+
+    try:
+        view_name = parser.compile_filter(bits[1])
+    except TemplateSyntaxError as exc:
+        exc.args = (exc.args[0] + ". "
+                    "The syntax of the 'url' template tag has changed in "
+                    "Django 1.5, see the docs. The view name is now "
+                    "quoted unless it's meant as a variable."),
+        raise
+
+    asvar, pivot, bits = fetch_arg(name, 'as', bits[1:])  # Strip off viewname
+    scheme, pivot, bits = fetch_arg(name, 'scheme', bits)
+    if scheme:
+        scheme = parser.compile_filter(scheme)
+    port, pivot, bits = fetch_arg(name, 'port', bits)
+    if port:
+        port = parser.compile_filter(port)
+
+    host, pivot, bits = fetch_arg(name, 'host', bits, consume=False)
+
+    if host is None:
+        host, pivot, bits = fetch_arg(name, 'on', bits, consume=False)
+        warnings.warn("The 'on' keyword of the '%s' template tag is pending "
+                      "deprecation in favor of the 'host' keyword. Please "
+                      "upgrade your templates accordingly.",
+                      PendingDeprecationWarning)
+
+    if host:
+        host = parser.compile_filter(host)
+        view_args, view_kwargs = parse_params(name, parser, bits[1:pivot])
+        host_args, host_kwargs = parse_params(name, parser, bits[pivot + 2:])
+    else:
+        # No host was given so use the default host
+        host = settings.DEFAULT_HOST
+        view_args, view_kwargs = parse_params(name, parser, bits[1:])
+        host_args, host_kwargs = (), {}
+
+    return HostURLNode(view_name=view_name, args=view_args, kwargs=view_kwargs,
+                       asvar=asvar, host=host, host_args=host_args,
+                       host_kwargs=host_kwargs, scheme=scheme, port=port)

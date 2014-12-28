@@ -1,5 +1,5 @@
-Reference
-=========
+Python helpers
+==============
 
 ``hosts`` and ``patterns``
 --------------------------
@@ -7,10 +7,10 @@ Reference
 .. automodule:: django_hosts.defaults
     :members: patterns, host
 
-Reversal with ``reverse_host`` and ``reverse_full``
----------------------------------------------------
+``reverse_host`` and ``reverse``
+--------------------------------
 
-.. automodule:: django_hosts.reverse
+.. automodule:: django_hosts.resolvers
     :members:
 
 ``HostSiteManager`` model manager

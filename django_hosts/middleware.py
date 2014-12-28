@@ -2,38 +2,46 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch, set_urlconf, get_urlconf
 
-from django_hosts.reverse import get_host_patterns, get_host
+from .resolvers import get_host_patterns, get_host
 
-hosts_middleware = "django_hosts.middleware.HostsMiddleware"
-toolbar_middleware = "debug_toolbar.middleware.DebugToolbarMiddleware"
 
 class HostsBaseMiddleware(object):
     """
     Adjust incoming request's urlconf based on hosts defined in
     settings.ROOT_HOSTCONF module.
     """
+    old_hosts_middleware = 'django_hosts.middleware.HostsMiddleware'
+    new_hosts_middleware = 'django_hosts.middleware.HostsRequestMiddleware'
+    toolbar_middleware = 'debug_toolbar.middleware.DebugToolbarMiddleware'
+
     def __init__(self):
         self.current_urlconf = None
         self.host_patterns = get_host_patterns()
         try:
-            self.default_host = get_host(settings.DEFAULT_HOST)
-        except AttributeError:
-            raise ImproperlyConfigured("Missing DEFAULT_HOST setting")
-        except NoReverseMatch as e:
-            raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" % e)
+            self.default_host = get_host()
+        except NoReverseMatch as exc:
+            raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" %
+                                       exc)
 
         middlewares = list(settings.MIDDLEWARE_CLASSES)
-        try:
-            if (middlewares.index(hosts_middleware) >
-                    middlewares.index(toolbar_middleware)):
-                raise ImproperlyConfigured(
-                    "The django_hosts and debug_toolbar middlewares "
-                    "are in the wrong order. Make sure %r comes before "
-                    "%r in the MIDDLEWARE_CLASSES setting." %
-                    (hosts_middleware, toolbar_middleware))
-        except ValueError:
-            # django-debug-toolbar middleware doesn't seem to be installed
-            pass
+
+        show_exception = False
+        if (self.old_hosts_middleware in middlewares and
+                self.toolbar_middleware in middlewares):
+            show_exception = (middlewares.index(self.old_hosts_middleware) >
+                              middlewares.index(self.toolbar_middleware))
+
+        if not show_exception and (self.new_hosts_middleware in middlewares and
+                                   self.toolbar_middleware in middlewares):
+            show_exception = (middlewares.index(self.new_hosts_middleware) >
+                              middlewares.index(self.toolbar_middleware))
+
+        if show_exception:
+            raise ImproperlyConfigured(
+                "The django-hosts and django-debug-toolbar middlewares "
+                "are in the wrong order. Make sure the django-hosts "
+                "middleware comes before the django-debug-toolbar "
+                "middleware in the MIDDLEWARE_CLASSES setting.")
 
     def get_host(self, request_host):
         for host in self.host_patterns:
@@ -89,5 +97,5 @@ class HostsMiddleware(HostsRequestMiddleware):  # pragma: no cover
                       "middleware has been split into HostsRequestMiddleware "
                       "and HostsResponseMiddleware. Please consult the "
                       "documentation and update your middleware settings.",
-                      DeprecationWarning)
+                      PendingDeprecationWarning)
         super(HostsMiddleware, self).__init__()

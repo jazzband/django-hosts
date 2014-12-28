@@ -1,9 +1,18 @@
 django-hosts
 ============
 
-.. image:: https://secure.travis-ci.org/jezdez/django-hosts.png?branch=develop
-    :alt: Build Status
-    :target: http://travis-ci.org/jezdez/django-hosts
+.. image:: https://img.shields.io/pypi/v/django-hosts.svg
+   :target: https://pypi.python.org/pypi/django-hosts
+
+.. image:: https://img.shields.io/travis/jezdez/django-hosts.svg
+    :target: https://travis-ci.org/jezdez/django-hosts
+
+.. image:: https://img.shields.io/coveralls/jezdez/django-hosts.svg
+   :target: https://coveralls.io/r/jezdez/django-hosts
+
+.. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=plastic
+   :target: http://django-hosts.readthedocs.org/en/latest/
+
 
 This Django app routes requests for specific hosts to different URL schemes
 defined in modules called "hostconfs".
@@ -39,6 +48,8 @@ and ``bar.example.com`` to the same URLconf.
     )
 
 .. note:
+
+  Remember:
 
   * Patterns are matched against the extreme left of the requested host
 
