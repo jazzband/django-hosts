@@ -9,7 +9,7 @@ def reverse_host(host, args=None, kwargs=None):  # pragma: no cover
         "deprecation and will be removed in the next version. Please "
         "use the function 'django_hosts.resolvers.reverse_host' instead.",
         PendingDeprecationWarning)
-    return actual_reverse_host(host, args=None, kwargs=None)
+    return actual_reverse_host(host, args=args, kwargs=kwargs)
 
 
 def reverse_full(host, view,
@@ -21,5 +21,5 @@ def reverse_full(host, view,
         "use the function 'django_hosts.resolvers.reverse' instead.",
         PendingDeprecationWarning)
 
-    return reverse(view, host=host,
-                   view_args=view_args, view_kwargs=view_kwargs)
+    return reverse(view, args=view_args, kwargs=view_kwargs,
+                   host=host, host_args=host_args, host_kwargs=host_kwargs)
