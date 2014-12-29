@@ -172,16 +172,33 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     :raises django.core.urlresolvers.NoReverseMatch: if no host or path matches
     :rtype: the fully qualified URL with path
     """
-    host = get_host(host)
-    hostname = reverse_host(host,
-                            args=host_args,
-                            kwargs=host_kwargs)
-    path = reverse_path(viewname,
-                        urlconf=host.urlconf,
-                        args=args or (),
-                        kwargs=kwargs or {},
-                        prefix=prefix,
-                        current_app=current_app)
+    if host or host_args or host_kwargs:
+        hosts = [get_host(host)]
+    else:  # Try all hosts for 3rd party compatibility.
+        default = get_host()
+        # Ensure that the default host is tried first
+        hosts = [h for h in get_host_patterns() if h.name != default.name]
+        hosts = [default] + hosts
+
+    error = None
+    for host in hosts:
+        try:
+            hostname = reverse_host(host,
+                                    args=host_args,
+                                    kwargs=host_kwargs)
+            path = reverse_path(viewname,
+                                urlconf=host.urlconf,
+                                args=args or (),
+                                kwargs=kwargs or {},
+                                prefix=prefix,
+                                current_app=current_app)
+        except NoReverseMatch as e:
+            error = e
+            continue
+        else:
+            break
+    else:  # An error occured.
+        raise error
 
     if scheme is None:
         scheme = host.scheme

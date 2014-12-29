@@ -49,6 +49,13 @@ class TemplateTagsTest(HostsTestCase):
     @override_settings(
         DEFAULT_HOST='www',
         ROOT_HOSTCONF='tests.hosts.simple')
+    def test_host_url_tag_loop(self):
+        self.assertRender("{% host_url 'simple-direct' %}", '//www.example.com/simple/')
+        self.assertRender("{% host_url 'multiple-direct' %}", '//loop/multiple/')
+
+    @override_settings(
+        DEFAULT_HOST='www',
+        ROOT_HOSTCONF='tests.hosts.simple')
     def test_host_url_tag_without_host(self):
         self.assertRender("{% host_url 'simple-direct' %}",
                           '//www.example.com/simple/')
