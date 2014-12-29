@@ -1,7 +1,8 @@
 from __future__ import absolute_import, with_statement
 
+from django_hosts.utils import normalize_scheme, normalize_port
+
 from .base import HostsTestCase
-from ..utils import normalize_scheme, normalize_port
 
 
 class UtilsTest(HostsTestCase):

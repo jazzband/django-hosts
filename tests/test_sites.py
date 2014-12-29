@@ -3,16 +3,12 @@ from __future__ import with_statement
 from django.contrib.sites.models import Site
 from django.test import RequestFactory
 from django.test.utils import override_settings
+from django.utils.functional import empty
+
+from django_hosts.middleware import HostsRequestMiddleware
 
 from .base import HostsTestCase
 from .models import Author, BlogPost, WikiPage
-from ..middleware import HostsRequestMiddleware
-
-
-try:  # pragma: no cover
-    from django.utils.functional import empty
-except ImportError:  # pragma: no cover
-    empty = None  # noqa
 
 
 class SitesTests(HostsTestCase):
@@ -40,18 +36,18 @@ class SitesTests(HostsTestCase):
             model.objects.all().delete()
 
     @override_settings(
-        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_sites_callback(self):
         rf = RequestFactory(HTTP_HOST='wiki.site1')
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware()
         middleware.process_request(request)
-        self.assertEqual(request.urlconf, 'django_hosts.tests.urls.simple')
+        self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertEqual(request.site.pk, self.site1.pk)
 
     @override_settings(
-        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_sites_cached_callback(self):
         rf = RequestFactory(HTTP_HOST='admin.site4')
@@ -72,38 +68,38 @@ class SitesTests(HostsTestCase):
         self.assertEqual(request.site.pk, self.site4.pk)
 
     @override_settings(
-        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_sites_callback_with_parent_host(self):
         rf = RequestFactory(HTTP_HOST='wiki.site2')
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware()
         middleware.process_request(request)
-        self.assertEqual(request.urlconf, 'django_hosts.tests.urls.simple')
+        self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertEqual(request.site.pk, self.site2.pk)
 
     @override_settings(
-        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_manager_simple(self):
         rf = RequestFactory(HTTP_HOST='wiki.site2')
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware()
         middleware.process_request(request)
-        self.assertEqual(request.urlconf, 'django_hosts.tests.urls.simple')
+        self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertEqual(request.site.pk, self.site2.pk)
         self.assertEqual(list(WikiPage.on_site.by_request(request)),
                          [self.page3])
 
     @override_settings(
-        ROOT_HOSTCONF='django_hosts.tests.hosts.simple',
+        ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_manager_missing_site(self):
         rf = RequestFactory(HTTP_HOST='static')
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware()
         middleware.process_request(request)
-        self.assertEqual(request.urlconf, 'django_hosts.tests.urls.simple')
+        self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertRaises(AttributeError, lambda: request.site)
         self.assertEqual(list(WikiPage.on_site.by_request(request)), [])
 

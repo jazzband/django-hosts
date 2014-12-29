@@ -11,10 +11,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sites',
     'django_hosts',
-    'django_hosts.tests',
+    'tests',
 ]
 
-ROOT_URLCONF = 'django_hosts.tests.urls.root'
+ROOT_URLCONF = 'tests.urls.root'
 
 SITE_ID = 1
 

@@ -1,8 +1,9 @@
 from django.core.exceptions import ImproperlyConfigured
 
+from django_hosts.defaults import patterns, host
+from django_hosts.resolvers import get_host_patterns
+
 from .base import HostsTestCase
-from ..defaults import patterns, host
-from ..resolvers import get_host_patterns
 
 
 class PatternsTests(HostsTestCase):
@@ -73,5 +74,5 @@ class HostTests(HostsTestCase):
             lambda: api_host.callback)
 
         api_host = host(r'api', 'api.urls', name='api',
-                        callback='django_hosts.tests.broken_module.yeah_yeah')
+                        callback='tests.broken_module.yeah_yeah')
         self.assertRaises(ImproperlyConfigured, lambda: api_host.callback)
