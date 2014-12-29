@@ -29,25 +29,11 @@ When using Django's cache middleware it calculates the cache key using the
 request's path, at least until the 1.7 release. So if you're using 1.7 or later
 you can stop reading now.
 
-If you're using any version older than 1.7 you'll need to extend Django's
-cache middleware to make sure the cache keys are correctly generated using
-the request's host **and** the request's path. Here's how to do that:
+If you're using an older version than 1.7 we'll automatically apply a monkey
+patch to the functions in Django that deal with generating the cache keys
+to work around the problems with them. They will work the same as the way it
+is in Django 1.7. This is neccesary to make sure full page caching works
+as intended. See the `commit in Django`_ that fixed the issue there to see what
+differs between the old and the new versions of the functions.
 
-.. code-block:: python
-
-    from django.conf import settings
-    from django.middleware.cache import (UpdateCacheMiddleware,
-                                         FetchFromCacheMiddleware)
-
-    class HostUpdateCacheMiddleware(UpdateCacheMiddleware):
-        def process_response(self, request, response):
-            self.key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX + request.get_host()
-            return super(HostUpdateCacheMiddleware, self).process_response(request, response)
-
-    class HostFetchFromCacheMiddleware(FetchFromCacheMiddleware):
-        def process_request(self, request):
-            self.key_prefix = settings.CACHE_MIDDLEWARE_KEY_PREFIX + request.get_host()
-            return super(HostFetchFromCacheMiddleware, self).process_request(request)
-
-Save those middlewares somewhere in your site's code and refer to them in the
-``MIDDLEWARE_CLASSES`` setting instead of Django's originals.
+.. _`commit in Django`: http://git.io/8Ieptg
