@@ -9,7 +9,7 @@ Changelog
 - Extended testing setup to Python 3.4 and Django 1.7.
 
 - Dropped support for Django 1.5 as it doesn't receive any security releases
-  anymore and 1.4 since it's very soon going to lose it's LTS status.
+  anymore and 1.4 since its very soon going to lose it's LTS status.
 
 - Optionally allow setting the port per host and using the
   :attr:`~django.conf.settings.HOST_PORT` setting.
