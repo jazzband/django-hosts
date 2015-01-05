@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1 (2015-01-05)
+----------------
+
+- Improved handling of allowed hosts by returning the 400 response directly.
+
 1.0 (2014-12-29)
 ----------------
 

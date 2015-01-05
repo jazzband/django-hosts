@@ -7,7 +7,7 @@ try:  # pragma: no cover
 except ImportError:  # pragma: no cover
     pass
 
-__version__ = '1.0'
+__version__ = '1.1'
 __author__ = 'Jannis Leidel <jannis@leidel.info>'
 
 default_app_config = 'django_hosts.apps.HostsConfig'
