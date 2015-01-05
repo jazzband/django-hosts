@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, DisallowedHost
 from django.core.urlresolvers import NoReverseMatch, set_urlconf, get_urlconf
 
 from .resolvers import get_host_patterns, get_host
@@ -78,7 +78,12 @@ class HostsResponseMiddleware(HostsBaseMiddleware):
         # any of our middleware makes use of host, etc URLs.
 
         # Find best match, falling back to settings.DEFAULT_HOST
-        host, kwargs = self.get_host(request.get_host())
+        try:
+            host, kwargs = self.get_host(request.get_host())
+        except DisallowedHost:
+            # Bail out early, there is nothing to reset as HostsRequestMiddleware
+            # never gets called with an invalid host.
+            return response
         # This is the main part of this middleware
         request.urlconf = host.urlconf
         request.host = host
