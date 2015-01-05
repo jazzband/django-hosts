@@ -64,6 +64,19 @@ class MiddlewareTests(HostsTestCase):
         self.assertEqual(host.name, 'with_view_kwargs')
 
     @override_settings(
+        ROOT_HOSTCONF='tests.hosts.simple',
+        DEFAULT_HOST='www',
+        ALLOWED_HOSTS=['somehost.com'],
+        DEBUG=False,
+        MIDDLEWARE_CLASSES=[
+            'django_hosts.middleware.HostsRequestMiddleware',
+            'django_hosts.middleware.HostsResponseMiddleware',
+        ])
+    def test_fallback_with_evil_host(self):
+        response = self.client.get('/', HTTP_HOST='evil.com')
+        self.assertEqual(response.status_code, 400)
+
+    @override_settings(
         ROOT_HOSTCONF='tests.hosts.multiple',
         DEFAULT_HOST='multiple')
     def test_multiple_subdomains(self):
