@@ -23,6 +23,9 @@ _host_patterns_cache = {}
 _host_cache = {}
 
 
+HOST_STICKY = getattr(settings, 'HOST_STICKY', True)
+
+
 def get_hostconf():
     try:
         return settings.ROOT_HOSTCONF
@@ -172,13 +175,11 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     :raises django.core.urlresolvers.NoReverseMatch: if no host or path matches
     :rtype: the fully qualified URL with path
     """
-    if host or host_args or host_kwargs:
+    # Try all hosts for 3rd party compatibility.
+    if not (HOST_STICKY or (host or host_args or host_kwargs)):
+        hosts = get_host_patterns()
+    else:
         hosts = [get_host(host)]
-    else:  # Try all hosts for 3rd party compatibility.
-        default = get_host()
-        # Ensure that the default host is tried first
-        hosts = [h for h in get_host_patterns() if h.name != default.name]
-        hosts = [default] + hosts
 
     error = None
     for host in hosts:

@@ -70,8 +70,16 @@ class ReverseTest(HostsTestCase):
     @override_settings(
         DEFAULT_HOST='www',
         ROOT_HOSTCONF='tests.hosts.simple')
-    def test_host_url_loop_no_match(self):
+    def test_reverse_no_looping(self):
         self.assertEqual(reverse('simple-direct'), '//www.example.com/simple/')
+        self.assertRaises(NoReverseMatch, reverse, 'not-existant')
+
+    @override_settings(
+        DEFAULT_HOST='with_kwargs',
+        ROOT_HOSTCONF='tests.hosts.simple',
+        HOST_STICKY=False)
+    def test_reverse_looping(self):
+        self.assertEqual(reverse('simple-direct'), '//example.com/simple/')
         self.assertRaises(NoReverseMatch, reverse, 'not-existant')
 
 
