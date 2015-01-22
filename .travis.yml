@@ -8,10 +8,14 @@ env:
   - TOXENV=py26-django-16
   - TOXENV=py27-django-16
   - TOXENV=py27-django-17
+  - TOXENV=py27-django-18
   - TOXENV=py32-django-16
   - TOXENV=py32-django-17
+  - TOXENV=py32-django-18
   - TOXENV=py33-django-16
   - TOXENV=py33-django-17
+  - TOXENV=py33-django-18
   - TOXENV=py34-django-16
   - TOXENV=py34-django-17
+  - TOXENV=py34-django-18
 after_success: coveralls

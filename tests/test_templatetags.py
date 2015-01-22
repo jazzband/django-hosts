@@ -1,6 +1,10 @@
 from __future__ import absolute_import, with_statement
 
-from django.template import Template, Context, TemplateSyntaxError, Parser
+from django.template import Template, Context, TemplateSyntaxError
+try:
+    from django.template.base import Parser
+except ImportError:  # Django < 1.8
+    from django.template import Parser
 from django.test.utils import override_settings
 
 from django_hosts.templatetags.hosts import parse_params
@@ -37,7 +41,10 @@ class TemplateTagsTest(HostsTestCase):
         # but that doesn't really work since that setting is read only
         # on import time for Django < 1.7 and on setup time for >= 1.7
         # so we have to fake it by manually setting the stage
-        from django.template import add_to_builtins
+        try:
+            from django.template.base import add_to_builtins
+        except ImportError:  # Django < 1.8
+            from django.template import add_to_builtins
         add_to_builtins('django_hosts.templatetags.hosts_override')
 
         self.assertRender("{% url 'simple-direct' host 'www' %}",
