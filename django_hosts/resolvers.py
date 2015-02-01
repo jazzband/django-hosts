@@ -165,7 +165,7 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     :param prefix: the prefix of the view urlconf
     :param current_app: the current_app argument
     :param scheme: the scheme to use
-    :param scheme: the port to use
+    :param port: the port to use
     :param host: the name of the host
     :param host_args: the host arguments
     :param host_kwargs: the host keyed arguments
