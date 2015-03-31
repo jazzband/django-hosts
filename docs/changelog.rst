@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2 (Under Development)
+-----------------------
+
+- Added support for Django 1.8 and dropped support for Django 1.6.
+
 1.1 (2015-01-05)
 ----------------
 
