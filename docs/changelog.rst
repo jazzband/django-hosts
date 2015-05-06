@@ -4,7 +4,7 @@ Changelog
 1.2 (2015-05-06)
 ----------------
 
-- **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.5 as it doesn't
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.6 as it doesn't
   receive any security releases anymore.
 
 - **BACKWARD-INCOMPATIBLE** Removed deprecated ``django_hosts.reverse``
