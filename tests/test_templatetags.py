@@ -1,5 +1,3 @@
-from __future__ import absolute_import, with_statement
-
 from django.template import Template, Context, TemplateSyntaxError
 try:
     from django.template.base import Parser

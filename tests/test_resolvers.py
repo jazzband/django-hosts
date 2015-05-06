@@ -1,5 +1,3 @@
-from __future__ import absolute_import, with_statement
-
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
 from django.test.utils import override_settings

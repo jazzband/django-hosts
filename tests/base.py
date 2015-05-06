@@ -1,4 +1,3 @@
-from __future__ import absolute_import, with_statement
 import pytest
 from django.test import TestCase, RequestFactory
 from django_hosts.resolvers import clear_host_caches

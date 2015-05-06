@@ -1,5 +1,3 @@
-from __future__ import with_statement
-
 from django.contrib.sites.models import Site
 from django.test import RequestFactory
 from django.test.utils import override_settings
