@@ -3,7 +3,6 @@ try:  # pragma: no cover
     from django_hosts.defaults import patterns, host
     from django_hosts.resolvers import (reverse, reverse_lazy,
                                         reverse_host, reverse_host_lazy)
-    from django_hosts.reverse import reverse_full
 except ImportError:  # pragma: no cover
     pass
 
