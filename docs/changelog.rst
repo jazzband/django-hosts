@@ -9,22 +9,23 @@ Changelog
 1.0 (2014-12-29)
 ----------------
 
-- Moved repo to https://github.com/jezdez/django-hosts
-
-- Extended testing setup to Python 3.4 and Django 1.7.
-
-- Dropped support for Django 1.5 as it doesn't receive any security releases
-  anymore and 1.4 since its very soon going to lose it's LTS status.
-
-- Optionally allow setting the port per host and using the
-  :attr:`~django.conf.settings.HOST_PORT` setting.
-
-- Moved ``django_hosts.reverse.reverse_full`` to
+- **BACKWARD-INCOMPATIBLE** Moved ``django_hosts.reverse.reverse_full`` to
   :func:`django_hosts.resolvers.reverse` and
   ``django_hosts.reverse.reverse_host`` to
   :func:`django_hosts.resolvers.reverse_host`. This is a cleanup process to
   easier map Django's features and normalize the call signatures. The old
   functions are now pending deprecation and will be removed in the 1.2 release.
+
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.5 as it doesn't
+  receive any security releases anymore and 1.4 since its very soon going
+  to lose it's LTS status.
+
+- Moved repo to https://github.com/jezdez/django-hosts
+
+- Extended testing setup to Python 3.4 and Django 1.7.
+
+- Optionally allow setting the port per host and using the
+  :attr:`~django.conf.settings.HOST_PORT` setting.
 
 - Refactored :func:`~django_hosts.templatetags.hosts.host_url` template tag
   to closer follow Django's own url template tag. This includes:
