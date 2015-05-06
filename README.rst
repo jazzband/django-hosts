@@ -10,7 +10,7 @@ django-hosts
 .. image:: https://img.shields.io/coveralls/jezdez/django-hosts.svg
    :target: https://coveralls.io/r/jezdez/django-hosts
 
-.. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=plastic
+.. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=flat
    :target: http://django-hosts.readthedocs.org/en/latest/
 
 
