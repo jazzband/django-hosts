@@ -1,10 +1,18 @@
 Changelog
 =========
 
-1.2 (Under Development)
------------------------
+1.2 (2015-05-06)
+----------------
 
-- Added support for Django 1.8 and dropped support for Django 1.6.
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.5 as it doesn't
+  receive any security releases anymore.
+
+- **BACKWARD-INCOMPATIBLE** Removed deprecated ``django_hosts.reverse``
+  module as it incorrectly shadowed the :func:`django_hosts.resolvers.reverse`
+  function that was added in version 1.0. This is a earlier deprecation than
+  planned, apologies for the inconvenience.
+
+- Added support for Django 1.8.
 
 1.1 (2015-01-05)
 ----------------
