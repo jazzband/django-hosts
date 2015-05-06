@@ -67,6 +67,21 @@ class ReverseTest(HostsTestCase):
         self.assertEqual(reverse('simple-direct', host='port', port='1337'),
                          '//port.spam.eggs:1337/simple/')
 
+    @override_settings(
+        DEFAULT_HOST='www',
+        ROOT_HOSTCONF='tests.hosts.simple')
+    def test_reverse_no_looping(self):
+        self.assertEqual(reverse('simple-direct'), '//www.example.com/simple/')
+        self.assertRaises(NoReverseMatch, reverse, 'not-existant')
+
+    @override_settings(
+        DEFAULT_HOST='with_kwargs',
+        ROOT_HOSTCONF='tests.hosts.simple',
+        HOST_STICKY=False)
+    def test_reverse_looping(self):
+        self.assertEqual(reverse('simple-direct'), '//example.com/simple/')
+        self.assertRaises(NoReverseMatch, reverse, 'not-existant')
+
 
 class UtilityTests(HostsTestCase):
 

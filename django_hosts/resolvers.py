@@ -23,6 +23,9 @@ _host_patterns_cache = {}
 _host_cache = {}
 
 
+HOST_STICKY = getattr(settings, 'HOST_STICKY', True)
+
+
 def get_hostconf():
     try:
         return settings.ROOT_HOSTCONF
@@ -172,16 +175,31 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     :raises django.core.urlresolvers.NoReverseMatch: if no host or path matches
     :rtype: the fully qualified URL with path
     """
-    host = get_host(host)
-    hostname = reverse_host(host,
-                            args=host_args,
-                            kwargs=host_kwargs)
-    path = reverse_path(viewname,
-                        urlconf=host.urlconf,
-                        args=args or (),
-                        kwargs=kwargs or {},
-                        prefix=prefix,
-                        current_app=current_app)
+    # Try all hosts for 3rd party compatibility.
+    if not (HOST_STICKY or (host or host_args or host_kwargs)):
+        hosts = get_host_patterns()
+    else:
+        hosts = [get_host(host)]
+
+    error = None
+    for host in hosts:
+        try:
+            hostname = reverse_host(host,
+                                    args=host_args,
+                                    kwargs=host_kwargs)
+            path = reverse_path(viewname,
+                                urlconf=host.urlconf,
+                                args=args or (),
+                                kwargs=kwargs or {},
+                                prefix=prefix,
+                                current_app=current_app)
+        except NoReverseMatch as e:
+            error = e
+            continue
+        else:
+            break
+    else:  # An error occured.
+        raise error
 
     if scheme is None:
         scheme = host.scheme

@@ -2,16 +2,13 @@ import re
 import warnings
 
 from django import template
-from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.utils import six
 from django.template.base import FilterExpression
 from django.template.defaulttags import URLNode
-from django.utils.encoding import iri_to_uri, smart_str
-from django.core.urlresolvers import set_urlconf, get_urlconf
+from django.utils.encoding import smart_str
 
-from ..resolvers import reverse_host, get_host
-from ..utils import normalize_scheme, normalize_port
+from ..resolvers import reverse
 
 register = template.Library()
 
@@ -39,35 +36,24 @@ class HostURLNode(URLNode):
         return var
 
     def render(self, context):
-        host = get_host(self.maybe_resolve(self.host, context))
-        current_urlconf = get_urlconf()
-        try:
-            set_urlconf(host.urlconf)
-            path = super(HostURLNode, self).render(context)
-            if self.asvar:
-                path = context[self.asvar]
-        finally:
-            set_urlconf(current_urlconf)
+        view_name = self.view_name.resolve(context)
 
+        args = [arg.resolve(context) for arg in self.args]
+        kwargs = dict((smart_str(k, 'ascii'), v.resolve(context))
+                              for k, v in self.kwargs.items())
+
+        host = self.maybe_resolve(self.host, context)
         host_args = [self.maybe_resolve(x, context) for x in self.host_args]
 
         host_kwargs = dict((smart_str(k, 'ascii'),
                             self.maybe_resolve(v, context))
                            for k, v in six.iteritems(self.host_kwargs))
 
-        if self.scheme:
-            scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))
-        else:
-            scheme = host.scheme
+        scheme = self.maybe_resolve(self.scheme, context)
+        port = self.maybe_resolve(self.port, context)
 
-        if self.port:
-            port = normalize_port(self.maybe_resolve(self.port, context))
-        else:
-            port = host.port
-
-        hostname = reverse_host(host, args=host_args, kwargs=host_kwargs)
-
-        uri = iri_to_uri('%s%s%s%s' % (scheme, hostname, port, path))
+        uri = reverse(view_name, args, kwargs, None, context.current_app,
+                      host, host_args, host_kwargs, scheme, port)
 
         if self.asvar:
             context[self.asvar] = uri
@@ -157,8 +143,7 @@ def host_url(parser, token):
         view_args, view_kwargs = parse_params(name, parser, bits[1:pivot])
         host_args, host_kwargs = parse_params(name, parser, bits[pivot + 2:])
     else:
-        # No host was given so use the default host
-        host = settings.DEFAULT_HOST
+        host = None
         view_args, view_kwargs = parse_params(name, parser, bits[1:])
         host_args, host_kwargs = (), {}
 

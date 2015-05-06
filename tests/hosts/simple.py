@@ -21,4 +21,5 @@ host_patterns = patterns('',
          port='12345'),
     host(r'port-tag', 'tests.urls.simple', name='port-tag',
          port='12345'),
+    host(r'loop', 'tests.urls.multiple', name='loop'),
 )
