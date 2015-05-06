@@ -10,34 +10,31 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch, reverse as reverse_path
 from django.utils import six
 from django.utils.encoding import iri_to_uri, force_text
-from django.utils.functional import memoize, lazy
+from django.utils.functional import lazy
 from django.utils.importlib import import_module
+from django.utils.lru_cache import lru_cache
 from django.utils.regex_helper import normalize
 
 from .defaults import host as host_cls
 from .utils import normalize_scheme, normalize_port
 
-_hostconf_cache = {}
-_hostconf_module_cache = {}
-_host_patterns_cache = {}
-_host_cache = {}
 
-
+@lru_cache()
 def get_hostconf():
     try:
         return settings.ROOT_HOSTCONF
     except AttributeError:
         raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting")
-get_hostconf = memoize(get_hostconf, _hostconf_cache, 0)
 
 
+@lru_cache()
 def get_hostconf_module(hostconf=None):
     if hostconf is None:
         hostconf = get_hostconf()
     return import_module(hostconf)
-get_hostconf_module = memoize(get_hostconf_module, _hostconf_module_cache, 1)
 
 
+@lru_cache()
 def get_host(name=None):
     if name is None:
         try:
@@ -48,29 +45,23 @@ def get_host(name=None):
         if host.name == name:
             return host
     raise NoReverseMatch("No host called '%s' exists" % name)
-get_host = memoize(get_host, _host_cache, 1)
 
 
+@lru_cache()
 def get_host_patterns():
     hostconf = get_hostconf()
     module = get_hostconf_module(hostconf)
     try:
         return module.host_patterns
     except AttributeError:
-        raise ImproperlyConfigured("Missing host_patterns in '%s'" %
-                                   hostconf)
-get_host_patterns = memoize(get_host_patterns, _host_patterns_cache, 0)
+        raise ImproperlyConfigured("Missing host_patterns in '%s'" % hostconf)
 
 
 def clear_host_caches():
-    global _hostconf_cache
-    _hostconf_cache.clear()
-    global _hostconf_module_cache
-    _hostconf_module_cache.clear()
-    global _host_patterns_cache
-    _host_patterns_cache.clear()
-    global _host_cache
-    _host_cache.clear()
+    get_hostconf.cache_clear()
+    get_hostconf_module.cache_clear()
+    get_host.cache_clear()
+    get_host_patterns.cache_clear()
 
 
 def reverse_host(host, args=None, kwargs=None):
