@@ -73,7 +73,7 @@ class HostTests(HostsTestCase):
                 "Could not import 'django_hosts.non_existent'. "
                 "Callable does not exist in module",
                 lambda: api_host.callback)
-        except AssertionError:  # Django < 1.8
+        except Exception:  # Django < 1.8
             self.assertRaisesMessageIn(ImproperlyConfigured,
                 "Could not import django_hosts.non_existent. "
                 "Callable does not exist in module",
