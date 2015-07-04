@@ -18,6 +18,11 @@ from django.utils.regex_helper import normalize
 from .defaults import host as host_cls
 from .utils import normalize_scheme, normalize_port
 
+try:
+    from django.core.signals import setting_changed
+except ImportError:
+    from django.test.signals import setting_changed
+
 
 @lru_cache()
 def get_hostconf():
@@ -62,6 +67,13 @@ def clear_host_caches():
     get_hostconf_module.cache_clear()
     get_host.cache_clear()
     get_host_patterns.cache_clear()
+
+
+def setting_changed_receiver(setting, enter, **kwargs):
+    if not enter and setting in {'ROOT_HOSTCONF', 'DEFAULT_HOST'}:
+        clear_host_caches()
+
+setting_changed.connect(setting_changed_receiver)
 
 
 def reverse_host(host, args=None, kwargs=None):

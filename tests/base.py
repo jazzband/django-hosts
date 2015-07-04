@@ -1,6 +1,5 @@
 import pytest
 from django.test import TestCase, RequestFactory
-from django_hosts.resolvers import clear_host_caches
 
 
 @pytest.mark.django_db()
@@ -10,10 +9,6 @@ class HostsTestCase(TestCase):
         super(HostsTestCase, self).setUp()
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
-
-    def tearDown(self):
-        super(HostsTestCase, self).tearDown()
-        clear_host_caches()
 
     def assertRaisesMessageIn(self, error,
                               message, callable, *args, **kwargs):
