@@ -180,12 +180,19 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     hostname = reverse_host(host,
                             args=host_args,
                             kwargs=host_kwargs)
-    path = reverse_path(viewname,
-                        urlconf=host.urlconf,
-                        args=args or (),
-                        kwargs=kwargs or {},
-                        prefix=prefix,
-                        current_app=current_app)
+    kwargs = {
+        'urlconf': host.urlconf,
+        'args': args or (),
+        'kwargs': kwargs or {},
+        'prefix': prefix,
+        'current_app': current_app,
+    }
+    try:
+        path = reverse_path(viewname, **kwargs)
+    except TypeError:
+        # Django 1.9+ has the `prefix` kwarg removed in reverse().
+        del kwargs['prefix']
+        path = reverse_path(viewname, **kwargs)
 
     if scheme is None:
         scheme = host.scheme

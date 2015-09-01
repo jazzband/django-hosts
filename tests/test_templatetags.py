@@ -42,14 +42,35 @@ class TemplateTagsTest(HostsTestCase):
         try:
             from django.template.base import add_to_builtins
         except ImportError:  # Django < 1.8
-            from django.template import add_to_builtins
-        add_to_builtins('django_hosts.templatetags.hosts_override')
+            try:
+                from django.template import add_to_builtins
+            except ImportError:  # Django 1.9+
+                add_to_builtins = None
 
-        self.assertRender("{% url 'simple-direct' host 'www' %}",
+        if add_to_builtins:
+            add_to_builtins('django_hosts.templatetags.hosts_override')
+
+            self.assertRender("{% url 'simple-direct' host 'www' %}",
                           '//www.example.com/simple/')
-        self.assertRender("{% url 'simple-direct' host 'www' as "
-                          "simple_direct_url %}{{ simple_direct_url }}",
-                          '//www.example.com/simple/')
+            self.assertRender("{% url 'simple-direct' host 'www' as "
+                              "simple_direct_url %}{{ simple_direct_url }}",
+                              '//www.example.com/simple/')
+        else:
+            with self.settings(
+                TEMPLATES=[{
+                    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                    'OPTIONS': {
+                        'builtins': [
+                            'django_hosts.templatetags.hosts_override',
+                        ],
+                    },
+                }]
+            ):
+                self.assertRender("{% url 'simple-direct' host 'www' %}",
+                                  '//www.example.com/simple/')
+                self.assertRender("{% url 'simple-direct' host 'www' as "
+                                  "simple_direct_url %}{{ simple_direct_url }}",
+                                  '//www.example.com/simple/')
 
     @override_settings(
         DEFAULT_HOST='www',
