@@ -138,9 +138,8 @@ def reverse_host(host, args=None, kwargs=None):
 reverse_host_lazy = lazy(reverse_host, str)
 
 
-def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
-            host=None, host_args=None, host_kwargs=None,
-            scheme=None, port=None):
+def reverse(viewname, args=None, kwargs=None, current_app=None, host=None,
+            host_args=None, host_kwargs=None, scheme=None, port=None):
     """
     Given the host and view name and the appropriate parameters,
     reverses the fully qualified URL, e.g.::
@@ -166,7 +165,6 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     :param viewname: the name of the view
     :param args: the arguments of the view
     :param kwargs: the keyed arguments of the view
-    :param prefix: the prefix of the view urlconf
     :param current_app: the current_app argument
     :param scheme: the scheme to use
     :param port: the port to use
@@ -184,7 +182,6 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
                         urlconf=host.urlconf,
                         args=args or (),
                         kwargs=kwargs or {},
-                        prefix=prefix,
                         current_app=current_app)
 
     if scheme is None:
