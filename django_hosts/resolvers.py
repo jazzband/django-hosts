@@ -9,6 +9,7 @@ from importlib import import_module
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.signals import setting_changed
 from django.core.urlresolvers import NoReverseMatch, reverse as reverse_path
 from django.utils import six
 from django.utils.encoding import iri_to_uri, force_text
@@ -18,11 +19,6 @@ from django.utils.regex_helper import normalize
 
 from .defaults import host as host_cls
 from .utils import normalize_scheme, normalize_port
-
-try:
-    from django.core.signals import setting_changed
-except ImportError:
-    from django.test.signals import setting_changed
 
 
 @lru_cache()

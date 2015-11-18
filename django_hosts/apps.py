@@ -4,11 +4,8 @@ from django.core import checks
 from django.core.exceptions import ImproperlyConfigured
 try:
     from django.template.base import add_to_builtins
-except ImportError:  # Django < 1.8
-    try:
-        from django.template import add_to_builtins
-    except ImportError:  # Django 1.9+
-        add_to_builtins = None
+except ImportError:  # Django 1.9+
+    add_to_builtins = None
 from django.utils.translation import ugettext_lazy as _
 
 from .checks import check_default_host, check_root_hostconf
