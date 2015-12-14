@@ -1,6 +1,11 @@
 Changelog
 =========
 
+In development
+--------------
+
+- Moved repo to https://github.com/jazzband/django-hosts
+
 1.2 (2015-05-06)
 ----------------
 
@@ -33,7 +38,7 @@ Changelog
   receive any security releases anymore and 1.4 since its very soon going
   to lose it's LTS status.
 
-- Moved repo to https://github.com/jezdez/django-hosts
+- Moved repo to https://github.com/jazzband/django-hosts
 
 - Extended testing setup to Python 3.4 and Django 1.7.
 

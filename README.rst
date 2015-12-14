@@ -4,15 +4,17 @@ django-hosts
 .. image:: https://img.shields.io/pypi/v/django-hosts.svg
    :target: https://pypi.python.org/pypi/django-hosts
 
-.. image:: https://img.shields.io/travis/jezdez/django-hosts.svg
-    :target: https://travis-ci.org/jezdez/django-hosts
+.. image:: https://img.shields.io/travis/jazzband/django-hosts.svg
+    :target: https://travis-ci.org/jazzband/django-hosts
 
-.. image:: https://img.shields.io/coveralls/jezdez/django-hosts.svg
-   :target: https://coveralls.io/r/jezdez/django-hosts
+.. image:: https://img.shields.io/coveralls/jazzband/django-hosts.svg
+   :target: https://coveralls.io/r/jazzband/django-hosts
 
 .. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=flat
    :target: http://django-hosts.readthedocs.org/en/latest/
 
+.. image:: https://jazzband.co/static/img/badge.svg
+   :target: https://jazzband.co/
 
 This Django app routes requests for specific hosts to different URL schemes
 defined in modules called "hostconfs".
@@ -92,5 +94,5 @@ Then configure your Django site to use the app:
    pattern matches or you don't give a name to the ``host_url`` template
    tag.
 
-.. _`repository on Github`: https://github.com/jezdez/django-hosts
+.. _`repository on Github`: https://github.com/jazzband/django-hosts
 .. _`django-hosts.rtfd.org`: http://django-hosts.readthedocs.org/
