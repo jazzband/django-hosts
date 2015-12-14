@@ -114,6 +114,10 @@ Settings
     Whether or not to automatically override Django's default url template tag.
     Defaults to ``False``.
 
+    On Django 1.9+, you must add ``'django_hosts.templatetags.hosts_override'``
+    to the ``TEMPLATES['OPTIONS']['builtins']`` list instead of using this
+    setting.
+
 
 More docs
 ---------

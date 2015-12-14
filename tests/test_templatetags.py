@@ -1,8 +1,5 @@
 from django.template import Template, Context, TemplateSyntaxError
-try:
-    from django.template.base import Parser
-except ImportError:  # Django < 1.8
-    from django.template import Parser
+from django.template.base import Parser
 from django.test.utils import override_settings
 
 from django_hosts.templatetags.hosts import parse_params
@@ -37,19 +34,36 @@ class TemplateTagsTest(HostsTestCase):
     def test_url_tag_override(self):
         # we should be setting HOST_OVERRIDE_URL_TAG to True
         # but that doesn't really work since that setting is read only
-        # on import time for Django < 1.7 and on setup time for >= 1.7
-        # so we have to fake it by manually setting the stage
+        # on setup time so we have to fake it by manually setting the stage.
         try:
             from django.template.base import add_to_builtins
-        except ImportError:  # Django < 1.8
-            from django.template import add_to_builtins
-        add_to_builtins('django_hosts.templatetags.hosts_override')
+        except ImportError: # Django 1.9+
+            add_to_builtins = None
 
-        self.assertRender("{% url 'simple-direct' host 'www' %}",
+        if add_to_builtins:
+            add_to_builtins('django_hosts.templatetags.hosts_override')
+
+            self.assertRender("{% url 'simple-direct' host 'www' %}",
                           '//www.example.com/simple/')
-        self.assertRender("{% url 'simple-direct' host 'www' as "
-                          "simple_direct_url %}{{ simple_direct_url }}",
-                          '//www.example.com/simple/')
+            self.assertRender("{% url 'simple-direct' host 'www' as "
+                              "simple_direct_url %}{{ simple_direct_url }}",
+                              '//www.example.com/simple/')
+        else:
+            with self.settings(
+                TEMPLATES=[{
+                    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                    'OPTIONS': {
+                        'builtins': [
+                            'django_hosts.templatetags.hosts_override',
+                        ],
+                    },
+                }]
+            ):
+                self.assertRender("{% url 'simple-direct' host 'www' %}",
+                                  '//www.example.com/simple/')
+                self.assertRender("{% url 'simple-direct' host 'www' as "
+                                  "simple_direct_url %}{{ simple_direct_url }}",
+                                  '//www.example.com/simple/')
 
     @override_settings(
         DEFAULT_HOST='www',

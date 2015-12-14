@@ -1,10 +1,11 @@
 from django.apps import AppConfig
 from django.conf import settings
 from django.core import checks
+from django.core.exceptions import ImproperlyConfigured
 try:
     from django.template.base import add_to_builtins
-except ImportError:  # Django < 1.8
-    from django.template import add_to_builtins
+except ImportError:  # Django 1.9+
+    add_to_builtins = None
 from django.utils.translation import ugettext_lazy as _
 
 from .checks import check_default_host, check_root_hostconf
@@ -23,4 +24,12 @@ class HostsConfig(AppConfig):  # pragma: no cover
         checks.register(check_default_host)
 
         if getattr(settings, 'HOST_OVERRIDE_URL_TAG', False):
-            add_to_builtins('django_hosts.templatetags.hosts_override')
+            if add_to_builtins:
+                add_to_builtins('django_hosts.templatetags.hosts_override')
+            else:
+                raise ImproperlyConfigured(
+                    "On Django 1.9+, you must add "
+                    "'django_hosts.templatetags.hosts_override' to the "
+                    "TEMPLATES['OPTIONS']['builtins'] list instead of using "
+                    "the HOST_OVERRIDE_URL_TAG setting."
+                )

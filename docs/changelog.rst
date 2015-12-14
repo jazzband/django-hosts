@@ -1,9 +1,12 @@
 Changelog
 =========
 
-In development
---------------
+1.3 (TBA)
+---------
 
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.7 as it doesn't
+  receive security releases anymore.
+- Added support for Django 1.9.
 - Moved repo to https://github.com/jazzband/django-hosts
 
 1.2 (2015-05-06)
