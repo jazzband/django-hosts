@@ -6,8 +6,15 @@ Changelog
 
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.7 as it doesn't
   receive security releases anymore.
+
 - Added support for Django 1.9.
+
 - Moved repo to https://github.com/jazzband/django-hosts
+
+- Moved tests to https://travis-ci.org/jazzband/django-hosts
+
+- Start to use `setuptools_scm <https://pypi.python.org/pypi/setuptools_scm>`
+  for easier versioning.
 
 1.2 (2015-05-06)
 ----------------
