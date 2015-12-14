@@ -1,19 +1,28 @@
-sudo: no
+sudo: false
 language: python
 install:
-  - pip install tox coveralls
+- pip install tox coveralls
 script:
-  - tox
+- tox
 env:
-  - TOXENV=py27-django-18
-  - TOXENV=py27-django-19
-  - TOXENV=py32-django-18
-  - TOXENV=py33-django-18
-  - TOXENV=py34-django-18
-  - TOXENV=py34-django-19
+- TOXENV=py27-django-18
+- TOXENV=py27-django-19
+- TOXENV=py32-django-18
+- TOXENV=py33-django-18
+- TOXENV=py34-django-18
+- TOXENV=py34-django-19
 matrix:
   include:
-    - python: 3.5
-      env:
-      - TOXENV=py35-django-19
+  - python: 3.5
+    env:
+    - TOXENV=py35-django-19
 after_success: coveralls
+deploy:
+  provider: pypi
+  user: jazzband
+  distributions: "sdist bdist_wheel"
+  password:
+    secure: i/WljFt0Q7H2IaUqpREh4gBY/btCzmERFvXvHBPbTft5BqtkNyn97iQ8vyjR+JQCdOp/GKcq7YC6/Ryy7fpqWhOl6tp7YgKzwLqmGXTrbvB7fSLQ8Ief0pM+qjcwQSBUBucrP0LaynW5CVTh8DjINb7uw9fEdcL95Jwl9MVVVSI=
+  on:
+    tags: true
+    repo: jazzband/django-hosts
