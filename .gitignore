@@ -7,3 +7,5 @@ docs/_build
 reports/
 build/
 dist/
+.cache/
+.eggs/
