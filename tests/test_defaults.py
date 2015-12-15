@@ -1,6 +1,5 @@
 from django.core.exceptions import ImproperlyConfigured
-
-from django_hosts.defaults import patterns, host
+from django_hosts.defaults import host, patterns
 from django_hosts.resolvers import get_host_patterns
 
 from .base import HostsTestCase
@@ -73,7 +72,7 @@ class HostTests(HostsTestCase):
                 "Could not import 'django_hosts.non_existent'. "
                 "Callable does not exist in module",
                 lambda: api_host.callback)
-        except Exception:  # Django < 1.8
+        except AssertionError:
             self.assertRaisesMessageIn(ImproperlyConfigured,
                 "Could not import django_hosts.non_existent. "
                 "Callable does not exist in module",

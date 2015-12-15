@@ -1,7 +1,6 @@
-from django.template import Template, Context, TemplateSyntaxError
+from django.template import Context, Template, TemplateSyntaxError
 from django.template.base import Parser
 from django.test.utils import override_settings
-
 from django_hosts.templatetags.hosts import parse_params
 
 from .base import HostsTestCase
@@ -37,7 +36,7 @@ class TemplateTagsTest(HostsTestCase):
         # on setup time so we have to fake it by manually setting the stage.
         try:
             from django.template.base import add_to_builtins
-        except ImportError: # Django 1.9+
+        except ImportError:  # Django 1.9+
             add_to_builtins = None
 
         if add_to_builtins:
