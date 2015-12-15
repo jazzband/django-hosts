@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3 (TBA)
+1.3 (2015-12-15)
 ---------
 
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.7 as it doesn't
