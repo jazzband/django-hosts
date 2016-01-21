@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-hosts'
-copyright = u'2011-2015, Jannis Leidel and contributors'
+copyright = u'2015-2016, Jazzband members (https://jazzband.co/)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
