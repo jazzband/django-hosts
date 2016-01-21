@@ -1,8 +1,17 @@
 Changelog
 =========
 
+1.4 (2016-01-21)
+----------------
+
+- **BACKWARD-INCOMPATIBLE** Dropped support for Python 3.2.
+
+- Removed the last leftover from Django 1.5 support code.
+
+- Clarified license in favor of Jazzband members.
+
 1.3 (2015-12-15)
----------
+----------------
 
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django 1.7 as it doesn't
   receive security releases anymore.
