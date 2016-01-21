@@ -126,15 +126,7 @@ def host_url(parser, token):
         raise TemplateSyntaxError("'%s' takes at least one argument"
                                   " (path to a view)" % name)
 
-    try:
-        view_name = parser.compile_filter(bits[1])
-    except TemplateSyntaxError as exc:
-        exc.args = (exc.args[0] + ". "
-                    "The syntax of the 'url' template tag has changed in "
-                    "Django 1.5, see the docs. The view name is now "
-                    "quoted unless it's meant as a variable."),
-        raise
-
+    view_name = parser.compile_filter(bits[1])
     asvar, pivot, bits = fetch_arg(name, 'as', bits[1:])  # Strip off viewname
     scheme, pivot, bits = fetch_arg(name, 'scheme', bits)
     if scheme:

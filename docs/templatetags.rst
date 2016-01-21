@@ -10,10 +10,6 @@ Template tags
    The ``on`` argument is now called ``host`` but will continue to work in
    a deprecation cycle of two releases.
 
-   The template tag expects the syntax of the Django's url template as
-   introduced in Django 1.5. See `the release notes`_ for more information.
-   That affects both the view name as well as the host name.
-
 Now if you want to actually refer to the full URLs in your templates
 you can use the included ``host_url`` template tag. So imagine having a
 host pattern of::
@@ -193,4 +189,3 @@ result of the template tag in a template variable and use it later on, e.g.:
 
 .. _The protocol-relative URL: http://paulirish.com/2010/the-protocol-relative-url/
 .. _section in RFC 3986: http://tools.ietf.org/html/rfc3986#section-4.2
-.. _the release notes: https://docs.djangoproject.com/en/dev/releases/1.5/#overview
