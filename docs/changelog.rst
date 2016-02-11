@@ -7,6 +7,9 @@ Changelog
 - **BACKWARD-INCOMPATIBLE** Removed the ``HostsMiddleware``, deprecated in
   django-hosts 1.0.
 
+- **BACKWARD-INCOMPATIBLE** Removed the ``on`` argument of the
+  ``{% host_url %}`` template tag, deprecated in django-hosts 1.0.
+
 1.4 (2016-01-21)
 ----------------
 

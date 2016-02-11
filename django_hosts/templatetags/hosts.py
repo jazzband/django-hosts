@@ -1,5 +1,4 @@
 import re
-import warnings
 
 from django import template
 from django.conf import settings
@@ -136,13 +135,6 @@ def host_url(parser, token):
         port = parser.compile_filter(port)
 
     host, pivot, bits = fetch_arg(name, 'host', bits, consume=False)
-
-    if host is None:
-        host, pivot, bits = fetch_arg(name, 'on', bits, consume=False)
-        warnings.warn("The 'on' keyword of the '%s' template tag is pending "
-                      "deprecation in favor of the 'host' keyword. Please "
-                      "upgrade your templates accordingly.",
-                      PendingDeprecationWarning)
 
     if host:
         host = parser.compile_filter(host)
