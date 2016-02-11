@@ -10,7 +10,6 @@ class HostsBaseMiddleware(object):
     Adjust incoming request's urlconf based on hosts defined in
     settings.ROOT_HOSTCONF module.
     """
-    old_hosts_middleware = 'django_hosts.middleware.HostsMiddleware'
     new_hosts_middleware = 'django_hosts.middleware.HostsRequestMiddleware'
     toolbar_middleware = 'debug_toolbar.middleware.DebugToolbarMiddleware'
 
@@ -26,13 +25,8 @@ class HostsBaseMiddleware(object):
         middlewares = list(settings.MIDDLEWARE_CLASSES)
 
         show_exception = False
-        if (self.old_hosts_middleware in middlewares and
-                self.toolbar_middleware in middlewares):
-            show_exception = (middlewares.index(self.old_hosts_middleware) >
-                              middlewares.index(self.toolbar_middleware))
 
-        if not show_exception and (self.new_hosts_middleware in middlewares and
-                                   self.toolbar_middleware in middlewares):
+        if self.new_hosts_middleware in middlewares and self.toolbar_middleware in middlewares:
             show_exception = (middlewares.index(self.new_hosts_middleware) >
                               middlewares.index(self.toolbar_middleware))
 
@@ -90,17 +84,3 @@ class HostsResponseMiddleware(HostsBaseMiddleware):
 
         set_urlconf(host.urlconf)
         return response
-
-
-class HostsMiddleware(HostsRequestMiddleware):  # pragma: no cover
-    """
-    Provided for backwards-compatibility.
-    """
-    def __init__(self):
-        import warnings
-        warnings.warn("The 'django_hosts.middleware.HostsMiddleware' "
-                      "middleware has been split into HostsRequestMiddleware "
-                      "and HostsResponseMiddleware. Please consult the "
-                      "documentation and update your middleware settings.",
-                      PendingDeprecationWarning)
-        super(HostsMiddleware, self).__init__()
