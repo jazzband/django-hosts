@@ -5,11 +5,6 @@ Template tags
 
 .. function:: host_url(view_name, [view_args, view_kwargs], host_name, [host_args, host_kwargs, as_var, scheme])
 
-.. versionchanged:: 1.0
-
-   The ``on`` argument is now called ``host`` but will continue to work in
-   a deprecation cycle of two releases.
-
 Now if you want to actually refer to the full URLs in your templates
 you can use the included ``host_url`` template tag. So imagine having a
 host pattern of::

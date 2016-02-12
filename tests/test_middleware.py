@@ -90,11 +90,3 @@ class MiddlewareTests(HostsTestCase):
         DEFAULT_HOST='multiple')
     def test_debug_toolbar_new_warning(self):
         self.assertRaises(ImproperlyConfigured, HostsRequestMiddleware)
-
-    @override_settings(
-        MIDDLEWARE_CLASSES=['debug_toolbar.middleware.DebugToolbarMiddleware',
-                            'django_hosts.middleware.HostsMiddleware'],
-        ROOT_HOSTCONF='tests.hosts.multiple',
-        DEFAULT_HOST='multiple')
-    def test_debug_toolbar_old_warning(self):
-        self.assertRaises(ImproperlyConfigured, HostsRequestMiddleware)
