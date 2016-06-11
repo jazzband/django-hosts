@@ -11,7 +11,7 @@ django-hosts
    :target: https://coveralls.io/r/jazzband/django-hosts
 
 .. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=flat
-   :target: http://django-hosts.readthedocs.org/en/latest/
+   :target: https://django-hosts.readthedocs.io/en/latest/
 
 .. image:: https://jazzband.co/static/img/badge.svg
    :target: https://jazzband.co/
@@ -95,4 +95,4 @@ Then configure your Django site to use the app:
    tag.
 
 .. _`repository on Github`: https://github.com/jazzband/django-hosts
-.. _`django-hosts.rtfd.org`: http://django-hosts.readthedocs.org/
+.. _`django-hosts.rtfd.org`: https://django-hosts.readthedocs.io/
