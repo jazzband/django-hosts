@@ -15,7 +15,7 @@ setup(
     long_description=read('README.rst'),
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
-    url='http://django-hosts.rtfd.org/',
+    url='https://django-hosts.readthedocs.io/',
     author='Jannis Leidel',
     author_email='jannis@leidel.info',
     license='BSD',

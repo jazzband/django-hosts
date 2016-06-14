@@ -185,7 +185,7 @@ Changelog
 
 - Extended tests dramatically (100% coverage).
 
-- Added docs at http://django-hosts.rtfd.org
+- Added docs at https://django-hosts.readthedocs.io
 
 - Stopped preventing the name 'default' for hosts.
 
