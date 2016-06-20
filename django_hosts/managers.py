@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models.fields import FieldDoesNotExist
 
+from .deprecation import get_all_field_names
+
 
 class HostSiteManager(models.Manager):
     """
@@ -32,6 +34,7 @@ class HostSiteManager(models.Manager):
             return render(request, 'home_page.html', {'posts': posts})
 
     """
+
     def __init__(self, field_name=None, select_related=True):
         super(HostSiteManager, self).__init__()
         self._field_name = field_name
@@ -40,8 +43,7 @@ class HostSiteManager(models.Manager):
         self._is_validated = False
 
     def _validate_field_name(self):
-        field_names = self.model._meta.get_all_field_names()
-
+        field_names = get_all_field_names(self.model._meta)
         # If a custom name is provided, make sure the field exists on the model
         if self._field_name is not None:
             name_parts = self._field_name.split("__", 1)

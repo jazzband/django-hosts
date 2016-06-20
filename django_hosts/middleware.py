@@ -2,10 +2,11 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, DisallowedHost
 from django.core.urlresolvers import NoReverseMatch, set_urlconf, get_urlconf
 
+from .deprecation import MiddlewareMixin
 from .resolvers import get_host_patterns, get_host
 
 
-class HostsBaseMiddleware(object):
+class HostsBaseMiddleware(MiddlewareMixin):
     """
     Adjust incoming request's urlconf based on hosts defined in
     settings.ROOT_HOSTCONF module.

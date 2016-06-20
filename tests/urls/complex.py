@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from tests.views import test_view
 
-urlpatterns = patterns('tests.views',
-    url(r'^template/(?P<template>\w+)/$', 'test_view', name='complex-direct'),
-)
+urlpatterns = [
+    url(r'^template/(?P<template>\w+)/$', test_view, name='complex-direct'),
+]

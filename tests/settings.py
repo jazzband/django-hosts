@@ -14,6 +14,13 @@ INSTALLED_APPS = [
     'tests',
 ]
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+    },
+]
+
 ROOT_URLCONF = 'tests.urls.root'
 
 SITE_ID = 1
