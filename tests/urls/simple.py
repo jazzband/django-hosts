@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from django.shortcuts import render
 
-urlpatterns = patterns('',
-    url(r'^simple/$', 'django.shortcuts.render', name='simple-direct'),
-)
+urlpatterns = [
+    url(r'^simple/$', render, name='simple-direct'),
+]

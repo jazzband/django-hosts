@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from django.shortcuts import render
 
-urlpatterns = patterns('',
-    url(r'^multiple/$', 'django.shortcuts.render', name='multiple-direct'),
-)
+urlpatterns = [
+    url(r'^multiple/$', render, name='multiple-direct'),
+]
