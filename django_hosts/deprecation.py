@@ -12,7 +12,7 @@ else:
 
 if VERSION[0:2] >= (1, 10):
     from django.urls.utils import get_callable as actual_get_callable
-    
+
     def get_callable(lookup_view):
         try:
             return actual_get_callable(lookup_view)
