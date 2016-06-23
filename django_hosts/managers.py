@@ -2,8 +2,6 @@ from django.conf import settings
 from django.db import models
 from django.db.models.fields import FieldDoesNotExist
 
-from .deprecation import get_all_field_names
-
 
 class HostSiteManager(models.Manager):
     """
@@ -43,37 +41,36 @@ class HostSiteManager(models.Manager):
         self._is_validated = False
 
     def _validate_field_name(self):
-        field_names = get_all_field_names(self.model._meta)
         # If a custom name is provided, make sure the field exists on the model
+        field = None
         if self._field_name is not None:
             name_parts = self._field_name.split("__", 1)
             rel_depth = len(name_parts)
             if rel_depth > self._depth:
                 self._depth = rel_depth
             field_name = name_parts[0]
-            if field_name not in field_names:
-                raise ValueError("%s couldn't find a field named %s in %s." %
-                                 (self.__class__.__name__, field_name,
-                                  self.model._meta.object_name))
-
+            try:
+                field = self.model._meta.get_field(field_name)
+            except FieldDoesNotExist:
+                pass
         # Otherwise, see if there is a field called either 'site' or 'sites'
         else:
             for potential_name in ['site', 'sites']:
-                if potential_name in field_names:
+                try:
+                    field = self.model._meta.get_field(potential_name)
+                except FieldDoesNotExist:
+                    field_name = None
+                else:
                     self._field_name = field_name = potential_name
                     self._is_validated = True
                     break
-                else:
-                    field_name = None
-
         # Now do a type check on the field (FK or M2M only)
-        try:
-            field = self.model._meta.get_field(field_name)
+        if field:
             if not isinstance(field, (models.ForeignKey,
                                       models.ManyToManyField)):
                 raise TypeError("%s must be a ForeignKey or "
                                 "ManyToManyField." % field_name)
-        except FieldDoesNotExist:
+        else:
             raise ValueError("%s couldn't find a field named %s in %s." %
                              (self.__class__.__name__, field_name,
                               self.model._meta.object_name))
