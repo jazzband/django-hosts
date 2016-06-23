@@ -10,7 +10,7 @@ django-hosts' ``HostsRequestMiddleware`` middleware, e.g.:
 
 .. code-block:: python
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = (
         'django_hosts.middleware.HostsRequestMiddleware',
         # your other middlewares..
         'debug_toolbar.middleware.DebugToolbarMiddleware',

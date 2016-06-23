@@ -1,9 +1,15 @@
+import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, DisallowedHost
 from django.core.urlresolvers import NoReverseMatch, set_urlconf, get_urlconf
 
-from .deprecation import MiddlewareMixin
 from .resolvers import get_host_patterns, get_host
+
+if django.VERSION < (1, 10):
+    class MiddlewareMixin(object):
+        pass
+else:
+    from django.utils.deprecation import MiddlewareMixin
 
 
 class HostsBaseMiddleware(MiddlewareMixin):
@@ -14,7 +20,8 @@ class HostsBaseMiddleware(MiddlewareMixin):
     new_hosts_middleware = 'django_hosts.middleware.HostsRequestMiddleware'
     toolbar_middleware = 'debug_toolbar.middleware.DebugToolbarMiddleware'
 
-    def __init__(self):
+    def __init__(self, get_response=None):
+        self.get_response = get_response
         self.current_urlconf = None
         self.host_patterns = get_host_patterns()
         try:
@@ -23,7 +30,8 @@ class HostsBaseMiddleware(MiddlewareMixin):
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" %
                                        exc)
 
-        middlewares = list(settings.MIDDLEWARE_CLASSES)
+        middleware_setting = 'MIDDLEWARE' if getattr(settings, 'MIDDLEWARE', None) is not None else 'MIDDLEWARE_CLASSES'
+        middlewares = list(getattr(settings, middleware_setting))
 
         show_exception = False
 
@@ -36,7 +44,7 @@ class HostsBaseMiddleware(MiddlewareMixin):
                 "The django-hosts and django-debug-toolbar middlewares "
                 "are in the wrong order. Make sure the django-hosts "
                 "middleware comes before the django-debug-toolbar "
-                "middleware in the MIDDLEWARE_CLASSES setting.")
+                "middleware in the %s setting." % middleware_setting)
 
     def get_host(self, request_host):
         for host in self.host_patterns:

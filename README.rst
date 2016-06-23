@@ -76,10 +76,10 @@ Then configure your Django site to use the app:
 #. Add ``'django_hosts'`` to your ``INSTALLED_APPS`` setting.
 
 #. Add ``'django_hosts.middleware.HostsRequestMiddleware'`` to the **beginning** of your
-   ``MIDDLEWARE_CLASSES`` setting.
+   ``MIDDLEWARE`` or ``MIDDLEWARE_CLASSES`` setting.
 
 #. Add ``'django_hosts.middleware.HostsResponseMiddleware'`` to the **end** of your
-   ``MIDDLEWARE_CLASSES`` setting.
+   ``MIDDLEWARE`` or ``MIDDLEWARE_CLASSES`` setting.
 
 #. Create a new module containing your default host patterns,
    e.g. in the ``hosts.py`` file next to your ``urls.py``.

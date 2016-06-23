@@ -1,3 +1,6 @@
+import unittest
+
+import django
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.utils import override_settings
@@ -7,6 +10,8 @@ from django_hosts.middleware import (HostsRequestMiddleware,
                                      HostsResponseMiddleware)
 
 from .base import HostsTestCase
+
+DJANGO_1_9 = django.VERSION < (1, 10)  # Django 1.9 or earlier
 
 
 class MiddlewareTests(HostsTestCase):
@@ -69,6 +74,34 @@ class MiddlewareTests(HostsTestCase):
             'django_hosts.middleware.HostsRequestMiddleware',
             'django_hosts.middleware.HostsResponseMiddleware',
         ])
+    def test_fallback_with_evil_host_middleware_classes(self):
+        response = self.client.get('/', HTTP_HOST='evil.com')
+        self.assertEqual(response.status_code, 400)
+
+    @unittest.skipIf(DJANGO_1_9, 'settings.MIDDLEWARE is new in Django 1.10')
+    @override_settings(
+        ROOT_HOSTCONF='tests.hosts.simple',
+        DEFAULT_HOST='www',
+        MIDDLEWARE=[
+            'django_hosts.middleware.HostsRequestMiddleware',
+            'django_hosts.middleware.HostsResponseMiddleware',
+        ])
+    def test_request(self):
+        # This does a pass through the middleware and ensures that the
+        # middleware's __init__() assigns the get_response attribute.
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 404)
+
+    @unittest.skipIf(DJANGO_1_9, 'settings.MIDDLEWARE is new in Django 1.10')
+    @override_settings(
+        ROOT_HOSTCONF='tests.hosts.simple',
+        DEFAULT_HOST='www',
+        ALLOWED_HOSTS=['somehost.com'],
+        DEBUG=False,
+        MIDDLEWARE=[
+            'django_hosts.middleware.HostsRequestMiddleware',
+            'django_hosts.middleware.HostsResponseMiddleware',
+        ])
     def test_fallback_with_evil_host(self):
         response = self.client.get('/', HTTP_HOST='evil.com')
         self.assertEqual(response.status_code, 400)
@@ -88,5 +121,27 @@ class MiddlewareTests(HostsTestCase):
                             'django_hosts.middleware.HostsRequestMiddleware'],
         ROOT_HOSTCONF='tests.hosts.multiple',
         DEFAULT_HOST='multiple')
+    def test_debug_toolbar_new_warning_middleware_classes(self):
+        msg = (
+            'The django-hosts and django-debug-toolbar middlewares are in the '
+            'wrong order. Make sure the django-hosts middleware comes before '
+            'the django-debug-toolbar middleware in the MIDDLEWARE_CLASSES setting.'
+        )
+        with self.assertRaisesMessage(ImproperlyConfigured, msg):
+            HostsRequestMiddleware()
+
+    @override_settings(
+        MIDDLEWARE=[
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
+            'django_hosts.middleware.HostsRequestMiddleware'
+        ],
+        ROOT_HOSTCONF='tests.hosts.multiple',
+        DEFAULT_HOST='multiple')
     def test_debug_toolbar_new_warning(self):
-        self.assertRaises(ImproperlyConfigured, HostsRequestMiddleware)
+        msg = (
+            'The django-hosts and django-debug-toolbar middlewares are in the '
+            'wrong order. Make sure the django-hosts middleware comes before '
+            'the django-debug-toolbar middleware in the MIDDLEWARE setting.'
+        )
+        with self.assertRaisesMessage(ImproperlyConfigured, msg):
+            HostsRequestMiddleware()
