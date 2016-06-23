@@ -10,6 +10,8 @@ Changelog
 - **BACKWARD-INCOMPATIBLE** Removed the ``on`` argument of the
   ``{% host_url %}`` template tag, deprecated in django-hosts 1.0.
 
+- Added support for Django 1.10.
+
 1.4 (2016-01-21)
 ----------------
 
