@@ -3,13 +3,27 @@ When defining hostconfs you need to use the ``patterns`` and ``host`` helpers
 """
 import re
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import get_mod_func
+from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
+from django.core.urlresolvers import (
+    get_callable as actual_get_callable, get_mod_func,
+)
 from django.utils.encoding import smart_str
 from django.utils.functional import cached_property
 
-from .deprecation import get_callable
 from .utils import normalize_scheme, normalize_port
+
+
+def get_callable(lookup_view):
+    """
+    Convert a string version of a function name to the callable object.
+
+    If the lookup_view is not an import path, it is assumed to be a URL pattern
+    label and the original string is returned.
+    """
+    try:
+        return actual_get_callable(lookup_view)
+    except ViewDoesNotExist as exc:
+        raise ImproperlyConfigured(exc.args[0].replace('View', 'Callable'))
 
 
 def patterns(prefix, *args):
