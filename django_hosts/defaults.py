@@ -11,8 +11,6 @@ from django.utils.functional import cached_property
 from .deprecation import get_callable
 from .utils import normalize_scheme, normalize_port
 
-_callable_cache = {}  # Maps view and url pattern names to their view functions
-
 
 def patterns(prefix, *args):
     """
