@@ -7,14 +7,17 @@ script:
 env:
 - TOXENV=py27-django-18
 - TOXENV=py27-django-19
+- TOXENV=py27-django-110
 - TOXENV=py33-django-18
 - TOXENV=py34-django-18
 - TOXENV=py34-django-19
+- TOXENV=py34-django-110
 matrix:
   include:
   - python: 3.5
     env:
     - TOXENV=py35-django-19
+    - TOXENV=py35-django-110
 after_success: coveralls
 deploy:
   provider: pypi
