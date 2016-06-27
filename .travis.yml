@@ -17,6 +17,8 @@ matrix:
   - python: 3.5
     env:
     - TOXENV=py35-django-19
+  - python: 3.5
+    env:
     - TOXENV=py35-django-110
 after_success: coveralls
 deploy:
