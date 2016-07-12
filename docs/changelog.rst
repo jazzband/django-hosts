@@ -33,7 +33,7 @@ Changelog
 
 - Moved tests to https://travis-ci.org/jazzband/django-hosts
 
-- Start to use `setuptools_scm <https://pypi.python.org/pypi/setuptools_scm>`
+- Start to use `setuptools_scm <https://pypi.python.org/pypi/setuptools_scm>`_
   for easier versioning.
 
 1.2 (2015-05-06)
