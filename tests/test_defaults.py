@@ -61,22 +61,16 @@ class HostTests(HostsTestCase):
     def test_host_nonexistent_callback(self):
         api_host = host(r'api', 'api.urls', name='api',
                         callback='whatever.non_existent')
-        self.assertRaisesMessageIn(ImproperlyConfigured,
+        self.assertRaisesMessage(ImproperlyConfigured,
             "Could not import 'whatever'. Error was: No module named",
             lambda: api_host.callback)
 
         api_host = host(r'api', 'api.urls', name='api',
                         callback='django_hosts.non_existent')
-        try:
-            self.assertRaisesMessageIn(ImproperlyConfigured,
-                "Could not import 'django_hosts.non_existent'. "
-                "Callable does not exist in module",
-                lambda: api_host.callback)
-        except AssertionError:
-            self.assertRaisesMessageIn(ImproperlyConfigured,
-                "Could not import django_hosts.non_existent. "
-                "Callable does not exist in module",
-                lambda: api_host.callback)
+        self.assertRaisesMessage(ImproperlyConfigured,
+            "Could not import 'django_hosts.non_existent'. "
+            "Callable does not exist in module",
+            lambda: api_host.callback)
 
         api_host = host(r'api', 'api.urls', name='api',
                         callback='tests.broken_module.yeah_yeah')
