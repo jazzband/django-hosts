@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0 (2016-07-12)
+2.0 (2016-07-25)
 ----------------
 
 - **BACKWARD-INCOMPATIBLE** Removed the ``HostsMiddleware``, deprecated in
