@@ -70,6 +70,7 @@ def setting_changed_receiver(setting, enter, **kwargs):
     if not enter and setting in {'ROOT_HOSTCONF', 'DEFAULT_HOST'}:
         clear_host_caches()
 
+
 setting_changed.connect(setting_changed_receiver)
 
 
@@ -128,6 +129,7 @@ def reverse_host(host, args=None, kwargs=None):
     raise NoReverseMatch("Reverse host for '%s' with arguments '%s' "
                          "and keyword arguments '%s' not found." %
                          (host.name, args, kwargs))
+
 
 #: The lazy version of the :func:`~django_hosts.resolvers.reverse_host`
 #: function to be used in class based views and other module level situations
@@ -201,6 +203,7 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
         port = normalize_port(port)
 
     return iri_to_uri('%s%s%s%s' % (scheme, hostname, port, path))
+
 
 #: The lazy version of the :func:`~django_hosts.resolvers.reverse`
 #: function to be used in class based views and other module level situations
