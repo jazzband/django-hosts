@@ -9,6 +9,7 @@ from .base import HostsTestCase
 from .models import Author, BlogPost, WikiPage
 
 
+@override_settings(ALLOWED_HOSTS=['wiki.site1', 'wiki.site2', 'admin.site4', 'static'])
 class SitesTests(HostsTestCase):
 
     def setUp(self):

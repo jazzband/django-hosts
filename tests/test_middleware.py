@@ -34,6 +34,7 @@ class MiddlewareTests(HostsTestCase):
             HostsRequestMiddleware)
 
     @override_settings(
+        ALLOWED_HOSTS=['other.example.com'],
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_request_urlconf_module(self):
@@ -44,6 +45,7 @@ class MiddlewareTests(HostsTestCase):
         self.assertEqual(request.urlconf, 'tests.urls.simple')
 
     @override_settings(
+        ALLOWED_HOSTS=['other.example.com'],
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_response_urlconf_module(self):
@@ -54,6 +56,7 @@ class MiddlewareTests(HostsTestCase):
         self.assertEqual(request.urlconf, 'tests.urls.simple')
 
     @override_settings(
+        ALLOWED_HOSTS=['ss.example.com'],
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='with_view_kwargs')
     def test_fallback_to_defaulthost(self):
@@ -107,6 +110,7 @@ class MiddlewareTests(HostsTestCase):
         self.assertEqual(response.status_code, 400)
 
     @override_settings(
+        ALLOWED_HOSTS=['spam.eggs.example.com'],
         ROOT_HOSTCONF='tests.hosts.multiple',
         DEFAULT_HOST='multiple')
     def test_multiple_subdomains(self):
