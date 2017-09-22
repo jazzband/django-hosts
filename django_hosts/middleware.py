@@ -1,15 +1,9 @@
-import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, DisallowedHost
-from django.core.urlresolvers import NoReverseMatch, set_urlconf, get_urlconf
+from django.utils.deprecation import MiddlewareMixin
+from django.urls import NoReverseMatch, set_urlconf, get_urlconf
 
 from .resolvers import get_host_patterns, get_host
-
-if django.VERSION < (1, 10):
-    class MiddlewareMixin(object):
-        pass
-else:
-    from django.utils.deprecation import MiddlewareMixin
 
 
 class HostsBaseMiddleware(MiddlewareMixin):

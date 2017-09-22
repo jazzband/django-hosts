@@ -1,6 +1,3 @@
-import unittest
-
-import django
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.utils import override_settings
@@ -10,8 +7,6 @@ from django_hosts.middleware import (HostsRequestMiddleware,
                                      HostsResponseMiddleware)
 
 from .base import HostsTestCase
-
-DJANGO_1_9 = django.VERSION < (1, 10)  # Django 1.9 or earlier
 
 
 class MiddlewareTests(HostsTestCase):
@@ -81,7 +76,6 @@ class MiddlewareTests(HostsTestCase):
         response = self.client.get('/', HTTP_HOST='evil.com')
         self.assertEqual(response.status_code, 400)
 
-    @unittest.skipIf(DJANGO_1_9, 'settings.MIDDLEWARE is new in Django 1.10')
     @override_settings(
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www',
@@ -95,7 +89,6 @@ class MiddlewareTests(HostsTestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 404)
 
-    @unittest.skipIf(DJANGO_1_9, 'settings.MIDDLEWARE is new in Django 1.10')
     @override_settings(
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www',

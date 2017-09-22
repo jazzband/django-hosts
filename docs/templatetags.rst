@@ -69,10 +69,9 @@ Override the default url template tag
 
 In case you don't like adding ``{% load hosts %}`` to each and every template
 that you reverse an URL in you can automatically override the url template tag
-that is built into Django.
-
-Simply set the :attr:`~django.conf.settings.HOST_OVERRIDE_URL_TAG` setting
-to ``True``.
+that is built into Django by adding
+``'django_hosts.templatetags.hosts_override'`` to the
+``TEMPLATES['OPTIONS']['builtins']`` list.
 
 It won't hurt to have some ``{% load hosts %}`` in some templates and the
 :func:`~django_hosts.templatetags.hosts.host_url` template tag will also still

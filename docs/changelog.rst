@@ -1,8 +1,10 @@
 Changelog
 =========
 
-2.1 (YYYY-MM-DD)
+3.0 (YYYY-MM-DD)
 ----------------
+
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django < 1.11.
 
 - Confirmed support for Django 1.11 and Python 3.6 (no code changes were
   required).
@@ -106,7 +108,7 @@ Changelog
   - a new optional ``port`` parameter to override the resulting URL's port
     individually
   - a new ability to override Django's built-in url template tag by setting
-    the :attr:`~django.conf.setting.HOST_OVERRIDE_URL_TAG` setting to ``True``
+    the ``HOST_OVERRIDE_URL_TAG`` setting to ``True``
 
 - Added :func:`~django_hosts.resolvers.reverse_lazy` and
   :func:`~django_hosts.resolvers.reverse_host_lazy` for use in import time

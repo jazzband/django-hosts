@@ -4,7 +4,7 @@ When defining hostconfs you need to use the ``patterns`` and ``host`` helpers
 import re
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
-from django.core.urlresolvers import (
+from django.urls import (
     get_callable as actual_get_callable, get_mod_func,
 )
 from django.utils.encoding import smart_str

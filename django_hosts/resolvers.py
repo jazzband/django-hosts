@@ -10,7 +10,7 @@ from importlib import import_module
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import setting_changed
-from django.core.urlresolvers import NoReverseMatch, reverse as reverse_path
+from django.urls import NoReverseMatch, reverse as reverse_path
 from django.utils import six
 from django.utils.encoding import iri_to_uri, force_text
 from django.utils.functional import lazy
@@ -178,20 +178,13 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     hostname = reverse_host(host,
                             args=host_args,
                             kwargs=host_kwargs)
-    kwargs = {
-        'urlconf': host.urlconf,
-        'args': args or (),
-        'kwargs': kwargs or {},
-        'prefix': prefix,
-        'current_app': current_app,
-    }
-    try:
-        path = reverse_path(viewname, **kwargs)
-    except TypeError:
-        # Django 1.9+ has the `prefix` kwarg removed in reverse().
-        del kwargs['prefix']
-        path = reverse_path(viewname, **kwargs)
-
+    path = reverse_path(
+        viewname,
+        urlconf=host.urlconf,
+        args=args or (),
+        kwargs=kwargs or {},
+        current_app=current_app,
+    )
     if scheme is None:
         scheme = host.scheme
     else:

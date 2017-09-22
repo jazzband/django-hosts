@@ -31,38 +31,21 @@ class TemplateTagsTest(HostsTestCase):
         DEFAULT_HOST='www',
         ROOT_HOSTCONF='tests.hosts.simple')
     def test_url_tag_override(self):
-        # we should be setting HOST_OVERRIDE_URL_TAG to True
-        # but that doesn't really work since that setting is read only
-        # on setup time so we have to fake it by manually setting the stage.
-        try:
-            from django.template.base import add_to_builtins
-        except ImportError:  # Django 1.9+
-            add_to_builtins = None
-
-        if add_to_builtins:
-            add_to_builtins('django_hosts.templatetags.hosts_override')
-
+        with self.settings(
+            TEMPLATES=[{
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'OPTIONS': {
+                    'builtins': [
+                        'django_hosts.templatetags.hosts_override',
+                    ],
+                },
+            }]
+        ):
             self.assertRender("{% url 'simple-direct' host 'www' %}",
-                          '//www.example.com/simple/')
+                              '//www.example.com/simple/')
             self.assertRender("{% url 'simple-direct' host 'www' as "
                               "simple_direct_url %}{{ simple_direct_url }}",
                               '//www.example.com/simple/')
-        else:
-            with self.settings(
-                TEMPLATES=[{
-                    'BACKEND': 'django.template.backends.django.DjangoTemplates',
-                    'OPTIONS': {
-                        'builtins': [
-                            'django_hosts.templatetags.hosts_override',
-                        ],
-                    },
-                }]
-            ):
-                self.assertRender("{% url 'simple-direct' host 'www' %}",
-                                  '//www.example.com/simple/')
-                self.assertRender("{% url 'simple-direct' host 'www' as "
-                                  "simple_direct_url %}{{ simple_direct_url }}",
-                                  '//www.example.com/simple/')
 
     @override_settings(
         DEFAULT_HOST='www',

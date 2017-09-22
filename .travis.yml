@@ -5,21 +5,10 @@ install:
 script:
 - tox
 env:
-- TOXENV=py27-django-18
-- TOXENV=py27-django-19
-- TOXENV=py27-django-110
 - TOXENV=py27-django-111
-- TOXENV=py33-django-18
-- TOXENV=py34-django-18
-- TOXENV=py34-django-19
-- TOXENV=py34-django-110
 - TOXENV=py34-django-111
 matrix:
   include:
-  - python: 3.5
-    env: TOXENV=py35-django-19
-  - python: 3.5
-    env: TOXENV=py35-django-110
   - python: 3.5
     env: TOXENV=py35-django-111
   - python: 3.6
@@ -34,4 +23,4 @@ deploy:
   on:
     tags: true
     repo: jazzband/django-hosts
-    condition: "$TOXENV = py27-django-19"
+    condition: "$TOXENV = py27-django-111"

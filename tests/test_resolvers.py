@@ -1,6 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import NoReverseMatch
 from django.test.utils import override_settings
+from django.urls import NoReverseMatch
 
 from django_hosts.resolvers import (get_hostconf_module, get_host_patterns,
                                     get_host, reverse_host, reverse)

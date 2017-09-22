@@ -1,7 +1,7 @@
 """
-A template tag library that is automatically added to Django's
-built-in template tags if the setting HOST_OVERRIDE_URL_TAG is set
-to True.
+A template tag library that can replace Django's built-in url template tag
+by adding ``'django_hosts.templatetags.hosts_override'`` to the
+``TEMPLATES['OPTIONS']['builtins']`` list.
 """
 from django import template
 

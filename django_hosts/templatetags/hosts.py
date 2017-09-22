@@ -7,7 +7,7 @@ from django.utils import six
 from django.template.base import FilterExpression
 from django.template.defaulttags import URLNode
 from django.utils.encoding import iri_to_uri, smart_str
-from django.core.urlresolvers import set_urlconf, get_urlconf
+from django.urls import set_urlconf, get_urlconf
 
 from ..resolvers import reverse_host, get_host
 from ..utils import normalize_scheme, normalize_port

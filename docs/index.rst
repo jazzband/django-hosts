@@ -107,18 +107,6 @@ Settings
     when using the :func:`~django_hosts.callbacks.cached_host_site` callback.
     Defaults to ``3600``.
 
-.. attribute:: HOST_OVERRIDE_URL_TAG (optional)
-
-    .. versionadded:: 1.0
-
-    Whether or not to automatically override Django's default url template tag.
-    Defaults to ``False``.
-
-    On Django 1.9+, you must add ``'django_hosts.templatetags.hosts_override'``
-    to the ``TEMPLATES['OPTIONS']['builtins']`` list instead of using this
-    setting.
-
-
 More docs
 ---------
 

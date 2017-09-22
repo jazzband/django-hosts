@@ -6,12 +6,12 @@ from django_hosts.managers import HostSiteManager
 
 class Author(models.Model):
     name = models.TextField()
-    site = models.ForeignKey(Site)
+    site = models.ForeignKey(Site, models.CASCADE)
 
 
 class BlogPost(models.Model):
     content = models.TextField()
-    author = models.ForeignKey(Author)
+    author = models.ForeignKey(Author, models.CASCADE)
 
     objects = models.Manager()
     dead_end = HostSiteManager()
@@ -27,7 +27,7 @@ class BlogPost(models.Model):
 
 class WikiPage(models.Model):
     content = models.TextField()
-    site = models.ForeignKey(Site)
+    site = models.ForeignKey(Site, models.CASCADE)
 
     objects = models.Manager()
     on_site = HostSiteManager()
