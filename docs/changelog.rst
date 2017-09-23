@@ -7,7 +7,7 @@ Changelog
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django < 1.11.
 
 - Confirmed support for Django 1.11 and Python 3.6 (no code changes were
-  required).
+  required). Added support for Django 2.0.
 
 2.0 (2016-07-25)
 ----------------

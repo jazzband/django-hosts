@@ -1,3 +1,6 @@
+import unittest
+
+import django
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.utils import override_settings
@@ -7,6 +10,8 @@ from django_hosts.middleware import (HostsRequestMiddleware,
                                      HostsResponseMiddleware)
 
 from .base import HostsTestCase
+
+DJANGO_1_11 = django.VERSION < (2, 0)  # Django 1.11.x
 
 
 class MiddlewareTests(HostsTestCase):
@@ -63,6 +68,7 @@ class MiddlewareTests(HostsTestCase):
         host, kwargs = middleware.get_host('non-existing')
         self.assertEqual(host.name, 'with_view_kwargs')
 
+    @unittest.skipUnless(DJANGO_1_11, 'settings.MIDDLEWARE_CLASSES removed in Django 2.0+')
     @override_settings(
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www',
@@ -113,6 +119,7 @@ class MiddlewareTests(HostsTestCase):
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'tests.urls.multiple')
 
+    @unittest.skipUnless(DJANGO_1_11, 'settings.MIDDLEWARE_CLASSES removed in Django 2.0+')
     @override_settings(
         MIDDLEWARE_CLASSES=['debug_toolbar.middleware.DebugToolbarMiddleware',
                             'django_hosts.middleware.HostsRequestMiddleware'],
