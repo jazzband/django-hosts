@@ -2,8 +2,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch
 
-from django_hosts.resolvers import (get_hostconf_module, get_host_patterns,
-                                    get_host, reverse_host, reverse)
+from django_hosts.resolvers import (get_host, get_host_patterns, get_hostconf,
+                                    get_hostconf_module, reverse, reverse_host)
 
 from .base import HostsTestCase
 from .hosts import simple
@@ -99,3 +99,21 @@ class UtilityTests(HostsTestCase):
     @override_settings(ROOT_HOSTCONF='tests.hosts.appended')
     def test_appended_patterns(self):
         self.assertEqual(get_host('special').name, 'special')
+
+
+@override_settings(
+    ROOT_HOSTCONF='tests.hosts.simple',
+    DEFAULT_HOST='www',
+)
+class SettingChangedClearCacheTests(HostsTestCase):
+    def test_root_hostconf(self):
+        self.assertEqual(get_hostconf(), 'tests.hosts.simple')
+        with self.settings(ROOT_HOSTCONF='tests.hosts.appended'):
+            self.assertEqual(get_hostconf(), 'tests.hosts.appended')
+        self.assertEqual(get_hostconf(), 'tests.hosts.simple')
+
+    def test_default_host(self):
+        self.assertEqual(get_host().name, 'www')
+        with self.settings(DEFAULT_HOST='static'):
+            self.assertEqual(get_host().name, 'static')
+        self.assertEqual(get_host().name, 'www')
