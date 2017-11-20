@@ -21,6 +21,7 @@ matrix:
 after_success: coveralls
 deploy:
   provider: pypi
+  server: https://jazzband.co/projects/django-hosts/upload
   user: jazzband
   distributions: sdist bdist_wheel
   password:
