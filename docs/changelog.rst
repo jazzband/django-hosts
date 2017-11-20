@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0 (YYYY-MM-DD)
+3.0 (2017-11-20)
 ----------------
 
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django < 1.11.
