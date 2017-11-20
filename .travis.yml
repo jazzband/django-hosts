@@ -21,10 +21,7 @@ matrix:
 after_success: coveralls
 deploy:
   provider: pypi
-  user: jazzband
   distributions: "sdist bdist_wheel"
-  password:
-    secure: i/WljFt0Q7H2IaUqpREh4gBY/btCzmERFvXvHBPbTft5BqtkNyn97iQ8vyjR+JQCdOp/GKcq7YC6/Ryy7fpqWhOl6tp7YgKzwLqmGXTrbvB7fSLQ8Ief0pM+qjcwQSBUBucrP0LaynW5CVTh8DjINb7uw9fEdcL95Jwl9MVVVSI=
   on:
     tags: true
     repo: jazzband/django-hosts
