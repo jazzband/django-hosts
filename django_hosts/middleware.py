@@ -24,7 +24,10 @@ class HostsBaseMiddleware(MiddlewareMixin):
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" %
                                        exc)
 
-        middleware_setting = 'MIDDLEWARE' if getattr(settings, 'MIDDLEWARE', None) is not None else 'MIDDLEWARE_CLASSES'
+        middleware_setting = (
+            'MIDDLEWARE' if getattr(settings, 'MIDDLEWARE', None) is not None
+            else 'MIDDLEWARE_CLASSES'
+        )
         middlewares = list(getattr(settings, middleware_setting))
 
         show_exception = False

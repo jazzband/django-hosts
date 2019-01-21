@@ -27,7 +27,7 @@ def get_callable(lookup_view):
 
 
 def patterns(prefix, *args):
-    """
+    r"""
     The function to define the list of hosts (aka hostconfs), e.g.::
 
         from django_hosts import patterns

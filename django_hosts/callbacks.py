@@ -41,7 +41,7 @@ class CachedLazySite(LazySite):
 
 
 def host_site(request, *args, **kwargs):
-    """
+    r"""
     A callback function which uses the :mod:`django.contrib.sites` contrib
     app included in Django to match a host to a
     :class:`~django.contrib.sites.models.Site` instance, setting a
@@ -87,7 +87,7 @@ def host_site(request, *args, **kwargs):
 
 
 def cached_host_site(request, *args, **kwargs):
-    """
+    r"""
     A callback function similar to :func:`~django_hosts.callbacks.host_site`
     which caches the resulting :class:`~django.contrib.sites.models.Site`
     instance in the default cache backend for the time specfified as
