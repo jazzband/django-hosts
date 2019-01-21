@@ -19,12 +19,16 @@ matrix:
     env: TOXENV=py35-django-20
   - python: 3.5
     env: TOXENV=py35-django-21
+  - python: 3.5
+    env: TOXENV=py35-django-22
   - python: 3.6
     env: TOXENV=py36-django-111
   - python: 3.6
     env: TOXENV=py36-django-20
   - python: 3.6
     env: TOXENV=py36-django-21
+  - python: 3.6
+    env: TOXENV=py36-django-22
 after_success: coveralls
 deploy:
   provider: pypi

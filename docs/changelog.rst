@@ -4,7 +4,7 @@ Changelog
 X.Y (YYY-MM-DD)
 ----------------
 
-- Confirmed support for Django 2.1 (no code changes were required).
+- Confirmed support for Django 2.1 and 2.2 (no code changes were required).
 
 3.0 (2017-11-20)
 ----------------
