@@ -1,15 +1,18 @@
+dist: xenial
 sudo: false
 language: python
 install:
 - pip install tox coveralls
 script:
 - tox
-env:
-- TOXENV=py27-django-111
-- TOXENV=py34-django-111
-- TOXENV=py34-django-20
 matrix:
   include:
+  - python: 2.7
+    env: TOXENV=py27-django-111
+  - python: 3.4
+    env: TOXENV=py34-django-111
+  - python: 3.4
+    env: TOXENV=py34-django-20
   - python: 3.5
     env: TOXENV=py35-django-111
   - python: 3.5
