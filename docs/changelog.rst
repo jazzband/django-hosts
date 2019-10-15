@@ -7,7 +7,7 @@ X.Y (YYY-MM-DD)
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django < 2.2.
 
 - Confirmed support for Django 2.2 and Python 3.7 and 3.8 (no code changes were
-  required).
+  required). Added support for Django 3.0.
 
 3.0 (2017-11-20)
 ----------------
