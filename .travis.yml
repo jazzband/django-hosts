@@ -1,52 +1,12 @@
 language: python
-
-sudo: false
-
-install:
-- pip install tox coveralls
-
-script:
-- tox
-
-matrix:
-  include:
-  # Django 1.11 : Python 2.7, 3.4, 3.5, 3.6
-  - python: 2.7
-    env: TOXENV=py27-django-111
-  - python: 3.4
-    env: TOXENV=py34-django-111
-  - python: 3.5
-    env: TOXENV=py35-django-111
-  - python: 3.6
-    env: TOXENV=py36-django-111
-  - python: 3.7
-    env: TOXENV=py37-django-111
-  # Django 2.0 : Python 3.4, 3.5, 3.6, 3.7
-  - python: 3.4
-    env: TOXENV=py34-django-20
-  - python: 3.5
-    env: TOXENV=py35-django-20
-  - python: 3.6
-    env: TOXENV=py36-django-20
-  - python: 3.7
-    env: TOXENV=py37-django-20
-  # Django 2.1 : Python 3.5, 3.6, 3.7
-  - python: 3.5
-    env: TOXENV=py35-django-21
-  - python: 3.6
-    env: TOXENV=py36-django-21
-  - python: 3.7
-    env: TOXENV=py37-django-21
-  # Django 2.2 : Python 3.5, 3.6, 3.7
-  - python: 3.5
-    env: TOXENV=py35-django-22
-  - python: 3.6
-    env: TOXENV=py36-django-22
-  - python: 3.7
-    env: TOXENV=py37-django-22
-
+python:
+- '2.7'
+- '3.4'
+- '3.5'
+- '3.6'
+install: pip install tox-travis coveralls
+script: tox -v
 after_success: coveralls
-
 deploy:
   provider: pypi
   server: https://jazzband.co/projects/django-hosts/upload
