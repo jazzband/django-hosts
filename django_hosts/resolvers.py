@@ -6,15 +6,14 @@ scheme, hostname and port you'll need to use the ``reverse`` and
 import re
 
 from importlib import import_module
+from functools import lru_cache
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import setting_changed
 from django.urls import NoReverseMatch, reverse as reverse_path
-from django.utils import six
 from django.utils.encoding import iri_to_uri, force_text
 from django.utils.functional import lazy
-from django.utils.lru_cache import lru_cache
 from django.utils.regex_helper import normalize
 
 from .defaults import host as host_cls
@@ -104,7 +103,7 @@ def reverse_host(host, args=None, kwargs=None):
 
     unicode_args = [force_text(x) for x in args]
     unicode_kwargs = dict(((k, force_text(v))
-                          for (k, v) in six.iteritems(kwargs)))
+                          for (k, v) in kwargs))
 
     for result, params in normalize(host.regex):
         if args:
