@@ -1,9 +1,9 @@
 import re
+import six
 
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
-from django.utils import six
 from django.template.base import FilterExpression
 from django.template.defaulttags import URLNode
 from django.utils.encoding import iri_to_uri, smart_str
