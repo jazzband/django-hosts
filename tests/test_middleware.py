@@ -16,6 +16,22 @@ DJANGO_1_11 = django.VERSION < (2, 0)  # Django 1.11.x
 
 class MiddlewareTests(HostsTestCase):
 
+    @override_settings(
+        ROOT_HOSTCONF='tests.hosts.simple',
+        DEFAULT_HOST='www',
+        ALLOWED_HOSTS=[],
+        DEBUG=False,
+        MIDDLEWARE=[
+            'django_hosts.middleware.HostsRequestMiddleware',
+            'django_hosts.middleware.HostsResponseMiddleware',
+        ])
+    def test_disallowed_host(self):
+        try:
+            response = self.client.get('/', HTTP_HOST='abc.com')
+            self.assertEqual(response.status_code, 400)
+        except DisallowedHost:
+            pass
+
     def test_missing_hostconf_setting(self):
         self.assertRaisesMessage(ImproperlyConfigured,
             'Missing ROOT_HOSTCONF setting', HostsRequestMiddleware)
@@ -107,22 +123,6 @@ class MiddlewareTests(HostsTestCase):
     def test_fallback_with_evil_host(self):
         response = self.client.get('/', HTTP_HOST='evil.com')
         self.assertEqual(response.status_code, 400)
-
-    @override_settings(
-        ROOT_HOSTCONF='tests.hosts.simple',
-        DEFAULT_HOST='www',
-        ALLOWED_HOSTS=[],
-        DEBUG=False,
-        MIDDLEWARE=[
-            'django_hosts.middleware.HostsRequestMiddleware',
-            'django_hosts.middleware.HostsResponseMiddleware',
-        ])
-    def test_disallowed_host(self):
-        try:
-            response = self.client.get('/', HTTP_HOST='evil.com')
-            self.assertEqual(response.status_code, 400)
-        except DisallowedHost:
-            pass
 
     @override_settings(
         ALLOWED_HOSTS=['spam.eggs.example.com'],
