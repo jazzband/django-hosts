@@ -149,3 +149,8 @@ class MiddlewareTests(HostsTestCase):
         )
         with self.assertRaisesMessage(ImproperlyConfigured, msg):
             HostsRequestMiddleware()
+
+    @override_settings(
+        ALLOWED_HOSTS=[])
+    def test_disallowed_host(self):
+        response = self.client.get('/', HTTP_HOST='abc.disalowed.com')
