@@ -1,5 +1,4 @@
 import re
-import six
 
 from django import template
 from django.conf import settings
@@ -52,7 +51,7 @@ class HostURLNode(URLNode):
 
         host_kwargs = dict((smart_str(k, 'ascii'),
                             self.maybe_resolve(v, context))
-                           for k, v in six.iteritems(self.host_kwargs))
+                           for k, v in self.host_kwargs.items())
 
         if self.scheme:
             scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))

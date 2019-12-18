@@ -123,7 +123,6 @@ class MiddlewareTests(HostsTestCase):
             self.assertEqual(response.status_code, 400)
         except DisallowedHost:
             pass
-            
 
     @override_settings(
         ALLOWED_HOSTS=['spam.eggs.example.com'],
