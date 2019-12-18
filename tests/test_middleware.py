@@ -4,7 +4,7 @@ import django
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.utils import override_settings
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, DisallowedHost
 
 from django_hosts.middleware import (HostsRequestMiddleware,
                                      HostsResponseMiddleware)
@@ -109,6 +109,23 @@ class MiddlewareTests(HostsTestCase):
         self.assertEqual(response.status_code, 400)
 
     @override_settings(
+        ROOT_HOSTCONF='tests.hosts.simple',
+        DEFAULT_HOST='www',
+        ALLOWED_HOSTS=[],
+        DEBUG=False,
+        MIDDLEWARE=[
+            'django_hosts.middleware.HostsRequestMiddleware',
+            'django_hosts.middleware.HostsResponseMiddleware',
+        ])
+    def test_disallowed_host(self):
+        try:
+            response = self.client.get('/', HTTP_HOST='evil.com')
+            self.assertEqual(response.status_code, 400)
+        except DisallowedHost:
+            pass
+            
+
+    @override_settings(
         ALLOWED_HOSTS=['spam.eggs.example.com'],
         ROOT_HOSTCONF='tests.hosts.multiple',
         DEFAULT_HOST='multiple')
@@ -149,17 +166,3 @@ class MiddlewareTests(HostsTestCase):
         )
         with self.assertRaisesMessage(ImproperlyConfigured, msg):
             HostsRequestMiddleware()
-
-    @override_settings(
-        ALLOWED_HOSTS=['other.example.com'],
-        ROOT_HOSTCONF='tests.hosts.simple',
-        DEFAULT_HOST='www')
-    def test_request_urlconf_module(self):
-        try:
-            rf = RequestFactory(HTTP_HOST='another.example.com')
-            request = rf.get('/simple/')
-            middleware = HostsRequestMiddleware()
-            middleware.process_request(request)
-            self.assertEqual(request.urlconf, 'tests.urls.simple')
-        except:
-            pass
