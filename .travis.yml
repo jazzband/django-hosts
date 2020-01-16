@@ -19,4 +19,4 @@ deploy:
   on:
     tags: true
     repo: jazzband/django-hosts
-    condition: "$TOXENV = py27-django-111"
+    condition: "$TOXENV = py34-django-111"
