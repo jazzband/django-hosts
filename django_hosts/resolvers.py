@@ -11,8 +11,6 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import setting_changed
 from django.urls import NoReverseMatch, reverse as reverse_path
-from django.utils import six
-from django.utils.encoding import iri_to_uri, force_text
 from django.utils.functional import lazy
 from django.utils.lru_cache import lru_cache
 from django.utils.regex_helper import normalize
@@ -102,19 +100,15 @@ def reverse_host(host, args=None, kwargs=None):
     if not isinstance(host, host_cls):
         host = get_host(host)
 
-    unicode_args = [force_text(x) for x in args]
-    unicode_kwargs = dict(((k, force_text(v))
-                          for (k, v) in six.iteritems(kwargs)))
-
     for result, params in normalize(host.regex):
         if args:
             if len(args) != len(params):
                 continue
-            candidate = result % dict(zip(params, unicode_args))
+            candidate = result % dict(zip(params, args))
         else:
             if set(kwargs.keys()) != set(params):
                 continue
-            candidate = result % unicode_kwargs
+            candidate = result % kwargs
 
         if re.match(host.regex, candidate, re.UNICODE):  # pragma: no cover
             parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
