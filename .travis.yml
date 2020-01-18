@@ -7,7 +7,6 @@ python:
 - '3.8'
 install: pip install tox-travis coveralls
 script: tox -v
-
 after_success: coveralls
 deploy:
   provider: pypi

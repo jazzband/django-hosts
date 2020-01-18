@@ -109,6 +109,19 @@ class MiddlewareTests(HostsTestCase):
         self.assertEqual(response.status_code, 400)
 
     @override_settings(
+        ROOT_HOSTCONF='tests.hosts.simple',
+        DEFAULT_HOST='www',
+        ALLOWED_HOSTS=['somehost.com'],
+        DEBUG=False)
+    def test_fallback_with_evil_host_response(self):
+        rf = RequestFactory(HTTP_HOST='evil.com')
+        request = rf.get('/')
+        middleware = HostsResponseMiddleware()
+        initial_response = HttpResponse('test')
+        processed = middleware.process_response(request, initial_response)
+        self.assertEqual(initial_response, processed)
+
+    @override_settings(
         ALLOWED_HOSTS=['spam.eggs.example.com'],
         ROOT_HOSTCONF='tests.hosts.multiple',
         DEFAULT_HOST='multiple')
