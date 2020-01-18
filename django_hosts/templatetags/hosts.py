@@ -3,7 +3,7 @@ import re
 from django import template
 from django.conf import settings
 from django.template import TemplateSyntaxError
-from django.utils import six
+#from django.utils import six
 from django.template.base import FilterExpression
 from django.template.defaulttags import URLNode
 from django.utils.encoding import iri_to_uri, smart_str
@@ -52,7 +52,7 @@ class HostURLNode(URLNode):
 
         host_kwargs = dict((smart_str(k, 'ascii'),
                             self.maybe_resolve(v, context))
-                           for k, v in six.iteritems(self.host_kwargs))
+                           for k, v in dict.items(self.host_kwargs))
 
         if self.scheme:
             scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))
