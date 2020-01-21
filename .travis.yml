@@ -1,7 +1,5 @@
 language: python
 python:
-- '2.7'
-- '3.4'
 - '3.5'
 - '3.6'
 install: pip install tox-travis coveralls
@@ -17,4 +15,4 @@ deploy:
   on:
     tags: true
     repo: jazzband/django-hosts
-    condition: "$TOXENV = py27-django-111"
+    condition: "$TOXENV = py36-dj22"

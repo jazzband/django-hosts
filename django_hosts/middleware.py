@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured, DisallowedHost
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import NoReverseMatch, set_urlconf, get_urlconf
 
@@ -24,12 +24,7 @@ class HostsBaseMiddleware(MiddlewareMixin):
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" %
                                        exc)
 
-        middleware_setting = (
-            'MIDDLEWARE' if getattr(settings, 'MIDDLEWARE', None) is not None
-            else 'MIDDLEWARE_CLASSES'
-        )
-        middlewares = list(getattr(settings, middleware_setting))
-
+        middlewares = list(settings.MIDDLEWARE)
         show_exception = False
 
         if self.new_hosts_middleware in middlewares and self.toolbar_middleware in middlewares:
@@ -41,7 +36,8 @@ class HostsBaseMiddleware(MiddlewareMixin):
                 "The django-hosts and django-debug-toolbar middlewares "
                 "are in the wrong order. Make sure the django-hosts "
                 "middleware comes before the django-debug-toolbar "
-                "middleware in the %s setting." % middleware_setting)
+                "middleware in the MIDDLEWARE setting."
+            )
 
     def get_host(self, request_host):
         for host in self.host_patterns:
@@ -78,12 +74,7 @@ class HostsResponseMiddleware(HostsBaseMiddleware):
         # any of our middleware makes use of host, etc URLs.
 
         # Find best match, falling back to settings.DEFAULT_HOST
-        try:
-            host, kwargs = self.get_host(request.get_host())
-        except DisallowedHost:
-            # Bail out early, there is nothing to reset as HostsRequestMiddleware
-            # never gets called with an invalid host.
-            return response
+        host, kwargs = self.get_host(request.get_host())
         # This is the main part of this middleware
         request.urlconf = host.urlconf
         request.host = host

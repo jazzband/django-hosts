@@ -1,6 +1,3 @@
-import unittest
-
-import django
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.utils import override_settings
@@ -10,8 +7,6 @@ from django_hosts.middleware import (HostsRequestMiddleware,
                                      HostsResponseMiddleware)
 
 from .base import HostsTestCase
-
-DJANGO_1_11 = django.VERSION < (2, 0)  # Django 1.11.x
 
 
 class MiddlewareTests(HostsTestCase):
@@ -68,20 +63,6 @@ class MiddlewareTests(HostsTestCase):
         host, kwargs = middleware.get_host('non-existing')
         self.assertEqual(host.name, 'with_view_kwargs')
 
-    @unittest.skipUnless(DJANGO_1_11, 'settings.MIDDLEWARE_CLASSES removed in Django 2.0+')
-    @override_settings(
-        ROOT_HOSTCONF='tests.hosts.simple',
-        DEFAULT_HOST='www',
-        ALLOWED_HOSTS=['somehost.com'],
-        DEBUG=False,
-        MIDDLEWARE_CLASSES=[
-            'django_hosts.middleware.HostsRequestMiddleware',
-            'django_hosts.middleware.HostsResponseMiddleware',
-        ])
-    def test_fallback_with_evil_host_middleware_classes(self):
-        response = self.client.get('/', HTTP_HOST='evil.com')
-        self.assertEqual(response.status_code, 400)
-
     @override_settings(
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www',
@@ -118,21 +99,6 @@ class MiddlewareTests(HostsTestCase):
         middleware = HostsRequestMiddleware()
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'tests.urls.multiple')
-
-    @unittest.skipUnless(DJANGO_1_11, 'settings.MIDDLEWARE_CLASSES removed in Django 2.0+')
-    @override_settings(
-        MIDDLEWARE_CLASSES=['debug_toolbar.middleware.DebugToolbarMiddleware',
-                            'django_hosts.middleware.HostsRequestMiddleware'],
-        ROOT_HOSTCONF='tests.hosts.multiple',
-        DEFAULT_HOST='multiple')
-    def test_debug_toolbar_new_warning_middleware_classes(self):
-        msg = (
-            'The django-hosts and django-debug-toolbar middlewares are in the '
-            'wrong order. Make sure the django-hosts middleware comes before '
-            'the django-debug-toolbar middleware in the MIDDLEWARE_CLASSES setting.'
-        )
-        with self.assertRaisesMessage(ImproperlyConfigured, msg):
-            HostsRequestMiddleware()
 
     @override_settings(
         MIDDLEWARE=[
