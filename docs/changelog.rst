@@ -1,7 +1,7 @@
 Changelog
 =========
 
-X.Y (YYY-MM-DD)
+4.0 (2020-01-21)
 ----------------
 
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django < 2.2.
