@@ -17,4 +17,4 @@ deploy:
   on:
     tags: true
     repo: jazzband/django-hosts
-    condition: "$TOXENV = py36-dj22"
+    condition: "$TRAVIS_PYTHON_VERSION = 3.8"
