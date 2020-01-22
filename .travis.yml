@@ -1,4 +1,6 @@
+dist: xenial
 language: python
+cache: pip
 python:
 - '3.5'
 - '3.6'
@@ -7,14 +9,20 @@ python:
 install: pip install tox-travis coveralls
 script: tox -v
 after_success: coveralls
-deploy:
-  provider: pypi
-  server: https://jazzband.co/projects/django-hosts/upload
-  user: jazzband
-  distributions: sdist bdist_wheel
-  password:
-    secure: AwOdeqfsMKnlHLL/h8/WsetV1e3qc8ewGD4gtIVlW9jACadtqhiZeFpxJvLljq955MfF7lkv9lMGx2g1Ljvjyuw0txzkv93/gyxd+Seu606J/tIO5VMNZMQuEJaR/ND3DvpTjwV5WWiMxECa3lp/ttlq6F5Ugjdup/xuJo+MT0s=
-  on:
-    tags: true
-    repo: jazzband/django-hosts
-    condition: "$TRAVIS_PYTHON_VERSION = 3.8"
+jobs:
+  fast_finish: true
+  include:
+    - stage: deploy
+      env:
+      python: 3.7
+      script: skip
+      deploy:
+        provider: pypi
+        server: https://jazzband.co/projects/django-hosts/upload
+        user: jazzband
+        distributions: sdist bdist_wheel
+        password:
+          secure: AwOdeqfsMKnlHLL/h8/WsetV1e3qc8ewGD4gtIVlW9jACadtqhiZeFpxJvLljq955MfF7lkv9lMGx2g1Ljvjyuw0txzkv93/gyxd+Seu606J/tIO5VMNZMQuEJaR/ND3DvpTjwV5WWiMxECa3lp/ttlq6F5Ugjdup/xuJo+MT0s=
+        on:
+          tags: true
+          repo: jazzband/django-hosts
