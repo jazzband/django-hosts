@@ -18,7 +18,7 @@ class HostsBaseMiddleware(MiddlewareMixin):
         self.get_response = get_response
         self.current_urlconf = None
         self.host_patterns = get_host_patterns()
-        self.parent_host = getattr(settings, 'PARENT_HOST', '').lstrip(.)
+        self.parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
         
         try:
             self.default_host = get_host()
