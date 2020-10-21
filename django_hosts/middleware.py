@@ -18,11 +18,14 @@ class HostsBaseMiddleware(MiddlewareMixin):
         self.get_response = get_response
         self.current_urlconf = None
         self.host_patterns = get_host_patterns()
+        self.parent_host = getattr(settings, 'PARENT_HOST', '').lstrip(.)
+        
         try:
             self.default_host = get_host()
         except NoReverseMatch as exc:
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" %
                                        exc)
+        
 
         middlewares = list(settings.MIDDLEWARE)
         show_exception = False
@@ -41,9 +44,12 @@ class HostsBaseMiddleware(MiddlewareMixin):
 
     def get_host(self, request_host):
         for host in self.host_patterns:
-            match = host.compiled_regex.match(request_host)
-            if match:
-                return host, match.groupdict()
+            # Ensure it is not the parent domain without any subdomain
+            # This avoids capturing part of the root domain as a subdomain
+            if request_host != self.parent_host:
+                match = host.compiled_regex.match(request_host)
+                if match:
+                    return host, match.groupdict()
         return self.default_host, {}
 
 
