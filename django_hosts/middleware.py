@@ -13,6 +13,8 @@ class HostsBaseMiddleware(MiddlewareMixin):
     """
     new_hosts_middleware = 'django_hosts.middleware.HostsRequestMiddleware'
     toolbar_middleware = 'debug_toolbar.middleware.DebugToolbarMiddleware'
+    sync_capable = True
+    async_capable = False
 
     def __init__(self, get_response=None):
         self.get_response = get_response
