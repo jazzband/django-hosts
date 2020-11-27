@@ -3,7 +3,7 @@ export PATH := $(VENV)/bin:$(PATH)
 
 test:
 	flake8 django_hosts
-	py.test
+	pytest
 
 
 clean:
