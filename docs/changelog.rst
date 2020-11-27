@@ -1,6 +1,13 @@
 Changelog
 =========
 
+5.0 (unreleased)
+----------------
+
+- Moved tests to GitHub Actions: https://github.com/jazzband/django-hosts/actions
+
+- Confirmed support for Python 3.9 (no code changes were required).
+
 4.0 (2020-01-22)
 ----------------
 
