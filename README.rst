@@ -4,11 +4,11 @@ django-hosts
 .. image:: https://img.shields.io/pypi/v/django-hosts.svg
    :target: https://pypi.python.org/pypi/django-hosts
 
-.. image:: https://img.shields.io/travis/jazzband/django-hosts.svg
-    :target: https://travis-ci.org/jazzband/django-hosts
+.. image:: https://github.com/jazzband/django-hosts/workflows/Test/badge.svg
+   :target: https://github.com/jazzband/django-hosts/actions
 
-.. image:: https://img.shields.io/coveralls/jazzband/django-hosts.svg
-   :target: https://coveralls.io/r/jazzband/django-hosts
+.. image:: https://codecov.io/gh/jazzband/django-hosts/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/jazzband/django-hosts
 
 .. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=flat
    :target: https://django-hosts.readthedocs.io/en/latest/
