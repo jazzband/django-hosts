@@ -18,11 +18,11 @@ host pattern of::
 
 and a ``ROOT_URLCONF`` of::
 
-    from django.conf.urls import patterns, url
+    from django.urls import path
 
-    urlpatterns = patterns('mysite.admin',
-        url(r'^dashboard/$', 'dashboard', name='dashboard'),
-    )
+    urlpatterns = [
+        path('dashboard/', 'dashboard', name='dashboard'),
+    ]
 
 then this example will create a link to the admin dashboard:
 
