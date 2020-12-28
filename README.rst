@@ -21,7 +21,9 @@ defined in modules called "hostconfs".
 
 For example, if you own ``example.com`` but want to serve specific content
 at ``api.example.com`` and ``beta.example.com``, add the following to a
-``hosts.py`` file::
+``hosts.py`` file:
+
+.. code-block:: python
 
     from django_hosts import patterns, host
 
@@ -41,7 +43,7 @@ The patterns on the left-hand side are regular expressions. For example,
 the following ``ROOT_HOSTCONF`` setting will route ``foo.example.com``
 and ``bar.example.com`` to the same URLconf.
 
-::
+.. code-block:: python
 
     from django_hosts import patterns, host
 
@@ -85,7 +87,9 @@ Then configure your Django site to use the app:
    e.g. in the ``hosts.py`` file next to your ``urls.py``.
 
 #. Set the ``ROOT_HOSTCONF`` setting to the dotted Python
-   import path of the module containing your host patterns, e.g.::
+   import path of the module containing your host patterns, e.g.:
+   
+   .. code-block:: python
 
        ROOT_HOSTCONF = 'mysite.hosts'
 
