@@ -1,4 +1,5 @@
 from django.contrib.sites.models import Site
+from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.utils import override_settings
 from django.utils.functional import empty
@@ -7,6 +8,10 @@ from django_hosts.middleware import HostsRequestMiddleware
 
 from .base import HostsTestCase
 from .models import Author, BlogPost, WikiPage
+
+
+def get_response_empty(request):
+    return HttpResponse()
 
 
 @override_settings(ALLOWED_HOSTS=['wiki.site1', 'wiki.site2', 'admin.site4', 'static'])
@@ -40,7 +45,7 @@ class SitesTests(HostsTestCase):
     def test_sites_callback(self):
         rf = RequestFactory(HTTP_HOST='wiki.site1')
         request = rf.get('/simple/')
-        middleware = HostsRequestMiddleware()
+        middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertEqual(request.site.pk, self.site1.pk)
@@ -51,7 +56,7 @@ class SitesTests(HostsTestCase):
     def test_sites_cached_callback(self):
         rf = RequestFactory(HTTP_HOST='admin.site4')
         request = rf.get('/simple/')
-        middleware = HostsRequestMiddleware()
+        middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
 
         get_site = lambda: request.site.domain
@@ -72,7 +77,7 @@ class SitesTests(HostsTestCase):
     def test_sites_callback_with_parent_host(self):
         rf = RequestFactory(HTTP_HOST='wiki.site2')
         request = rf.get('/simple/')
-        middleware = HostsRequestMiddleware()
+        middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertEqual(request.site.pk, self.site2.pk)
@@ -83,7 +88,7 @@ class SitesTests(HostsTestCase):
     def test_manager_simple(self):
         rf = RequestFactory(HTTP_HOST='wiki.site2')
         request = rf.get('/simple/')
-        middleware = HostsRequestMiddleware()
+        middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertEqual(request.site.pk, self.site2.pk)
@@ -96,7 +101,7 @@ class SitesTests(HostsTestCase):
     def test_manager_missing_site(self):
         rf = RequestFactory(HTTP_HOST='static')
         request = rf.get('/simple/')
-        middleware = HostsRequestMiddleware()
+        middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'tests.urls.simple')
         self.assertRaises(AttributeError, lambda: request.site)

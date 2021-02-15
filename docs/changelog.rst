@@ -1,6 +1,14 @@
 Changelog
 =========
 
+5.1 (unreleased)
+----------------
+
+- Made middleware compatible with ASGI.
+
+  - This also fixes a bug that caused incompatibility with `channels
+    <https://pypi.org/project/channels/>`_ 3.0.0+.
+
 5.0 (2021-12-09)
 ----------------
 
