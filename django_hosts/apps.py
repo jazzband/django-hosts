@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 from django.core import checks
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .checks import check_default_host, check_root_hostconf
 

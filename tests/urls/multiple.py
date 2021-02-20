@@ -1,6 +1,6 @@
-from django.conf.urls import url
+from django.urls import path
 from django.shortcuts import render
 
 urlpatterns = [
-    url(r'^multiple/$', render, name='multiple-direct'),
+    path('multiple/', render, name='multiple-direct'),
 ]
