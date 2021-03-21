@@ -19,13 +19,12 @@ class HostsBaseMiddleware(MiddlewareMixin):
         self.current_urlconf = None
         self.host_patterns = get_host_patterns()
         self.parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
-        
+
         try:
             self.default_host = get_host()
         except NoReverseMatch as exc:
             raise ImproperlyConfigured("Invalid DEFAULT_HOST setting: %s" %
                                        exc)
-        
 
         middlewares = list(settings.MIDDLEWARE)
         show_exception = False
