@@ -40,6 +40,18 @@ class MiddlewareTests(HostsTestCase):
         self.assertEqual(request.urlconf, 'tests.urls.simple')
 
     @override_settings(
+        ALLOWED_HOSTS=['example.com'],
+        ROOT_HOSTCONF='tests.hosts.blank_wildcard',
+        PARENT_HOST='example.com',
+        DEFAULT_HOST='root')
+    def test_request_blank_urlconf_module(self):
+        rf = RequestFactory(HTTP_HOST='example.com')
+        request = rf.get('/')
+        middleware = HostsRequestMiddleware()
+        middleware.process_request(request)
+        self.assertEqual(request.urlconf, 'tests.urls.root')
+
+    @override_settings(
         ALLOWED_HOSTS=['other.example.com'],
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
