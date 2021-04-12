@@ -8,6 +8,8 @@ Changelog
 
 - Confirmed support for Python 3.9 (no code changes were required).
 
+- Drop Django 3.0 support.
+
 4.0 (2020-01-22)
 ----------------
 
