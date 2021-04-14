@@ -74,6 +74,8 @@ You can find the full docs here: `django-hosts.rtfd.org`_
 Then configure your Django site to use the app:
 
 #. Add ``'django_hosts'`` to your ``INSTALLED_APPS`` setting.
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjazzband%2Fdjango-hosts.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjazzband%2Fdjango-hosts?ref=badge_shield)
+
 
 #. Add ``'django_hosts.middleware.HostsRequestMiddleware'`` to the
    **beginning** of your ``MIDDLEWARE`` setting.
@@ -96,3 +98,7 @@ Then configure your Django site to use the app:
 
 .. _`repository on Github`: https://github.com/jazzband/django-hosts
 .. _`django-hosts.rtfd.org`: https://django-hosts.readthedocs.io/
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjazzband%2Fdjango-hosts.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjazzband%2Fdjango-hosts?ref=badge_large)
