@@ -24,3 +24,5 @@ ROOT_URLCONF = 'tests.urls.root'
 SITE_ID = 1
 
 SECRET_KEY = 'something-something'
+
+USE_TZ = True
