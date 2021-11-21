@@ -4,6 +4,12 @@ django-hosts
 .. image:: https://img.shields.io/pypi/v/django-hosts.svg
    :target: https://pypi.python.org/pypi/django-hosts
 
+.. image:: https://img.shields.io/pypi/pyversions/django-hosts.svg
+   :target: https://pypi.org/project/django-hosts/
+
+.. image:: https://img.shields.io/pypi/djversions/django-hosts.svg
+   :target: https://pypi.org/project/django-hosts/
+
 .. image:: https://github.com/jazzband/django-hosts/workflows/Test/badge.svg
    :target: https://github.com/jazzband/django-hosts/actions
 
