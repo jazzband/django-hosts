@@ -14,6 +14,8 @@ Changelog
 
 - Add Python 3.10 support.
 
+- Add Django main to test matrix.
+
 4.0 (2020-01-22)
 ----------------
 
