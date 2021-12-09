@@ -1,7 +1,7 @@
 Changelog
 =========
 
-5.0 (unreleased)
+5.0 (2021-12-09)
 ----------------
 
 - **BACKWARD-INCOMPATIBLE** Dropped support for Django < 3.2.
