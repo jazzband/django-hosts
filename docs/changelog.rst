@@ -10,7 +10,7 @@ Changelog
 
 - Drop Django 3.0 support.
 
-- Add Django 3.2 support.
+- Add Django 3.2 and 4.0 support.
 
 - Add Python 3.10 support.
 
