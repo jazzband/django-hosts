@@ -4,17 +4,9 @@ Changelog
 5.0 (unreleased)
 ----------------
 
-- Moved tests to GitHub Actions: https://github.com/jazzband/django-hosts/actions
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django < 3.2.
 
-- Confirmed support for Python 3.9 (no code changes were required).
-
-- Drop Django 3.0 support.
-
-- Add Django 3.2 and 4.0 support.
-
-- Add Python 3.10 support.
-
-- Add Django main to test matrix.
+- Added Django 3.2 and 4.0 support.
 
 4.0 (2020-01-22)
 ----------------
