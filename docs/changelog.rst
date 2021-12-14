@@ -107,11 +107,15 @@ Changelog
     name (and the host name) to be quoted unless it's meant to be a template
     context variable
 
-    Old::
+    Old:
+
+    .. code-block:: html+django
 
       {% host_url homepage on www %}
 
-    New::
+    New:
+
+    .. code-block:: html+django
 
       {% host_url 'homepage' host 'www' %}
 
@@ -229,18 +233,24 @@ Changelog
 
 - **BACKWARDS INCOMPATIBLE** Renamed the package to ``django_hosts``
 
-  Please change your import from::
+  Please change your import from:
+
+  .. code-block:: python
 
     from hosts import patterns, hosts
 
-  to::
+  to:
+
+  .. code-block:: python
 
     from django_hosts import patterns, hosts
 
 - **BACKWARDS INCOMPATIBLE** Changed the data type that the
   ``django_hosts.patterns`` function returns to be a list instead of a
   SortedDict to follow conventions of Django's URL patterns.
-  You can use that for easy extension of the patterns, e.g.::
+  You can use that for easy extension of the patterns, e.g.:
+
+  .. code-block:: python
 
     from django_hosts import patterns, host
     from mytemplateproject.hosts import host_patterns
