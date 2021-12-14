@@ -10,5 +10,3 @@ except ImportError:  # pragma: no cover
 
 __version__ = pkg_resources.get_distribution('django-hosts').version
 __author__ = 'Jazzband members (https://jazzband.co/)'
-
-default_app_config = 'django_hosts.apps.HostsConfig'
