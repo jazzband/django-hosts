@@ -10,7 +10,9 @@ unwieldy.
 To remedy this, you can optionally specify a callback method to be called
 if your host matches.
 
-Simply define a callback function::
+Simply define a callback function:
+
+.. code-block:: python
 
     from django.shortcuts import get_object_or_404
     from django.contrib.auth.models import User
@@ -18,7 +20,9 @@ Simply define a callback function::
     def custom_fn(request, username):
         request.viewing_user = get_object_or_404(User, username=username)
 
-..and pass it as the ``callback`` paramter to the ``host`` object::
+..and pass it as the ``callback`` paramter to the ``host`` object:
+
+.. code-block:: python
 
     from django.conf import settings
     from django_hosts import patterns, host
