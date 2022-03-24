@@ -17,6 +17,9 @@ setup(
     python_requires='>=3.6',
     setup_requires=['setuptools_scm'],
     url='https://django-hosts.readthedocs.io/',
+    project_urls={
+        'Source': 'https://github.com/jazzband/django-hosts',
+    },
     author='Jannis Leidel',
     author_email='jannis@leidel.info',
     license='BSD',
