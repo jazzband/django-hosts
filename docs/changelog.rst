@@ -1,6 +1,11 @@
 Changelog
 =========
 
+X.Y (unreleased)
+----------------
+
+- Confirmed support for Django 4.1 (no code changes were required).
+
 5.1 (2022-01-15)
 ----------------
 
