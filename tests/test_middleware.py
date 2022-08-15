@@ -61,7 +61,7 @@ class MiddlewareTests(HostsTestCase):
     def test_request_blank_urlconf_module(self):
         rf = RequestFactory(HTTP_HOST='example.com')
         request = rf.get('/')
-        middleware = HostsRequestMiddleware()
+        middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
         self.assertEqual(request.urlconf, 'tests.urls.root')
 
