@@ -14,8 +14,10 @@ class HostsBaseMiddleware(MiddlewareMixin):
     new_hosts_middleware = 'django_hosts.middleware.HostsRequestMiddleware'
     toolbar_middleware = 'debug_toolbar.middleware.DebugToolbarMiddleware'
 
+    # TODO: when support for Django 3.2 is removed, replace with:
+    #   def __init__(self, get_response):
     def __init__(self, get_response=None):
-        self.get_response = get_response
+        super().__init__(get_response)
         self.current_urlconf = None
         self.host_patterns = get_host_patterns()
         try:

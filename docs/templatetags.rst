@@ -7,7 +7,9 @@ Template tags
 
 Now if you want to actually refer to the full URLs in your templates
 you can use the included ``host_url`` template tag. So imagine having a
-host pattern of::
+host pattern of:
+
+.. code-block:: python
 
     from django.conf import settings
     from django_hosts import patterns, host
@@ -16,7 +18,9 @@ host pattern of::
         host(r'admin', settings.ROOT_URLCONF, name='our-admin'),
     )
 
-and a ``ROOT_URLCONF`` of::
+and a ``ROOT_URLCONF`` of:
+
+.. code-block:: python
 
     from django.urls import path
 
@@ -85,7 +89,9 @@ Fully qualified domain names (FQDN)
 
 In case you want to append a default domain name to the domain part of
 the rendered URL you can simply set the
-:attr:`~django.conf.settings.PARENT_HOST`, e.g::
+:attr:`~django.conf.settings.PARENT_HOST`, e.g:
+
+.. code-block:: python
 
     PARENT_HOST = 'example.com'
 
@@ -96,7 +102,9 @@ This would render the link of the previous section as:
     <a href="//admin.example.com/dashboard/">Admin dashboard</a>
 
 Alternatively -- in case you don't want to append this parent domain
-to all URLs you can also spell out the domain in the host pattern::
+to all URLs you can also spell out the domain in the host pattern:
+
+.. code-block:: python
 
     from django.conf import settings
     from django_hosts import patterns, host
@@ -108,7 +116,9 @@ to all URLs you can also spell out the domain in the host pattern::
 Host and URL pattern parameters
 -------------------------------
 
-If your host pattern contains an parameter (or keyed parameter), like::
+If your host pattern contains an parameter (or keyed parameter), like:
+
+.. code-block:: python
 
     from django.conf import settings
     from django_hosts import patterns, host

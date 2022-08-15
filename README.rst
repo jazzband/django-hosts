@@ -4,6 +4,12 @@ django-hosts
 .. image:: https://img.shields.io/pypi/v/django-hosts.svg
    :target: https://pypi.python.org/pypi/django-hosts
 
+.. image:: https://img.shields.io/pypi/pyversions/django-hosts.svg
+   :target: https://pypi.org/project/django-hosts/
+
+.. image:: https://img.shields.io/pypi/djversions/django-hosts.svg
+   :target: https://pypi.org/project/django-hosts/
+
 .. image:: https://github.com/jazzband/django-hosts/workflows/Test/badge.svg
    :target: https://github.com/jazzband/django-hosts/actions
 
@@ -21,7 +27,9 @@ defined in modules called "hostconfs".
 
 For example, if you own ``example.com`` but want to serve specific content
 at ``api.example.com`` and ``beta.example.com``, add the following to a
-``hosts.py`` file::
+``hosts.py`` file:
+
+.. code-block:: python
 
     from django_hosts import patterns, host
 
@@ -41,7 +49,7 @@ The patterns on the left-hand side are regular expressions. For example,
 the following ``ROOT_HOSTCONF`` setting will route ``foo.example.com``
 and ``bar.example.com`` to the same URLconf.
 
-::
+.. code-block:: python
 
     from django_hosts import patterns, host
 
@@ -63,7 +71,9 @@ and ``bar.example.com`` to the same URLconf.
 Installation
 ------------
 
-First, install the app with your favorite package manager, e.g.::
+First, install the app with your favorite package manager, e.g.:
+
+.. code-block:: shell
 
     pip install django-hosts
 
@@ -85,7 +95,9 @@ Then configure your Django site to use the app:
    e.g. in the ``hosts.py`` file next to your ``urls.py``.
 
 #. Set the ``ROOT_HOSTCONF`` setting to the dotted Python
-   import path of the module containing your host patterns, e.g.::
+   import path of the module containing your host patterns, e.g.:
+
+   .. code-block:: python
 
        ROOT_HOSTCONF = 'mysite.hosts'
 

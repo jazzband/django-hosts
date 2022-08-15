@@ -1,12 +1,25 @@
 Changelog
 =========
 
-5.0 (unreleased)
+X.Y (unreleased)
 ----------------
 
-- Moved tests to GitHub Actions: https://github.com/jazzband/django-hosts/actions
+- Confirmed support for Django 4.1 (no code changes were required).
 
-- Confirmed support for Python 3.9 (no code changes were required).
+5.1 (2022-01-15)
+----------------
+
+- Made middleware compatible with ASGI.
+
+  - This also fixes a bug that caused incompatibility with `channels
+    <https://pypi.org/project/channels/>`_ 3.0.0+.
+
+5.0 (2021-12-09)
+----------------
+
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django < 3.2.
+
+- Added Django 3.2 and 4.0 support.
 
 4.0 (2020-01-22)
 ----------------
@@ -107,11 +120,15 @@ Changelog
     name (and the host name) to be quoted unless it's meant to be a template
     context variable
 
-    Old::
+    Old:
+
+    .. code-block:: html+django
 
       {% host_url homepage on www %}
 
-    New::
+    New:
+
+    .. code-block:: html+django
 
       {% host_url 'homepage' host 'www' %}
 
@@ -229,18 +246,24 @@ Changelog
 
 - **BACKWARDS INCOMPATIBLE** Renamed the package to ``django_hosts``
 
-  Please change your import from::
+  Please change your import from:
+
+  .. code-block:: python
 
     from hosts import patterns, hosts
 
-  to::
+  to:
+
+  .. code-block:: python
 
     from django_hosts import patterns, hosts
 
 - **BACKWARDS INCOMPATIBLE** Changed the data type that the
   ``django_hosts.patterns`` function returns to be a list instead of a
   SortedDict to follow conventions of Django's URL patterns.
-  You can use that for easy extension of the patterns, e.g.::
+  You can use that for easy extension of the patterns, e.g.:
+
+  .. code-block:: python
 
     from django_hosts import patterns, host
     from mytemplateproject.hosts import host_patterns

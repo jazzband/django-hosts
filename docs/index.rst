@@ -4,7 +4,9 @@ Usage
 -----
 
 Patterns being regular expressions allows setups to feature dynamic (or
-"wildcard") host schemes::
+"wildcard") host schemes:
+
+.. code-block:: python
 
     from django.conf import settings
     from django_hosts import patterns, host
@@ -22,7 +24,9 @@ would have matched against ``\w+`` and thus routed to the wrong
 destination.
 
 Alternatively, we could have used negative lookahead, given the value
-of the ``ROOT_URLCONF`` setting::
+of the ``ROOT_URLCONF`` setting:
+
+.. code-block:: python
 
     from django_hosts import patterns, host
 
@@ -54,7 +58,9 @@ to simplify reversing URLs in your templates:
 
 On the Python side of things like your views you can easily do the same as
 with Django's own reverse function. Simply use the
-:func:`~django_hosts.resolvers.reverse` function for that::
+:func:`~django_hosts.resolvers.reverse` function for that:
+
+.. code-block:: python
 
     from django.shortcuts import render
     from django_hosts.resolvers import reverse
