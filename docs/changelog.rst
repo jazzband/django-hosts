@@ -6,6 +6,7 @@ X.Y (unreleased)
 
 - Confirmed support for Django 4.1 (no code changes were required).
 - Confirmed support for Python 3.11 (no code changes were required).
+- **BACKWARD-INCOMPATIBLE** Dropped support for Python 3.6.
 
 5.1 (2022-01-15)
 ----------------
