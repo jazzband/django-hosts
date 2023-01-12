@@ -4,6 +4,9 @@ Changelog
 X.Y (unreleased)
 ----------------
 
+5.2 (2023-01-12)
+----------------
+
 - Fixed erroneous empty pattern matching when ``PARENT_HOST`` is defined.
 
 - Confirmed support for Django 4.1 (no code changes were required).
