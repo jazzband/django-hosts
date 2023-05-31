@@ -1,5 +1,4 @@
-# flake8: noqa
-import pkg_resources
+from importlib.metadata import version
 
 try:  # pragma: no cover
     from django_hosts.defaults import patterns, host
@@ -8,5 +7,5 @@ try:  # pragma: no cover
 except ImportError:  # pragma: no cover
     pass
 
-__version__ = pkg_resources.get_distribution('django-hosts').version
+__version__ = version('django-hosts')
 __author__ = 'Jazzband members (https://jazzband.co/)'
