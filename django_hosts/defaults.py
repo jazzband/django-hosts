@@ -94,9 +94,7 @@ class host(object):
         The pattern is also suffixed by the PARENT_HOST setting if it exists.
         """
         self.regex = regex
-        parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
-        suffix = r'\.' + parent_host if parent_host else ''
-        self.compiled_regex = re.compile(r'%s%s(\.|:|$)' % (regex, suffix))
+        self.compiled_regex = re.compile(r'%s(\.|:|$)' % regex)
         self.urlconf = urlconf
         self.name = name
         self._scheme = scheme
