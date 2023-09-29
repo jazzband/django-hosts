@@ -21,3 +21,19 @@ Also, you have to install `django-debug-toolbar 0.9.X`_ or higher.
 
 .. _`Django Debug toolbar`: https://github.com/django-debug-toolbar/django-debug-toolbar/
 .. _`django-debug-toolbar 0.9.X`: http://pypi.python.org/pypi/django-debug-toolbar
+
+
+My tests using client.post(...) are failing now, what should I do?
+-----------------------------------------------------
+
+Yes, django-hosts might make your existing pytest tests fail if you are using
+client.post(...). All you need to do is to set the correct SERVER_NAME on that call
+depending on the host that should handle the call
+
+.. code-block:: python
+
+    client.post(..., SERVER_NAME='api-server.something')
+
+.. _`Django Debug toolbar`: https://github.com/django-debug-toolbar/django-debug-toolbar/
+.. _`django-debug-toolbar 0.9.X`: http://pypi.python.org/pypi/django-debug-toolbar
+
