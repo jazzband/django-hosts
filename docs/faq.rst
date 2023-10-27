@@ -34,6 +34,4 @@ depending on the host that should handle the call
 
     client.post(..., SERVER_NAME='api-server.something')
 
-.. _`Django Debug toolbar`: https://github.com/django-debug-toolbar/django-debug-toolbar/
-.. _`django-debug-toolbar 0.9.X`: http://pypi.python.org/pypi/django-debug-toolbar
 
