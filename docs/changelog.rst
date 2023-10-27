@@ -4,6 +4,9 @@ Changelog
 X.Y (unreleased)
 ----------------
 
+6.0 (2023-10-27)
+----------------
+
 - **BACKWARD-INCOMPATIBLE** Dropped support for Python 3.7.
 
 - Confirmed support for Python 3.12.
