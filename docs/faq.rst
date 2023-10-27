@@ -34,4 +34,3 @@ depending on the host that should handle the call
 
     client.post(..., SERVER_NAME='api-server.something')
 
-
