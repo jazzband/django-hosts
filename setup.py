@@ -29,7 +29,6 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
-        'Framework :: Django :: 3.2',
         'Framework :: Django :: 4.2',
         'Framework :: Django :: 5.0',
         'Intended Audience :: Developers',
