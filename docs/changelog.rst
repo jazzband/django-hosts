@@ -4,6 +4,10 @@ Changelog
 X.Y (unreleased)
 ----------------
 
+- **BACKWARD-INCOMPATIBLE** Dropped support Django < 4.2.
+
+- Confirmed support for Django 4.2 and 5.0 (no code changes were required).
+
 6.0 (2023-10-27)
 ----------------
 

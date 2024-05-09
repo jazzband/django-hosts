@@ -4,6 +4,7 @@ docs/_build
 *.egg-info
 *.egg
 .coverage
+coverage.xml
 reports/
 build/
 dist/

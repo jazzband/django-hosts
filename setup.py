@@ -1,6 +1,7 @@
 import codecs
 from os import path
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 
 
 def read(*parts):
@@ -28,9 +29,8 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
-        'Framework :: Django :: 3.2',
-        'Framework :: Django :: 4.0',
-        'Framework :: Django :: 4.1',
+        'Framework :: Django :: 4.2',
+        'Framework :: Django :: 5.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
