@@ -65,7 +65,7 @@ def clear_host_caches():
 
 
 def setting_changed_receiver(setting, enter, **kwargs):
-    if setting in {'ROOT_HOSTCONF', 'DEFAULT_HOST'}:
+    if setting in {'ROOT_HOSTCONF', 'DEFAULT_HOST', 'ROOT_URLCONF'}:
         clear_host_caches()
 
 
