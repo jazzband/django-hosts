@@ -49,9 +49,9 @@ class HostURLNode(URLNode):
 
         host_args = [self.maybe_resolve(x, context) for x in self.host_args]
 
-        host_kwargs = dict((smart_str(k, 'ascii'),
-                            self.maybe_resolve(v, context))
-                           for k, v in self.host_kwargs.items())
+        host_kwargs = {smart_str(k, 'ascii'):
+                            self.maybe_resolve(v, context)
+                           for k, v in self.host_kwargs.items()}
 
         if self.scheme:
             scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))
@@ -65,7 +65,7 @@ class HostURLNode(URLNode):
 
         hostname = reverse_host(host, args=host_args, kwargs=host_kwargs)
 
-        uri = iri_to_uri('%s%s%s%s' % (scheme, hostname, port, path))
+        uri = iri_to_uri('{}{}{}{}'.format(scheme, hostname, port, path))
 
         if self.asvar:
             context[self.asvar] = uri

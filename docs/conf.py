@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # django-hosts documentation build configuration file, created by
 # sphinx-quickstart on Mon Sep 26 16:39:46 2011.
 #
@@ -43,8 +41,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-hosts'
-copyright = u'2015-2016, Jazzband members (https://jazzband.co/)'
+project = 'django-hosts'
+copyright = '2015-2016, Jazzband members (https://jazzband.co/)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -185,8 +183,8 @@ htmlhelp_basename = 'django-hostsdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-hosts.tex', u'django-hosts Documentation',
-   u'Jannis Leidel and contributors', 'manual'),
+  ('index', 'django-hosts.tex', 'django-hosts Documentation',
+   'Jannis Leidel and contributors', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -218,8 +216,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-hosts', u'django-hosts Documentation',
-     [u'Jannis Leidel and contributors'], 1)
+    ('index', 'django-hosts', 'django-hosts Documentation',
+     ['Jannis Leidel and contributors'], 1)
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.

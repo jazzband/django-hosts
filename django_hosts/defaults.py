@@ -96,7 +96,7 @@ class host:
         self.regex = regex
         parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
         suffix = r'\.' + parent_host if parent_host else ''
-        self.compiled_regex = re.compile(r'%s%s(\.|:|$)' % (regex, suffix))
+        self.compiled_regex = re.compile(r'{}{}(\.|:|$)'.format(regex, suffix))
         self.urlconf = urlconf
         self.name = name
         self._scheme = scheme
