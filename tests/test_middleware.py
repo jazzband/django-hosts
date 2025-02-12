@@ -47,7 +47,7 @@ class MiddlewareTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_request_urlconf_module(self):
-        rf = RequestFactory(HTTP_HOST='other.example.com')
+        rf = RequestFactory(headers={"host": 'other.example.com'})
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
@@ -59,7 +59,7 @@ class MiddlewareTests(HostsTestCase):
         PARENT_HOST='example.com',
         DEFAULT_HOST='root')
     def test_request_blank_urlconf_module(self):
-        rf = RequestFactory(HTTP_HOST='example.com')
+        rf = RequestFactory(headers={"host": 'example.com'})
         request = rf.get('/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
@@ -70,7 +70,7 @@ class MiddlewareTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_response_urlconf_module(self):
-        rf = RequestFactory(HTTP_HOST='other.example.com')
+        rf = RequestFactory(headers={"host": 'other.example.com'})
         request = rf.get('/simple/')
         middleware = HostsResponseMiddleware(get_response_empty)
         middleware.process_response(request, HttpResponse('test'))
@@ -81,7 +81,7 @@ class MiddlewareTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='with_view_kwargs')
     def test_fallback_to_defaulthost(self):
-        rf = RequestFactory(HTTP_HOST='ss.example.com')
+        rf = RequestFactory(headers={"host": 'ss.example.com'})
         request = rf.get('/template/test/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
@@ -124,7 +124,7 @@ class MiddlewareTests(HostsTestCase):
             'django_hosts.middleware.HostsResponseMiddleware',
         ])
     def test_fallback_with_evil_host(self):
-        response = self.client.get('/', HTTP_HOST='evil.com')
+        response = self.client.get('/', headers={"host": 'evil.com'})
         self.assertEqual(response.status_code, 400)
 
     @override_settings(
@@ -132,7 +132,7 @@ class MiddlewareTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.multiple',
         DEFAULT_HOST='multiple')
     def test_multiple_subdomains(self):
-        rf = RequestFactory(HTTP_HOST='spam.eggs.example.com')
+        rf = RequestFactory(headers={"host": 'spam.eggs.example.com'})
         request = rf.get('/multiple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
