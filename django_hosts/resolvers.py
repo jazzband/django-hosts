@@ -115,7 +115,7 @@ def reverse_host(host, args=None, kwargs=None):
             if parent_host:
                 # only add the parent host when needed (aka www-less domain)
                 if candidate and candidate != parent_host:
-                    candidate = '{}.{}'.format(candidate, parent_host)
+                    candidate = f'{candidate}.{parent_host}'
                 else:
                     candidate = parent_host
             return candidate
@@ -189,7 +189,7 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     else:
         port = normalize_port(port)
 
-    return iri_to_uri('{}{}{}{}'.format(scheme, hostname, port, path))
+    return iri_to_uri(f'{scheme}{hostname}{port}{path}')
 
 
 #: The lazy version of the :func:`~django_hosts.resolvers.reverse`

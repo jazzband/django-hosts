@@ -65,7 +65,7 @@ class HostURLNode(URLNode):
 
         hostname = reverse_host(host, args=host_args, kwargs=host_kwargs)
 
-        uri = iri_to_uri('{}{}{}{}'.format(scheme, hostname, port, path))
+        uri = iri_to_uri(f'{scheme}{hostname}{port}{path}')
 
         if self.asvar:
             context[self.asvar] = uri
