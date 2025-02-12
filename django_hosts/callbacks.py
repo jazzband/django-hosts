@@ -10,7 +10,7 @@ HOST_SITE_TIMEOUT = getattr(settings, 'HOST_SITE_TIMEOUT', 3600)
 class LazySite(LazyObject):
 
     def __init__(self, request, *args, **kwargs):
-        super(LazySite, self).__init__()
+        super().__init__()
         self.__dict__.update({
             'name': request.host.name,
             'args': args,

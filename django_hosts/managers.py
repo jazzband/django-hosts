@@ -34,7 +34,7 @@ class HostSiteManager(models.Manager):
     """
 
     def __init__(self, field_name=None, select_related=True):
-        super(HostSiteManager, self).__init__()
+        super().__init__()
         self._field_name = field_name
         self._select_related = select_related
         self._depth = 1
@@ -81,7 +81,7 @@ class HostSiteManager(models.Manager):
             site_id = settings.SITE_ID
         if not self._is_validated:
             self._validate_field_name()
-        qs = super(HostSiteManager, self).get_queryset()
+        qs = super().get_queryset()
         return qs.filter(**{'%s__id__exact' % self._field_name: site_id})
 
     def by_id(self, site_id=None):

@@ -18,7 +18,7 @@ def get_response_empty(request):
 class SitesTests(HostsTestCase):
 
     def setUp(self):
-        super(SitesTests, self).setUp()
+        super().setUp()
         self.site1 = Site.objects.create(domain='wiki.site1', name='site1')
         self.site2 = Site.objects.create(domain='wiki.site2', name='site2')
         self.site3 = Site.objects.create(domain='wiki.site3', name='site3')

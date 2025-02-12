@@ -55,7 +55,7 @@ def patterns(prefix, *args):
     return hosts
 
 
-class host(object):
+class host:
     """
     The host object used in host conf together with the
     :func:`django_hosts.defaults.patterns` function, e.g.::

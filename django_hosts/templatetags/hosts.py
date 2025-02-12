@@ -24,7 +24,7 @@ class HostURLNode(URLNode):
         self.host_kwargs = kwargs.pop('host_kwargs')
         self.scheme = kwargs.pop('scheme')
         self.port = kwargs.pop('port')
-        super(HostURLNode, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def maybe_resolve(self, var, context):
         """
@@ -41,7 +41,7 @@ class HostURLNode(URLNode):
         current_urlconf = get_urlconf()
         try:
             set_urlconf(host.urlconf)
-            path = super(HostURLNode, self).render(context)
+            path = super().render(context)
             if self.asvar:
                 path = context[self.asvar]
         finally:
