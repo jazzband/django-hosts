@@ -49,9 +49,10 @@ class HostURLNode(URLNode):
 
         host_args = [self.maybe_resolve(x, context) for x in self.host_args]
 
-        host_kwargs = {smart_str(k, 'ascii'):
-                            self.maybe_resolve(v, context)
-                           for k, v in self.host_kwargs.items()}
+        host_kwargs = {
+            smart_str(k, 'ascii'): self.maybe_resolve(v, context)
+            for k, v in self.host_kwargs.items()
+        }
 
         if self.scheme:
             scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))
