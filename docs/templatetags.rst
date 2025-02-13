@@ -191,5 +191,5 @@ result of the template tag in a template variable and use it later on, e.g.:
     <a href="{{ homepage_url }}" title="Go back to {{ homepage_url }}">Home</a>
 
 
-.. _The protocol-relative URL: http://paulirish.com/2010/the-protocol-relative-url/
-.. _section in RFC 3986: http://tools.ietf.org/html/rfc3986#section-4.2
+.. _The protocol-relative URL: https://www.paulirish.com/2010/the-protocol-relative-url/
+.. _section in RFC 3986: https://datatracker.ietf.org/doc/html/rfc3986#section-4.2
