@@ -10,12 +10,12 @@ django-hosts' ``HostsRequestMiddleware`` middleware, e.g.:
 
 .. code-block:: python
 
-    MIDDLEWARE = (
+    MIDDLEWARE = [
         'django_hosts.middleware.HostsRequestMiddleware',
         # your other middlewares..
         'debug_toolbar.middleware.DebugToolbarMiddleware',
         'django_hosts.middleware.HostsResponseMiddleware',
-    )
+    ]
 
 Also, you have to install `django-debug-toolbar 0.9.X`_ or higher.
 
