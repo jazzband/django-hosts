@@ -149,7 +149,7 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
         'git://jezdez.example.com:1337/repo/'
 
     You can set the used port and scheme in the host object or override with
-    the paramater named accordingly.
+    the parameter named accordingly.
 
     The host name can be left empty to automatically fall back to the default
     hostname as defined in the :attr:`~django.conf.settings.DEFAULT_HOST`

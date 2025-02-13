@@ -20,7 +20,7 @@ Simply define a callback function:
     def custom_fn(request, username):
         request.viewing_user = get_object_or_404(User, username=username)
 
-..and pass it as the ``callback`` paramter to the ``host`` object:
+..and pass it as the ``callback`` parameter to the ``host`` object:
 
 .. code-block:: python
 
