@@ -2,7 +2,7 @@ django-hosts
 ============
 
 .. image:: https://img.shields.io/pypi/v/django-hosts.svg
-   :target: https://pypi.python.org/pypi/django-hosts
+   :target: https://pypi.org/project/django-hosts/
 
 .. image:: https://img.shields.io/pypi/pyversions/django-hosts.svg
    :target: https://pypi.org/project/django-hosts/
@@ -14,7 +14,7 @@ django-hosts
    :target: https://github.com/jazzband/django-hosts/actions
 
 .. image:: https://codecov.io/gh/jazzband/django-hosts/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/jazzband/django-hosts
+   :target: https://app.codecov.io/gh/jazzband/django-hosts
 
 .. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=flat
    :target: https://django-hosts.readthedocs.io/en/latest/
