@@ -83,4 +83,4 @@ contrib app ``django.contrib.sites``:
 
 .. autofunction:: django_hosts.callbacks.cached_host_site(request, *args, **kwargs)
 
-.. _DRY: https://de.wikipedia.org/wiki/Don’t_repeat_yourself
+.. _DRY: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
