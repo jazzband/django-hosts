@@ -4,9 +4,19 @@ Changelog
 X.Y (unreleased)
 ----------------
 
-- **BACKWARD-INCOMPATIBLE** Dropped support Django < 4.2.
+- **BACKWARD-INCOMPATIBLE** Dropped support for Python 3.8.
 
-- Confirmed support for Django 4.2 and 5.0 (no code changes were required).
+- **BACKWARD-INCOMPATIBLE** Dropped support for Django < 4.2 and Django 5.0
+  (support for 5.0 was added to an unreleased version).
+
+- **BACKWARD-INCOMPATIBLE** Removed the ``None`` default value of the
+  ``get_response`` parameter of ``HostsBaseMiddleware()``, after the argument
+  was made required with Django 4.0+.
+
+- Confirmed support for Python 3.13.
+
+- Confirmed support for Django 4.2, 5.1 and 5.2
+  (no functional code changes were required).
 
 6.0 (2023-10-27)
 ----------------
