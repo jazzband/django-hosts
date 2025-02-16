@@ -10,17 +10,17 @@ django-hosts' ``HostsRequestMiddleware`` middleware, e.g.:
 
 .. code-block:: python
 
-    MIDDLEWARE = (
+    MIDDLEWARE = [
         'django_hosts.middleware.HostsRequestMiddleware',
         # your other middlewares..
         'debug_toolbar.middleware.DebugToolbarMiddleware',
         'django_hosts.middleware.HostsResponseMiddleware',
-    )
+    ]
 
 Also, you have to install `django-debug-toolbar 0.9.X`_ or higher.
 
 .. _`Django Debug toolbar`: https://github.com/django-debug-toolbar/django-debug-toolbar/
-.. _`django-debug-toolbar 0.9.X`: http://pypi.python.org/pypi/django-debug-toolbar
+.. _`django-debug-toolbar 0.9.X`: https://pypi.org/project/django-debug-toolbar/
 
 
 My tests using client.post(...) are failing now, what should I do?

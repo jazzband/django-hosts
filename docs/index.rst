@@ -137,6 +137,6 @@ Thanks
 Many thanks to the folks at playfire_ for releasing their
 django-dynamic-subdomains_ app, which was the inspiration for this app.
 
-.. _playfire: http://code.playfire.com/
+.. _playfire: https://web.archive.org/web/20110514020134/http://code.playfire.com/
 .. _django-dynamic-subdomains: https://github.com/playfire/django-dynamic-subdomains/
 .. _`Github issue tracker`: https://github.com/jazzband/django-hosts/issues

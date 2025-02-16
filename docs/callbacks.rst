@@ -20,7 +20,7 @@ Simply define a callback function:
     def custom_fn(request, username):
         request.viewing_user = get_object_or_404(User, username=username)
 
-..and pass it as the ``callback`` paramter to the ``host`` object:
+..and pass it as the ``callback`` parameter to the ``host`` object:
 
 .. code-block:: python
 
@@ -83,4 +83,4 @@ contrib app ``django.contrib.sites``:
 
 .. autofunction:: django_hosts.callbacks.cached_host_site(request, *args, **kwargs)
 
-.. _DRY: http://de.wikipedia.org/wiki/Don’t_repeat_yourself
+.. _DRY: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself

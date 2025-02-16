@@ -109,7 +109,7 @@ def fetch_arg(name, arg, bits, consume=True):
 @register.tag
 def host_url(parser, token):
     """
-    Simple tag to reverse the URL inclusing a host.
+    Simple tag to reverse the URL including a host.
 
     {% host_url 'view-name' host 'host-name'  %}
     {% host_url 'view-name' host 'host-name' 'spam' %}
