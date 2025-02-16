@@ -18,7 +18,7 @@ def get_response_empty(request):
 class SitesTests(HostsTestCase):
 
     def setUp(self):
-        super(SitesTests, self).setUp()
+        super().setUp()
         self.site1 = Site.objects.create(domain='wiki.site1', name='site1')
         self.site2 = Site.objects.create(domain='wiki.site2', name='site2')
         self.site3 = Site.objects.create(domain='wiki.site3', name='site3')
@@ -43,7 +43,7 @@ class SitesTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_sites_callback(self):
-        rf = RequestFactory(HTTP_HOST='wiki.site1')
+        rf = RequestFactory(headers={'host': 'wiki.site1'})
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
@@ -54,7 +54,7 @@ class SitesTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_sites_cached_callback(self):
-        rf = RequestFactory(HTTP_HOST='admin.site4')
+        rf = RequestFactory(headers={'host': 'admin.site4'})
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
@@ -75,7 +75,7 @@ class SitesTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_sites_callback_with_parent_host(self):
-        rf = RequestFactory(HTTP_HOST='wiki.site2')
+        rf = RequestFactory(headers={'host': 'wiki.site2'})
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
@@ -86,7 +86,7 @@ class SitesTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_manager_simple(self):
-        rf = RequestFactory(HTTP_HOST='wiki.site2')
+        rf = RequestFactory(headers={'host': 'wiki.site2'})
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
@@ -99,7 +99,7 @@ class SitesTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_manager_missing_site(self):
-        rf = RequestFactory(HTTP_HOST='static')
+        rf = RequestFactory(headers={'host': 'static'})
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)

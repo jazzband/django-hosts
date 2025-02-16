@@ -24,7 +24,7 @@ class HostURLNode(URLNode):
         self.host_kwargs = kwargs.pop('host_kwargs')
         self.scheme = kwargs.pop('scheme')
         self.port = kwargs.pop('port')
-        super(HostURLNode, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def maybe_resolve(self, var, context):
         """
@@ -41,7 +41,7 @@ class HostURLNode(URLNode):
         current_urlconf = get_urlconf()
         try:
             set_urlconf(host.urlconf)
-            path = super(HostURLNode, self).render(context)
+            path = super().render(context)
             if self.asvar:
                 path = context[self.asvar]
         finally:
@@ -49,9 +49,10 @@ class HostURLNode(URLNode):
 
         host_args = [self.maybe_resolve(x, context) for x in self.host_args]
 
-        host_kwargs = dict((smart_str(k, 'ascii'),
-                            self.maybe_resolve(v, context))
-                           for k, v in self.host_kwargs.items())
+        host_kwargs = {
+            smart_str(k, 'ascii'): self.maybe_resolve(v, context)
+            for k, v in self.host_kwargs.items()
+        }
 
         if self.scheme:
             scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))
@@ -65,7 +66,7 @@ class HostURLNode(URLNode):
 
         hostname = reverse_host(host, args=host_args, kwargs=host_kwargs)
 
-        uri = iri_to_uri('%s%s%s%s' % (scheme, hostname, port, path))
+        uri = iri_to_uri(f'{scheme}{hostname}{port}{path}')
 
         if self.asvar:
             context[self.asvar] = uri

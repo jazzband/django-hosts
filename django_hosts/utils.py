@@ -1,4 +1,3 @@
-
 def normalize_scheme(scheme=None, default='//'):
     if scheme is None:
         scheme = default

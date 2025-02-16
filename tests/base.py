@@ -6,6 +6,6 @@ from django.test import TestCase, RequestFactory
 class HostsTestCase(TestCase):
 
     def setUp(self):
-        super(HostsTestCase, self).setUp()
+        super().setUp()
         # Every test needs access to the request factory.
         self.factory = RequestFactory()

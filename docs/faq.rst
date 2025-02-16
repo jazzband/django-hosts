@@ -33,4 +33,3 @@ depending on the host that should handle the call
 .. code-block:: python
 
     client.post(..., SERVER_NAME='api-server.something')
-
