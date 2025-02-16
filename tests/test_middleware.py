@@ -47,7 +47,7 @@ class MiddlewareTests(HostsTestCase):
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='www')
     def test_request_urlconf_module(self):
-        rf = RequestFactory(headers={"host": 'other.example.com'})
+        rf = RequestFactory(headers={'host': 'other.example.com'})
         request = rf.get('/simple/')
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
