@@ -50,6 +50,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - name: Ruff linter
       uses: astral-sh/ruff-action@v3
       with:
