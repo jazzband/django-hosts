@@ -35,9 +35,9 @@ def patterns(prefix, *args):
 
         from django_hosts import patterns
 
-        host_patterns = patterns('path.to',
-            (r'www', 'urls.default', 'default'),
-            (r'api', 'urls.api', 'api'),
+        host_patterns = patterns("path.to",
+            (r"www", "urls.default", "default"),
+            (r"api", "urls.api", "api"),
         )
 
     :param prefix: the URLconf prefix to pass to the host object
@@ -53,7 +53,7 @@ def patterns(prefix, *args):
             arg.add_prefix(prefix)
         name = arg.name
         if name in [h.name for h in hosts]:
-            raise ImproperlyConfigured("Duplicate host name: %s" % name)
+            raise ImproperlyConfigured(f"Duplicate host name: {name}")
         hosts.append(arg)
     return hosts
 
@@ -65,10 +65,10 @@ class host:
 
         from django_hosts import patterns, host
 
-        host_patterns = patterns('path.to',
-            host(r'www', 'urls.default', name='default'),
-            host(r'api', 'urls.api', name='api'),
-            host(r'admin', 'urls.admin', name='admin', scheme='https://'),
+        host_patterns = patterns("path.to",
+            host(r"www", "urls.default", name="default"),
+            host(r"api", "urls.api", name="api"),
+            host(r"admin", "urls.admin", name="admin", scheme="https://"),
         )
 
     :param regex: a regular expression to be used to match the request's
@@ -112,8 +112,7 @@ class host:
 
     def __repr__(self):
         return smart_str(
-            "<%s %s: regex=%r urlconf=%r scheme=%r port=%r>"
-            % (self.__class__.__name__, self.name, self.regex, self.urlconf, self.scheme, self.port)
+            f"<{self.__class__.__name__} {self.name}: regex={self.regex} urlconf={self.urlconf} scheme={self.scheme} port={self.port}>"
         )
 
     @cached_property
@@ -138,11 +137,11 @@ class host:
             self._callback = get_callable(self._callback_str)
         except ImportError as exc:
             mod_name, _ = get_mod_func(self._callback_str)
-            raise ImproperlyConfigured("Could not import '%s'. Error was: %s" % (mod_name, str(exc)))
+            raise ImproperlyConfigured(f"Could not import '{mod_name}'. Error was: {str(exc)}")
         except AttributeError as exc:
             mod_name, func_name = get_mod_func(self._callback_str)
             raise ImproperlyConfigured(
-                "Tried importing '%s' from module '%s' but failed. Error was: %s" % (func_name, mod_name, str(exc))
+                f"Tried importing '{func_name}' from module '{mod_name}' but failed. Error was: {str(exc)}"
             )
         return self._callback
 

@@ -77,7 +77,7 @@ def parse_params(name, parser, bits):
     for bit in bits:
         match = kwarg_re.match(bit)
         if not match:
-            raise TemplateSyntaxError("Malformed arguments to %s tag" % name)
+            raise TemplateSyntaxError(f"Malformed arguments to {name} tag")
         name, value = match.groups()
         if name:
             kwargs[name] = parser.compile_filter(value)
@@ -92,7 +92,7 @@ def fetch_arg(name, arg, bits, consume=True):
         try:
             value = bits[pivot + 1]
         except IndexError:
-            raise TemplateSyntaxError("'%s' arguments must include a variable name after '%s'" % (name, arg))
+            raise TemplateSyntaxError(f"'{name}' arguments must include a variable name after '{arg}'")
         else:
             if consume:
                 del bits[pivot : pivot + 2]
@@ -116,7 +116,7 @@ def host_url(parser, token):
     bits = token.split_contents()
     name = bits[0]
     if len(bits) < 2:
-        raise TemplateSyntaxError("'%s' takes at least one argument (path to a view)" % name)
+        raise TemplateSyntaxError(f"'{name}' takes at least one argument (path to a view)")
 
     view_name = parser.compile_filter(bits[1])
     asvar, pivot, bits = fetch_arg(name, "as", bits[1:])  # Strip off viewname

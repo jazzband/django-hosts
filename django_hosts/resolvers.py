@@ -45,7 +45,7 @@ def get_host(name=None):
     for host in get_host_patterns():
         if host.name == name:
             return host
-    raise NoReverseMatch("No host called '%s' exists" % name)
+    raise NoReverseMatch(f"No host called '{name}' exists")
 
 
 @lru_cache
@@ -55,7 +55,7 @@ def get_host_patterns():
     try:
         return module.host_patterns
     except AttributeError:
-        raise ImproperlyConfigured("Missing host_patterns in '%s'" % hostconf)
+        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'")
 
 
 def clear_host_caches():
@@ -79,11 +79,11 @@ def reverse_host(host, args=None, kwargs=None):
     reverses the host, e.g.::
 
         >>> from django.conf import settings
-        >>> settings.ROOT_HOSTCONF = 'mysite.hosts'
-        >>> settings.PARENT_HOST = 'example.com'
+        >>> settings.ROOT_HOSTCONF = "mysite.hosts"
+        >>> settings.PARENT_HOST = "example.com"
         >>> from django_hosts.resolvers import reverse_host
-        >>> reverse_host('with_username', args=('jezdez',))
-        'jezdez.example.com'
+        >>> reverse_host("with_username", args=("jezdez",))
+        "jezdez.example.com"
 
     :param name: the name of the host as specified in the hostconf
     :param args: the host arguments to use to find a matching entry in the
@@ -122,7 +122,7 @@ def reverse_host(host, args=None, kwargs=None):
             return candidate
 
     raise NoReverseMatch(
-        "Reverse host for '%s' with arguments '%s' and keyword arguments '%s' not found." % (host.name, args, kwargs)
+        "Reverse host for '{}' with arguments '{}' and keyword arguments '{}' not found."(host.name, args, kwargs)
     )
 
 
