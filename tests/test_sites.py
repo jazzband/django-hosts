@@ -52,7 +52,7 @@ class SitesTests(HostsTestCase):
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
 
-        get_site = lambda: request.site.domain
+        get_site = lambda: request.site.domain  # noqa: E731
 
         # first checking if there is a db query
         self.assertEqual(request.site._wrapped, empty)
