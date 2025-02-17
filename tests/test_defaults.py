@@ -14,7 +14,7 @@ class PatternsTests(HostsTestCase):
         )
         self.assertEqual(len(host_patterns), 1)
         self.assertTrue(isinstance(host_patterns[0], host))
-        self.assertEqual(repr(host_patterns[0]), "<host api: regex='api' urlconf='api.urls' scheme='//' port=''>")
+        self.assertEqual(repr(host_patterns[0]), '<host api: regex="api" urlconf="api.urls" scheme="//" port="">')
 
     def test_pattern_as_tuple(self):
         host_patterns = patterns(

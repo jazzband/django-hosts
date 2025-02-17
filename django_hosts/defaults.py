@@ -48,7 +48,7 @@ def patterns(prefix, *args):
     hosts = []
     for arg in args:
         if isinstance(arg, (list, tuple)):
-            arg = host(prefix=prefix, *arg)
+            arg = host(prefix=prefix, *arg)  # noqa: B026
         else:
             arg.add_prefix(prefix)
         name = arg.name
@@ -112,7 +112,7 @@ class host:
 
     def __repr__(self):
         return smart_str(
-            f"<{self.__class__.__name__} {self.name}: regex={self.regex} urlconf={self.urlconf} scheme={self.scheme} port={self.port}>"
+            f'<{self.__class__.__name__} {self.name}: regex="{self.regex}" urlconf="{self.urlconf}" scheme="{self.scheme}" port="{self.port}">'  # noqa: E501
         )
 
     @cached_property

@@ -70,7 +70,7 @@ class HostSiteManager(models.Manager):
                 raise TypeError(f"{field_name} must be a ForeignKey or ManyToManyField.")
         else:
             raise ValueError(
-                f"{self.__class__.__name__} couldn't find a field named {field_name} in {self.model._meta.object_name}."
+                f"{self.__class__.__name__} couldn't find a field named {field_name} in {self.model._meta.object_name}."  # noqa: E501
             )
         self._is_validated = True
 
