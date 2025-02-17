@@ -1,6 +1,6 @@
 from django.conf import settings
-from django.db import models
 from django.core.exceptions import FieldDoesNotExist
+from django.db import models
 
 
 class HostSiteManager(models.Manager):

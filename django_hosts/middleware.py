@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.urls import NoReverseMatch, get_urlconf, set_urlconf
 from django.utils.deprecation import MiddlewareMixin
-from django.urls import NoReverseMatch, set_urlconf, get_urlconf
 
-from .resolvers import get_host_patterns, get_host
+from .resolvers import get_host, get_host_patterns
 
 
 class HostsBaseMiddleware(MiddlewareMixin):

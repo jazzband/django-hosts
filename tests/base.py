@@ -1,5 +1,6 @@
+from django.test import RequestFactory, TestCase
+
 import pytest
-from django.test import TestCase, RequestFactory
 
 
 @pytest.mark.django_db()

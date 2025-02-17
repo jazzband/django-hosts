@@ -1,4 +1,5 @@
 from django.urls import re_path
+
 from tests.views import test_view
 
 urlpatterns = [

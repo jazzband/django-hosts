@@ -16,7 +16,7 @@ from django.utils.functional import lazy
 from django.utils.regex_helper import normalize
 
 from .defaults import host as host_cls
-from .utils import normalize_scheme, normalize_port
+from .utils import normalize_port, normalize_scheme
 
 
 @lru_cache
