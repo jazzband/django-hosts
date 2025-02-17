@@ -26,7 +26,7 @@ def get_callable(lookup_view):
     try:
         return actual_get_callable(lookup_view)
     except ViewDoesNotExist as exc:
-        raise ImproperlyConfigured(exc.args[0].replace("View", "Callable"))
+        raise ImproperlyConfigured(exc.args[0].replace("View", "Callable")) from exc
 
 
 def patterns(prefix, *args):
@@ -137,12 +137,12 @@ class host:
             self._callback = get_callable(self._callback_str)
         except ImportError as exc:
             mod_name, _ = get_mod_func(self._callback_str)
-            raise ImproperlyConfigured(f"Could not import '{mod_name}'. Error was: {str(exc)}")
+            raise ImproperlyConfigured(f"Could not import '{mod_name}'. Error was: {str(exc)}") from exc
         except AttributeError as exc:
             mod_name, func_name = get_mod_func(self._callback_str)
             raise ImproperlyConfigured(
                 f"Tried importing '{func_name}' from module '{mod_name}' but failed. Error was: {str(exc)}"
-            )
+            ) from exc
         return self._callback
 
     def add_prefix(self, prefix=""):

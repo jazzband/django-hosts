@@ -24,8 +24,8 @@ from .utils import normalize_port, normalize_scheme
 def get_hostconf():
     try:
         return settings.ROOT_HOSTCONF
-    except AttributeError:
-        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting")
+    except AttributeError as exc:
+        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting") from exc
 
 
 @lru_cache
@@ -40,8 +40,8 @@ def get_host(name=None):
     if name is None:
         try:
             name = settings.DEFAULT_HOST
-        except AttributeError:
-            raise ImproperlyConfigured("Missing DEFAULT_HOST setting")
+        except AttributeError as exc:
+            raise ImproperlyConfigured("Missing DEFAULT_HOST setting") from exc
     for host in get_host_patterns():
         if host.name == name:
             return host
@@ -54,8 +54,8 @@ def get_host_patterns():
     module = get_hostconf_module(hostconf)
     try:
         return module.host_patterns
-    except AttributeError:
-        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'")
+    except AttributeError as exc:
+        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'") from exc
 
 
 def clear_host_caches():
@@ -148,15 +148,15 @@ def reverse(
     reverses the fully qualified URL, e.g.::
 
         >>> from django.conf import settings
-        >>> settings.ROOT_HOSTCONF = 'mysite.hosts'
-        >>> settings.PARENT_HOST = 'example.com'
+        >>> settings.ROOT_HOSTCONF = "mysite.hosts"
+        >>> settings.PARENT_HOST = "example.com"
         >>> from django_hosts.resolvers import reverse
-        >>> reverse('about')
-        '//www.example.com/about/'
-        >>> reverse('about', host='www')
-        '//www.example.com/about/'
-        >>> reverse('repo', args=('jezdez',), host='www', scheme='git', port=1337)
-        'git://jezdez.example.com:1337/repo/'
+        >>> reverse("about")
+        "//www.example.com/about/"
+        >>> reverse("about", host="www")
+        "//www.example.com/about/"
+        >>> reverse("repo", args=("jezdez",), host="www", scheme="git", port=1337)
+        "git://jezdez.example.com:1337/repo/"
 
     You can set the used port and scheme in the host object or override with
     the parameter named accordingly.
