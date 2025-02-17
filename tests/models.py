@@ -8,6 +8,9 @@ class Author(models.Model):
     name = models.TextField()
     site = models.ForeignKey(Site, models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 
 class BlogPost(models.Model):
     content = models.TextField()
@@ -20,7 +23,7 @@ class BlogPost(models.Model):
     non_existing = HostSiteManager("blabla")
     non_rel = HostSiteManager("content")
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.id)
 
 
@@ -31,5 +34,5 @@ class WikiPage(models.Model):
     objects = models.Manager()
     on_site = HostSiteManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.id)
