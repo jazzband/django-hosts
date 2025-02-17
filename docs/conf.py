@@ -22,10 +22,10 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-# needs_sphinx = '1.0'
+# needs_sphinx = "1.0"
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
-# coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+# coming with Sphinx (named "sphinx.ext.*") or your custom ones.
 extensions = ["sphinx.ext.autodoc", "sphinx.ext.intersphinx", "sphinx.ext.coverage"]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -35,7 +35,7 @@ templates_path = ["_templates"]
 source_suffix = ".rst"
 
 # The encoding of source files.
-# source_encoding = 'utf-8-sig'
+# source_encoding = "utf-8-sig"
 
 # The master toctree document.
 master_doc = "index"
@@ -64,9 +64,9 @@ except ImportError:
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
-# today = ''
+# today = ""
 # Else, today_fmt is used as the format for a strftime call.
-# today_fmt = '%B %d, %Y'
+# today_fmt = "%B %d, %Y"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -75,7 +75,7 @@ exclude_patterns = ["_build"]
 # The reST default role (used for this markup: `text`) to use for all documents.
 # default_role = None
 
-# If true, '()' will be appended to :func: etc. cross-reference text.
+# If true, "()" will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True
 
 # If true, the current module name will be prepended to all description
@@ -126,11 +126,11 @@ html_theme = "default"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
+# html_static_path = ["_static"]
 
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# If not "", a "Last updated on:" timestamp is inserted at every page bottom,
 # using the given strftime format.
-# html_last_updated_fmt = '%b %d, %Y'
+# html_last_updated_fmt = "%b %d, %Y"
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
@@ -164,7 +164,7 @@ html_theme = "default"
 # If true, an OpenSearch description file will be output, and all pages will
 # contain a <link> tag referring to it.  The value of this option must be the
 # base URL from which the finished HTML is served.
-# html_use_opensearch = ''
+# html_use_opensearch = ""
 
 # This is the file name suffix for HTML files (e.g. ".xhtml").
 # html_file_suffix = None
@@ -175,11 +175,11 @@ htmlhelp_basename = "django-hostsdoc"
 
 # -- Options for LaTeX output --------------------------------------------------
 
-# The paper size ('letter' or 'a4').
-# latex_paper_size = 'letter'
+# The paper size ("letter" or "a4").
+# latex_paper_size = "letter"
 
-# The font size ('10pt', '11pt' or '12pt').
-# latex_font_size = '10pt'
+# The font size ("10pt", "11pt" or "12pt").
+# latex_font_size = "10pt"
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
@@ -202,7 +202,7 @@ latex_documents = [
 # latex_show_urls = False
 
 # Additional stuff for the LaTeX preamble.
-# latex_preamble = ''
+# latex_preamble = ""
 
 # Documents to append as an appendix to all manuals.
 # latex_appendices = []
