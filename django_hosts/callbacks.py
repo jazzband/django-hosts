@@ -4,37 +4,40 @@ from django.utils.functional import LazyObject
 
 from .resolvers import reverse_host
 
-HOST_SITE_TIMEOUT = getattr(settings, 'HOST_SITE_TIMEOUT', 3600)
+HOST_SITE_TIMEOUT = getattr(settings, "HOST_SITE_TIMEOUT", 3600)
 
 
 class LazySite(LazyObject):
-
     def __init__(self, request, *args, **kwargs):
         super().__init__()
-        self.__dict__.update({
-            'name': request.host.name,
-            'args': args,
-            'kwargs': kwargs,
-        })
+        self.__dict__.update(
+            {
+                "name": request.host.name,
+                "args": args,
+                "kwargs": kwargs,
+            }
+        )
 
     def _setup(self):
         host = reverse_host(self.name, args=self.args, kwargs=self.kwargs)
         from django.contrib.sites.models import Site
+
         site = get_object_or_404(Site, domain__iexact=host)
         self._wrapped = site
 
 
 class CachedLazySite(LazySite):
-
     def _setup(self):
         host = reverse_host(self.name, args=self.args, kwargs=self.kwargs)
         cache_key = "hosts:%s" % host
         from django.core.cache import cache
+
         site = cache.get(cache_key, None)
         if site is not None:
             self._wrapped = site
             return
         from django.contrib.sites.models import Site
+
         site = get_object_or_404(Site, domain__iexact=host)
         cache.set(cache_key, site, HOST_SITE_TIMEOUT)
         self._wrapped = site

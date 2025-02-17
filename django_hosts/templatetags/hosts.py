@@ -17,13 +17,12 @@ kwarg_re = re.compile(r"(?:(\w+)=)?(.+)")
 
 
 class HostURLNode(URLNode):
-
     def __init__(self, *args, **kwargs):
-        self.host = kwargs.pop('host')
-        self.host_args = kwargs.pop('host_args')
-        self.host_kwargs = kwargs.pop('host_kwargs')
-        self.scheme = kwargs.pop('scheme')
-        self.port = kwargs.pop('port')
+        self.host = kwargs.pop("host")
+        self.host_args = kwargs.pop("host_args")
+        self.host_kwargs = kwargs.pop("host_kwargs")
+        self.scheme = kwargs.pop("scheme")
+        self.port = kwargs.pop("port")
         super().__init__(*args, **kwargs)
 
     def maybe_resolve(self, var, context):
@@ -49,10 +48,7 @@ class HostURLNode(URLNode):
 
         host_args = [self.maybe_resolve(x, context) for x in self.host_args]
 
-        host_kwargs = {
-            smart_str(k, 'ascii'): self.maybe_resolve(v, context)
-            for k, v in self.host_kwargs.items()
-        }
+        host_kwargs = {smart_str(k, "ascii"): self.maybe_resolve(v, context) for k, v in self.host_kwargs.items()}
 
         if self.scheme:
             scheme = normalize_scheme(self.maybe_resolve(self.scheme, context))
@@ -66,11 +62,11 @@ class HostURLNode(URLNode):
 
         hostname = reverse_host(host, args=host_args, kwargs=host_kwargs)
 
-        uri = iri_to_uri(f'{scheme}{hostname}{port}{path}')
+        uri = iri_to_uri(f"{scheme}{hostname}{port}{path}")
 
         if self.asvar:
             context[self.asvar] = uri
-            return ''
+            return ""
         else:
             return uri
 
@@ -96,12 +92,10 @@ def fetch_arg(name, arg, bits, consume=True):
         try:
             value = bits[pivot + 1]
         except IndexError:
-            raise TemplateSyntaxError("'%s' arguments must include "
-                                      "a variable name after '%s'" %
-                                      (name, arg))
+            raise TemplateSyntaxError("'%s' arguments must include a variable name after '%s'" % (name, arg))
         else:
             if consume:
-                del bits[pivot:pivot + 2]
+                del bits[pivot : pivot + 2]
             return value, pivot, bits
     except ValueError:
         return None, None, bits
@@ -122,30 +116,37 @@ def host_url(parser, token):
     bits = token.split_contents()
     name = bits[0]
     if len(bits) < 2:
-        raise TemplateSyntaxError("'%s' takes at least one argument"
-                                  " (path to a view)" % name)
+        raise TemplateSyntaxError("'%s' takes at least one argument (path to a view)" % name)
 
     view_name = parser.compile_filter(bits[1])
-    asvar, pivot, bits = fetch_arg(name, 'as', bits[1:])  # Strip off viewname
-    scheme, pivot, bits = fetch_arg(name, 'scheme', bits)
+    asvar, pivot, bits = fetch_arg(name, "as", bits[1:])  # Strip off viewname
+    scheme, pivot, bits = fetch_arg(name, "scheme", bits)
     if scheme:
         scheme = parser.compile_filter(scheme)
-    port, pivot, bits = fetch_arg(name, 'port', bits)
+    port, pivot, bits = fetch_arg(name, "port", bits)
     if port:
         port = parser.compile_filter(port)
 
-    host, pivot, bits = fetch_arg(name, 'host', bits, consume=False)
+    host, pivot, bits = fetch_arg(name, "host", bits, consume=False)
 
     if host:
         host = parser.compile_filter(host)
         view_args, view_kwargs = parse_params(name, parser, bits[1:pivot])
-        host_args, host_kwargs = parse_params(name, parser, bits[pivot + 2:])
+        host_args, host_kwargs = parse_params(name, parser, bits[pivot + 2 :])
     else:
         # No host was given so use the default host
         host = settings.DEFAULT_HOST
         view_args, view_kwargs = parse_params(name, parser, bits[1:])
         host_args, host_kwargs = (), {}
 
-    return HostURLNode(view_name=view_name, args=view_args, kwargs=view_kwargs,
-                       asvar=asvar, host=host, host_args=host_args,
-                       host_kwargs=host_kwargs, scheme=scheme, port=port)
+    return HostURLNode(
+        view_name=view_name,
+        args=view_args,
+        kwargs=view_kwargs,
+        asvar=asvar,
+        host=host,
+        host_args=host_args,
+        host_kwargs=host_kwargs,
+        scheme=scheme,
+        port=port,
+    )

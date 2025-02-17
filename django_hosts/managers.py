@@ -55,7 +55,7 @@ class HostSiteManager(models.Manager):
                 pass
         # Otherwise, see if there is a field called either 'site' or 'sites'
         else:
-            for potential_name in ['site', 'sites']:
+            for potential_name in ["site", "sites"]:
                 try:
                     field = self.model._meta.get_field(potential_name)
                 except FieldDoesNotExist:
@@ -66,14 +66,13 @@ class HostSiteManager(models.Manager):
                     break
         # Now do a type check on the field (FK or M2M only)
         if field:
-            if not isinstance(field, (models.ForeignKey,
-                                      models.ManyToManyField)):
-                raise TypeError("%s must be a ForeignKey or "
-                                "ManyToManyField." % field_name)
+            if not isinstance(field, (models.ForeignKey, models.ManyToManyField)):
+                raise TypeError("%s must be a ForeignKey or ManyToManyField." % field_name)
         else:
-            raise ValueError("%s couldn't find a field named %s in %s." %
-                             (self.__class__.__name__, field_name,
-                              self.model._meta.object_name))
+            raise ValueError(
+                "%s couldn't find a field named %s in %s."
+                % (self.__class__.__name__, field_name, self.model._meta.object_name)
+            )
         self._is_validated = True
 
     def get_queryset(self, site_id=None):
@@ -82,7 +81,7 @@ class HostSiteManager(models.Manager):
         if not self._is_validated:
             self._validate_field_name()
         qs = super().get_queryset()
-        return qs.filter(**{'%s__id__exact' % self._field_name: site_id})
+        return qs.filter(**{"%s__id__exact" % self._field_name: site_id})
 
     def by_id(self, site_id=None):
         """
