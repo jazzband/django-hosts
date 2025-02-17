@@ -51,10 +51,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Ruff linter
-      uses: astral-sh/ruff-action@v3
+    - uses: astral-sh/ruff-action@v3
       with:
         version: "latest"
-
+    - name: Ruff lint
+      run: ruff check --fix
     - name: Ruff format
       run: ruff format
