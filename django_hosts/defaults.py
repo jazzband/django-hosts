@@ -63,7 +63,7 @@ class host:
     The host object used in host conf together with the
     :func:`django_hosts.defaults.patterns` function, e.g.::
 
-        from django_hosts import patterns, host
+        from django_hosts import host, patterns
 
         host_patterns = patterns("path.to",
             host(r"www", "urls.default", name="default"),

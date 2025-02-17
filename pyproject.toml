@@ -25,7 +25,7 @@ known-third-party = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["INP001"] # Scripts are not part of the package.
+"django_hosts/__init__.py" = ["F401"]
 
 [tool.tox]
 legacy_tox_ini = """

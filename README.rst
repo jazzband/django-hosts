@@ -31,7 +31,7 @@ at ``api.example.com`` and ``beta.example.com``, add the following to a
 
 .. code-block:: python
 
-    from django_hosts import patterns, host
+    from django_hosts import host, patterns
 
     host_patterns = patterns("path.to",
         host(r"api", "api.urls", name="api"),
@@ -51,7 +51,7 @@ and ``bar.example.com`` to the same URLconf.
 
 .. code-block:: python
 
-    from django_hosts import patterns, host
+    from django_hosts import host, patterns
 
     host_patterns = patterns("",
         host(r"(foo|bar)", "path.to.urls", name="foo-or-bar"),

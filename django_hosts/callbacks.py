@@ -64,24 +64,24 @@ def host_site(request, *args, **kwargs):
     For example, imagine a host conf with a username parameter::
 
         from django.conf import settings
-        from django_hosts import patterns, host
+        from django_hosts import host, patterns
 
-        settings.PARENT_HOST = 'example.com'
+        settings.PARENT_HOST = "example.com"
 
-        host_patterns = patterns('',
-            host(r'www', settings.ROOT_URLCONF, name='www'),
-            host(r'(?P<username>\w+)', 'path.to.custom_urls',
-                 callback='django_hosts.callbacks.host_site',
-                 name='user-sites'),
+        host_patterns = patterns("",
+            host(r"www", settings.ROOT_URLCONF, name="www"),
+            host(r"(?P<username>\w+)", "path.to.custom_urls",
+                 callback="django_hosts.callbacks.host_site",
+                 name="user-sites"),
         )
 
     When requesting this website with the host ``jezdez.example.com``,
     the callback will act as if you'd do::
 
-        request.site = Site.objects.get(domain__iexact='jezdez.example.com')
+        request.site = Site.objects.get(domain__iexact="jezdez.example.com")
 
     ..since the result of calling :func:`~django_hosts.resolvers.reverse_host`
-    with the username ``'jezdez'`` is ``'jezdez.example.com'``.
+    with the username ``"jezdez"`` is ``"jezdez.example.com"``.
 
     Later, in your views, you can nicely refer to the current site
     as ``request.site`` for further site-specific functionality.
