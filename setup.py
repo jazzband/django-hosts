@@ -15,7 +15,7 @@ setup(
                 'Maps hostnames to URLconfs.',
     long_description=read('README.rst'),
     use_scm_version=True,
-    python_requires='>=3.9',
+    python_requires='>=3.10',
     setup_requires=['setuptools_scm'],
     url='https://django-hosts.readthedocs.io/',
     project_urls={
@@ -38,7 +38,6 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
