@@ -34,7 +34,7 @@ may get tired of repeating this.
 The solution
 ------------
 
-Luckily django-hosts provides some testing tool to help you write tests with
+Django-hosts provides some testing tools to help you write tests with
 less boilerplate, mainly using custom test cases ``SimpleTestCase``,
 ``TestCase``, ``TransactionTestCase``, all coming from ``django_hosts.test``,
 and subclasses of their counterpart from Django.
