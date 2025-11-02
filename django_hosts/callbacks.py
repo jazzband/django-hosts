@@ -68,19 +68,23 @@ def host_site(request, *args, **kwargs):
         from django.conf import settings
         from django_hosts import patterns, host
 
-        settings.PARENT_HOST = 'example.com'
+        settings.PARENT_HOST = "example.com"
 
-        host_patterns = patterns('',
-            host(r'www', settings.ROOT_URLCONF, name='www'),
-            host(r'(?P<username>\w+)', 'path.to.custom_urls',
-                 callback='django_hosts.callbacks.host_site',
-                 name='user-sites'),
+        host_patterns = patterns(
+            "",
+            host(r"www", settings.ROOT_URLCONF, name="www"),
+            host(
+                r"(?P<username>\w+)",
+                "path.to.custom_urls",
+                callback="django_hosts.callbacks.host_site",
+                name="user-sites",
+            ),
         )
 
     When requesting this website with the host ``jezdez.example.com``,
     the callback will act as if you'd do::
 
-        request.site = Site.objects.get(domain__iexact='jezdez.example.com')
+        request.site = Site.objects.get(domain__iexact="jezdez.example.com")
 
     ..since the result of calling :func:`~django_hosts.resolvers.reverse_host`
     with the username ``'jezdez'`` is ``'jezdez.example.com'``.

@@ -34,9 +34,10 @@ def patterns(prefix, *args):
 
         from django_hosts import patterns
 
-        host_patterns = patterns('path.to',
-            (r'www', 'urls.default', 'default'),
-            (r'api', 'urls.api', 'api'),
+        host_patterns = patterns(
+            "path.to",
+            host(r"www", "urls.default", name="default"),
+            host(r"api", "urls.api", name="api"),
         )
 
     :param prefix: the URLconf prefix to pass to the host object
@@ -64,10 +65,11 @@ class host:
 
         from django_hosts import patterns, host
 
-        host_patterns = patterns('path.to',
-            host(r'www', 'urls.default', name='default'),
-            host(r'api', 'urls.api', name='api'),
-            host(r'admin', 'urls.admin', name='admin', scheme='https://'),
+        host_patterns = patterns(
+            "path.to",
+            host(r"www", "urls.default", name="default"),
+            host(r"api", "urls.api", name="api"),
+            host(r"admin", "urls.admin", name="admin", scheme="https://"),
         )
 
     :param regex: a regular expression to be used to match the request's
