@@ -3,6 +3,7 @@ If you want to reverse the hostname or the full URL or a view including the
 scheme, hostname and port you'll need to use the ``reverse`` and
 ``reverse_host`` helper functions (or its lazy cousins).
 """
+
 import re
 from functools import lru_cache
 from importlib import import_module
@@ -65,7 +66,7 @@ def clear_host_caches():
 
 
 def setting_changed_receiver(setting, enter, **kwargs):
-    if setting in {'ROOT_HOSTCONF', 'DEFAULT_HOST'}:
+    if setting in {"ROOT_HOSTCONF", "DEFAULT_HOST"}:
         clear_host_caches()
 
 
@@ -111,18 +112,19 @@ def reverse_host(host, args=None, kwargs=None):
             candidate = result % kwargs
 
         if re.match(host.regex, candidate):  # pragma: no cover
-            parent_host = getattr(settings, 'PARENT_HOST', '').lstrip('.')
+            parent_host = getattr(settings, "PARENT_HOST", "").lstrip(".")
             if parent_host:
                 # only add the parent host when needed (aka www-less domain)
                 if candidate and candidate != parent_host:
-                    candidate = f'{candidate}.{parent_host}'
+                    candidate = f"{candidate}.{parent_host}"
                 else:
                     candidate = parent_host
             return candidate
 
-    raise NoReverseMatch("Reverse host for '%s' with arguments '%s' "
-                         "and keyword arguments '%s' not found." %
-                         (host.name, args, kwargs))
+    raise NoReverseMatch(
+        "Reverse host for '%s' with arguments '%s' "
+        "and keyword arguments '%s' not found." % (host.name, args, kwargs)
+    )
 
 
 #: The lazy version of the :func:`~django_hosts.resolvers.reverse_host`
@@ -130,9 +132,18 @@ def reverse_host(host, args=None, kwargs=None):
 reverse_host_lazy = lazy(reverse_host, str)
 
 
-def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
-            host=None, host_args=None, host_kwargs=None,
-            scheme=None, port=None):
+def reverse(
+    viewname,
+    args=None,
+    kwargs=None,
+    prefix=None,
+    current_app=None,
+    host=None,
+    host_args=None,
+    host_kwargs=None,
+    scheme=None,
+    port=None,
+):
     """
     Given the host and view name and the appropriate parameters,
     reverses the fully qualified URL, e.g.::
@@ -169,9 +180,7 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     :rtype: the fully qualified URL with path
     """
     host = get_host(host)
-    hostname = reverse_host(host,
-                            args=host_args,
-                            kwargs=host_kwargs)
+    hostname = reverse_host(host, args=host_args, kwargs=host_kwargs)
     path = reverse_path(
         viewname,
         urlconf=host.urlconf,
@@ -189,7 +198,7 @@ def reverse(viewname, args=None, kwargs=None, prefix=None, current_app=None,
     else:
         port = normalize_port(port)
 
-    return iri_to_uri(f'{scheme}{hostname}{port}{path}')
+    return iri_to_uri(f"{scheme}{hostname}{port}{path}")
 
 
 #: The lazy version of the :func:`~django_hosts.resolvers.reverse`
