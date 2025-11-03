@@ -1,6 +1,7 @@
 from django_hosts import patterns, host
 
-host_patterns = patterns('',
+host_patterns = patterns(
+    '',
     host(r'example\.com', 'tests.urls.simple',
          name='without_www'),
     host(r'www\.example\.com', 'tests.urls.simple', name='www'),

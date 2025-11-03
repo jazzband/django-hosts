@@ -9,6 +9,7 @@ def read(*parts):
     with codecs.open(filename, encoding='utf-8') as fp:
         return fp.read()
 
+
 setup(
     name='django-hosts',
     description='Dynamic and static host resolving for Django. '

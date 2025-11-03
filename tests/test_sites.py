@@ -59,7 +59,8 @@ class SitesTests(HostsTestCase):
         middleware = HostsRequestMiddleware(get_response_empty)
         middleware.process_request(request)
 
-        get_site = lambda: request.site.domain
+        def get_site():
+            return request.site.domain
 
         # first checking if there is a db query
         self.assertEqual(request.site._wrapped, empty)

@@ -26,21 +26,32 @@ def async_middleware(get_response):
 class MiddlewareTests(HostsTestCase):
 
     def test_missing_hostconf_setting(self):
-        self.assertRaisesMessage(ImproperlyConfigured,
-            'Missing ROOT_HOSTCONF setting', HostsRequestMiddleware, get_response_empty)
+        self.assertRaisesMessage(
+            ImproperlyConfigured,
+            'Missing ROOT_HOSTCONF setting',
+            HostsRequestMiddleware,
+            get_response_empty
+        )
 
     @override_settings(ROOT_HOSTCONF='tests.hosts.simple')
     def test_missing_default_hosts(self):
-        self.assertRaisesMessage(ImproperlyConfigured,
-            'Missing DEFAULT_HOST setting', HostsRequestMiddleware, get_response_empty)
+        self.assertRaisesMessage(
+            ImproperlyConfigured,
+            'Missing DEFAULT_HOST setting',
+            HostsRequestMiddleware,
+            get_response_empty
+        )
 
     @override_settings(
         ROOT_HOSTCONF='tests.hosts.simple',
         DEFAULT_HOST='boo')
     def test_wrong_default_hosts(self):
-        self.assertRaisesMessage(ImproperlyConfigured,
+        self.assertRaisesMessage(
+            ImproperlyConfigured,
             "Invalid DEFAULT_HOST setting: No host called 'boo' exists",
-            HostsRequestMiddleware, get_response_empty)
+            HostsRequestMiddleware,
+            get_response_empty
+        )
 
     @override_settings(
         ALLOWED_HOSTS=['other.example.com'],
