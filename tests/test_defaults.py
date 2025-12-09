@@ -8,7 +8,8 @@ from .base import HostsTestCase
 class PatternsTests(HostsTestCase):
 
     def test_pattern(self):
-        host_patterns = patterns('',
+        host_patterns = patterns(
+            '',
             host(r'api', 'api.urls', name='api'),
         )
         self.assertEqual(len(host_patterns), 1)
@@ -18,7 +19,8 @@ class PatternsTests(HostsTestCase):
                          "scheme='//' port=''>")
 
     def test_pattern_as_tuple(self):
-        host_patterns = patterns('',
+        host_patterns = patterns(
+            '',
             (r'api', 'api.urls', 'api'),
         )
         self.assertEqual(len(host_patterns), 1)
@@ -30,7 +32,8 @@ class PatternsTests(HostsTestCase):
                           patterns, '', api_host, api_host)
 
     def test_pattern_with_prefix(self):
-        host_patterns = patterns('mysite',
+        host_patterns = patterns(
+            'mysite',
             host(r'api', 'api.urls', name='api'),
         )
         self.assertEqual(len(host_patterns), 1)
@@ -61,16 +64,19 @@ class HostTests(HostsTestCase):
     def test_host_nonexistent_callback(self):
         api_host = host(r'api', 'api.urls', name='api',
                         callback='whatever.non_existent')
-        self.assertRaisesMessage(ImproperlyConfigured,
+        self.assertRaisesMessage(
+            ImproperlyConfigured,
             "Could not import 'whatever'. Error was: No module named",
-            lambda: api_host.callback)
+            lambda: api_host.callback
+        )
 
         api_host = host(r'api', 'api.urls', name='api',
                         callback='django_hosts.non_existent')
-        self.assertRaisesMessage(ImproperlyConfigured,
-            "Could not import 'django_hosts.non_existent'. "
-            "Callable does not exist in module",
-            lambda: api_host.callback)
+        self.assertRaisesMessage(
+            ImproperlyConfigured,
+            "Could not import 'django_hosts.non_existent'. Callable does not exist in module",
+            lambda: api_host.callback
+        )
 
         api_host = host(r'api', 'api.urls', name='api',
                         callback='tests.broken_module.yeah_yeah')
