@@ -15,11 +15,10 @@ class BlogPost(models.Model):
 
     objects = models.Manager()
     dead_end = HostSiteManager()
-    on_site = HostSiteManager('author__site')
-    no_select_related = HostSiteManager('author__site',
-                                        select_related=False)
-    non_existing = HostSiteManager('blabla')
-    non_rel = HostSiteManager('content')
+    on_site = HostSiteManager("author__site")
+    no_select_related = HostSiteManager("author__site", select_related=False)
+    non_existing = HostSiteManager("blabla")
+    non_rel = HostSiteManager("content")
 
     def __unicode__(self):
         return str(self.id)
