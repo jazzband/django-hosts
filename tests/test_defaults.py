@@ -1,4 +1,5 @@
 from django.core.exceptions import ImproperlyConfigured
+
 from django_hosts.defaults import host, patterns
 from django_hosts.resolvers import get_host_patterns
 

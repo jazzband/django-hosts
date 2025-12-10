@@ -5,11 +5,11 @@ from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.template.base import FilterExpression
 from django.template.defaulttags import URLNode
+from django.urls import get_urlconf, set_urlconf
 from django.utils.encoding import iri_to_uri, smart_str
-from django.urls import set_urlconf, get_urlconf
 
-from ..resolvers import reverse_host, get_host
-from ..utils import normalize_scheme, normalize_port
+from ..resolvers import get_host, reverse_host
+from ..utils import normalize_port, normalize_scheme
 
 register = template.Library()
 
@@ -91,8 +91,8 @@ def fetch_arg(name, arg, bits, consume=True):
         pivot = bits.index(arg)
         try:
             value = bits[pivot + 1]
-        except IndexError:
-            raise TemplateSyntaxError(f"'{name}' arguments must include a variable name after '{arg}'")
+        except IndexError as exc:
+            raise TemplateSyntaxError(f"'{name}' arguments must include a variable name after '{arg}'") from exc
         else:
             if consume:
                 del bits[pivot : pivot + 2]

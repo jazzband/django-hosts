@@ -11,21 +11,22 @@ from importlib import import_module
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import setting_changed
-from django.urls import NoReverseMatch, reverse as reverse_path
+from django.urls import NoReverseMatch
+from django.urls import reverse as reverse_path
 from django.utils.encoding import iri_to_uri
 from django.utils.functional import lazy
 from django.utils.regex_helper import normalize
 
 from .defaults import host as host_cls
-from .utils import normalize_scheme, normalize_port
+from .utils import normalize_port, normalize_scheme
 
 
 @lru_cache
 def get_hostconf():
     try:
         return settings.ROOT_HOSTCONF
-    except AttributeError:
-        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting")
+    except AttributeError as exc:
+        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting") from exc
 
 
 @lru_cache
@@ -40,8 +41,8 @@ def get_host(name=None):
     if name is None:
         try:
             name = settings.DEFAULT_HOST
-        except AttributeError:
-            raise ImproperlyConfigured("Missing DEFAULT_HOST setting")
+        except AttributeError as exc:
+            raise ImproperlyConfigured("Missing DEFAULT_HOST setting") from exc
     for host in get_host_patterns():
         if host.name == name:
             return host
@@ -54,8 +55,8 @@ def get_host_patterns():
     module = get_hostconf_module(hostconf)
     try:
         return module.host_patterns
-    except AttributeError:
-        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'")
+    except AttributeError as exc:
+        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'") from exc
 
 
 def clear_host_caches():
@@ -105,7 +106,7 @@ def reverse_host(host, args=None, kwargs=None):
         if args:
             if len(args) != len(params):
                 continue
-            candidate = result % dict(zip(params, args))
+            candidate = result % dict(zip(params, args, strict=False))
         else:
             if set(kwargs.keys()) != set(params):
                 continue

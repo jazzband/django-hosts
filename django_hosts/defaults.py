@@ -3,16 +3,15 @@ When defining hostconfs you need to use the ``patterns`` and ``host`` helpers
 """
 
 import re
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
-from django.urls import (
-    get_callable as actual_get_callable,
-    get_mod_func,
-)
+from django.urls import get_callable as actual_get_callable
+from django.urls import get_mod_func
 from django.utils.encoding import smart_str
 from django.utils.functional import cached_property
 
-from .utils import normalize_scheme, normalize_port
+from .utils import normalize_port, normalize_scheme
 
 
 def get_callable(lookup_view):
@@ -25,7 +24,7 @@ def get_callable(lookup_view):
     try:
         return actual_get_callable(lookup_view)
     except ViewDoesNotExist as exc:
-        raise ImproperlyConfigured(exc.args[0].replace("View", "Callable"))
+        raise ImproperlyConfigured(exc.args[0].replace("View", "Callable")) from exc
 
 
 def patterns(prefix, *args):
@@ -47,7 +46,7 @@ def patterns(prefix, *args):
     hosts = []
     for arg in args:
         if isinstance(arg, (list, tuple)):
-            arg = host(prefix=prefix, *arg)
+            arg = host(prefix=prefix, *arg)  # noqa: B026
         else:
             arg.add_prefix(prefix)
         name = arg.name
@@ -136,12 +135,12 @@ class host:
             self._callback = get_callable(self._callback_str)
         except ImportError as exc:
             mod_name, _ = get_mod_func(self._callback_str)
-            raise ImproperlyConfigured(f"Could not import '{mod_name}'. Error was: {str(exc)}")
+            raise ImproperlyConfigured(f"Could not import '{mod_name}'. Error was: {str(exc)}") from exc
         except AttributeError as exc:
             mod_name, func_name = get_mod_func(self._callback_str)
             raise ImproperlyConfigured(
                 f"Tried importing '{func_name}' from module '{mod_name}' but failed. Error was: {str(exc)}"
-            )
+            ) from exc
         return self._callback
 
     def add_prefix(self, prefix=""):

@@ -1,6 +1,7 @@
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.base import Parser
 from django.test.utils import override_settings
+
 from django_hosts.templatetags.hosts import parse_params
 
 from .base import HostsTestCase
