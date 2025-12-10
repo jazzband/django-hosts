@@ -1,0 +1,14 @@
+line-length = 119
+target-version = "py310"
+
+[lint]
+# https://docs.astral.sh/ruff/rules/
+# Default rules
+select = [
+    # https://docs.astral.sh/ruff/rules/#error-e
+    "E4",
+    "E7",
+    "E9",
+    # https://docs.astral.sh/ruff/rules/#pyflakes-f
+    "F",
+]

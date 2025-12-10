@@ -27,13 +27,14 @@ repos:
   hooks:
     - id: flake8
 
-- repo: https://github.com/psf/black-pre-commit-mirror
-  rev: 25.12.0
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.14.7
   hooks:
-    - id: black
-      language_version: python3.10
-      args: [--line-length, "119"]
+    - id: ruff-check
+      args: ["--fix"]
+    - id: ruff-format
 
+# TODO: Revisit when https://github.com/astral-sh/ruff/issues/9620 is resolved.
 - repo: https://github.com/adamchainz/blacken-docs
   rev: 1.20.0
   hooks:
