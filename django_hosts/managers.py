@@ -67,7 +67,7 @@ class HostSiteManager(models.Manager):
         # Now do a type check on the field (FK or M2M only)
         if field:
             if not isinstance(field, (models.ForeignKey, models.ManyToManyField)):
-                raise TypeError("%s must be a ForeignKey or " "ManyToManyField." % field_name)
+                raise TypeError("%s must be a ForeignKey or ManyToManyField." % field_name)
         else:
             raise ValueError(
                 "%s couldn't find a field named %s in %s."

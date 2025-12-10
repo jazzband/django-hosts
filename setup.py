@@ -12,7 +12,7 @@ def read(*parts):
 
 setup(
     name="django-hosts",
-    description="Dynamic and static host resolving for Django. " "Maps hostnames to URLconfs.",
+    description="Dynamic and static host resolving for Django. Maps hostnames to URLconfs.",
     long_description=read("README.rst"),
     use_scm_version=True,
     python_requires=">=3.10",
