@@ -93,7 +93,7 @@ def fetch_arg(name, arg, bits, consume=True):
         try:
             value = bits[pivot + 1]
         except IndexError:
-            raise TemplateSyntaxError("'%s' arguments must include a variable name after '%s'" % (name, arg))
+            raise TemplateSyntaxError(f"'{name}' arguments must include a variable name after '{arg}'")
         else:
             if consume:
                 del bits[pivot : pivot + 2]
