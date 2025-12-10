@@ -21,7 +21,7 @@ class TemplateTagsTest(HostsTestCase):
     def test_host_url_tag_simple(self):
         self.assertRender("{% host_url 'simple-direct' host 'www' %}", "//www.example.com/simple/")
         self.assertRender(
-            "{% host_url 'simple-direct' host 'www' as " "simple_direct_url %}{{ simple_direct_url }}",
+            "{% host_url 'simple-direct' host 'www' as simple_direct_url %}{{ simple_direct_url }}",
             "//www.example.com/simple/",
         )
 
@@ -41,7 +41,7 @@ class TemplateTagsTest(HostsTestCase):
         ):
             self.assertRender("{% url 'simple-direct' host 'www' %}", "//www.example.com/simple/")
             self.assertRender(
-                "{% url 'simple-direct' host 'www' as " "simple_direct_url %}{{ simple_direct_url }}",
+                "{% url 'simple-direct' host 'www' as simple_direct_url %}{{ simple_direct_url }}",
                 "//www.example.com/simple/",
             )
 
@@ -79,21 +79,21 @@ class TemplateTagsTest(HostsTestCase):
             "//www.eggs.spam/simple/",
         )
         self.assertRender(
-            "{% host_url 'simple-direct' as yeah " "host 'with_args' 'www.eggs.spam' %}{{ yeah }}",
+            "{% host_url 'simple-direct' as yeah host 'with_args' 'www.eggs.spam' %}{{ yeah }}",
             "//www.eggs.spam/simple/",
         )
 
     @override_settings(DEFAULT_HOST="www", PARENT_HOST="eggs.spam", ROOT_HOSTCONF="tests.hosts.simple")
     def test_host_url_tag_with_kwargs(self):
         self.assertRender(
-            "{% host_url 'simple-direct' " "host 'with_kwargs' username='johndoe' %}",
+            "{% host_url 'simple-direct' host 'with_kwargs' username='johndoe' %}",
             "//johndoe.eggs.spam/simple/",
         )
 
     @override_settings(DEFAULT_HOST="www", PARENT_HOST="eggs.spam", ROOT_HOSTCONF="tests.hosts.simple")
     def test_host_url_tag_with_view_kwargs(self):
         self.assertRender(
-            "{% host_url 'complex-direct' template='test' " "host 'with_view_kwargs' subdomain='test2000' %}",
+            "{% host_url 'complex-direct' template='test' host 'with_view_kwargs' subdomain='test2000' %}",
             "//stest2000.eggs.spam/template/test/",
         )
 

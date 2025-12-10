@@ -93,7 +93,7 @@ def fetch_arg(name, arg, bits, consume=True):
         try:
             value = bits[pivot + 1]
         except IndexError:
-            raise TemplateSyntaxError("'%s' arguments must include " "a variable name after '%s'" % (name, arg))
+            raise TemplateSyntaxError("'%s' arguments must include a variable name after '%s'" % (name, arg))
         else:
             if consume:
                 del bits[pivot : pivot + 2]
@@ -117,7 +117,7 @@ def host_url(parser, token):
     bits = token.split_contents()
     name = bits[0]
     if len(bits) < 2:
-        raise TemplateSyntaxError("'%s' takes at least one argument" " (path to a view)" % name)
+        raise TemplateSyntaxError("'%s' takes at least one argument (path to a view)" % name)
 
     view_name = parser.compile_filter(bits[1])
     asvar, pivot, bits = fetch_arg(name, "as", bits[1:])  # Strip off viewname

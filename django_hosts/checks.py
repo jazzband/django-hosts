@@ -9,7 +9,7 @@ E001 = checks.Error(
 
 E002 = checks.Error(
     "Missing 'ROOT_HOSTCONF' setting.",
-    hint="Has to be the dotted Python import path of " "the module containing your host patterns.",
+    hint="Has to be the dotted Python import path of the module containing your host patterns.",
     id="django_hosts.E002",
 )
 

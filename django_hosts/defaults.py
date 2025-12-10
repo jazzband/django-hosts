@@ -144,11 +144,11 @@ class host:
             self._callback = get_callable(self._callback_str)
         except ImportError as exc:
             mod_name, _ = get_mod_func(self._callback_str)
-            raise ImproperlyConfigured("Could not import '%s'. " "Error was: %s" % (mod_name, str(exc)))
+            raise ImproperlyConfigured("Could not import '%s'. Error was: %s" % (mod_name, str(exc)))
         except AttributeError as exc:
             mod_name, func_name = get_mod_func(self._callback_str)
             raise ImproperlyConfigured(
-                "Tried importing '%s' from module " "'%s' but failed. Error was: %s" % (func_name, mod_name, str(exc))
+                "Tried importing '%s' from module '%s' but failed. Error was: %s" % (func_name, mod_name, str(exc))
             )
         return self._callback
 
