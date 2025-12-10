@@ -10,12 +10,15 @@ select = [
     "F",
     # https://docs.astral.sh/ruff/rules/#error-w
     "W",
+    # https://docs.astral.sh/ruff/rules/#pyupgrade-up
+    "UP",
 ]
 ignore = [
     # Line lengths are checked & managed by ruff, don't need to check again.
     # https://docs.astral.sh/ruff/rules/line-too-long/
     "E501",
 ]
+
 
 
 [lint.per-file-ignores]
