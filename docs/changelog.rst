@@ -300,8 +300,9 @@ X.Y (unreleased)
     from django_hosts import patterns, host
     from mytemplateproject.hosts import host_patterns
 
-    host_patterns += patterns('',
-        host('www2', 'mysite.urls.www2', name='www2')
+    host_patterns += patterns(
+        "",
+        host("www2", "mysite.urls.www2", name="www2"),
     )
 
 - Extended tests to have full coverage.

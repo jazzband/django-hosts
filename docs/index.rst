@@ -11,9 +11,10 @@ Patterns being regular expressions allows setups to feature dynamic (or
     from django.conf import settings
     from django_hosts import patterns, host
 
-    host_patterns = patterns('',
-        host(r'www', settings.ROOT_URLCONF, name='www'),
-        host(r'(\w+)', 'path.to.custom_urls', name='wildcard'),
+    host_patterns = patterns(
+        "",
+        host(r"www", settings.ROOT_URLCONF, name="www"),
+        host(r"(\w+)", "path.to.custom_urls", name="wildcard"),
     )
 
 Here, requests to ``www.example.com`` will be routed as normal but a
@@ -30,8 +31,9 @@ of the ``ROOT_URLCONF`` setting:
 
     from django_hosts import patterns, host
 
-    host_patterns = patterns('',
-        host(r'(?!www)\w+', 'path.to.custom_urls', name='wildcard'),
+    host_patterns = patterns(
+        "",
+        host(r"(?!www)\w+", "path.to.custom_urls", name="wildcard"),
     )
 
 In your templates you can use the
@@ -65,9 +67,10 @@ with Django's own reverse function. Simply use the
     from django.shortcuts import render
     from django_hosts.resolvers import reverse
 
+
     def homepage(request):
-        homepage_url = reverse('homepage', host='www')
-        return render(request, 'homepage.html', {'homepage_url': homepage_url})
+        homepage_url = reverse("homepage", host="www")
+        return render(request, "homepage.html", {"homepage_url": homepage_url})
 
 Settings
 --------

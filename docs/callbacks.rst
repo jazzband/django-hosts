@@ -17,6 +17,7 @@ Simply define a callback function:
     from django.shortcuts import get_object_or_404
     from django.contrib.auth.models import User
 
+
     def custom_fn(request, username):
         request.viewing_user = get_object_or_404(User, username=username)
 
@@ -27,10 +28,15 @@ Simply define a callback function:
     from django.conf import settings
     from django_hosts import patterns, host
 
-    host_patterns = patterns('',
-        host(r'www', settings.ROOT_URLCONF, name='www'),
-        host(r'(?P<username>\w+)', 'path.to.custom_urls',
-             callback='path.to.custom_fn', name='with-callback'),
+    host_patterns = patterns(
+        "",
+        host(r"www", settings.ROOT_URLCONF, name="www"),
+        host(
+            r"(?P<username>\w+)",
+            "path.to.custom_urls",
+            callback="path.to.custom_fn",
+            name="with-callback",
+        ),
     )
 
 This example avoids the duplicated work in every view by attaching a
