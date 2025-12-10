@@ -4,7 +4,6 @@ from .base import HostsTestCase
 
 
 class UtilsTest(HostsTestCase):
-
     def test_normalize_scheme(self):
         self.assertEqual(normalize_scheme("http"), "http://")
         self.assertEqual(normalize_scheme("http:"), "http://")

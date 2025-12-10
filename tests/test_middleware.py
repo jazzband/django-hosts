@@ -23,7 +23,6 @@ def async_middleware(get_response):
 
 
 class MiddlewareTests(HostsTestCase):
-
     def test_missing_hostconf_setting(self):
         self.assertRaisesMessage(
             ImproperlyConfigured,

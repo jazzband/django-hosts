@@ -5,12 +5,6 @@ repos:
     - id: django-upgrade
       args: [--target-version, "4.2"]
 
-- repo: https://github.com/asottile/pyupgrade
-  rev: v3.21.2
-  hooks:
-    - id: pyupgrade
-      args: [--py310-plus]
-
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0
   hooks:
@@ -22,18 +16,14 @@ repos:
     - id: mixed-line-ending
     - id: trailing-whitespace
 
-- repo: https://github.com/pycqa/flake8
-  rev: 7.3.0
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.14.7
   hooks:
-    - id: flake8
+    - id: ruff-check
+      args: ["--fix"]
+    - id: ruff-format
 
-- repo: https://github.com/psf/black-pre-commit-mirror
-  rev: 25.12.0
-  hooks:
-    - id: black
-      language_version: python3.10
-      args: [--line-length, "119"]
-
+# TODO: Revisit when https://github.com/astral-sh/ruff/issues/9620 is resolved.
 - repo: https://github.com/adamchainz/blacken-docs
   rev: 1.20.0
   hooks:

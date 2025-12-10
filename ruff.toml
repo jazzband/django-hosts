@@ -1,0 +1,28 @@
+line-length = 119
+target-version = "py310"
+
+[lint]
+# https://docs.astral.sh/ruff/rules/
+select = [
+    # https://docs.astral.sh/ruff/rules/#error-e
+    "E",
+    # https://docs.astral.sh/ruff/rules/#pyflakes-f
+    "F",
+    # https://docs.astral.sh/ruff/rules/#error-w
+    "W",
+    # https://docs.astral.sh/ruff/rules/#pyupgrade-up
+    "UP",
+]
+ignore = [
+    # Line lengths are checked & managed by ruff, don't need to check again.
+    # https://docs.astral.sh/ruff/rules/line-too-long/
+    "E501",
+]
+
+
+
+[lint.per-file-ignores]
+"django_hosts/__init__.py" = [
+    # https://docs.astral.sh/ruff/rules/unused-import/
+    "F401",
+]

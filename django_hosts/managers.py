@@ -67,11 +67,10 @@ class HostSiteManager(models.Manager):
         # Now do a type check on the field (FK or M2M only)
         if field:
             if not isinstance(field, (models.ForeignKey, models.ManyToManyField)):
-                raise TypeError("%s must be a ForeignKey or ManyToManyField." % field_name)
+                raise TypeError(f"{field_name} must be a ForeignKey or ManyToManyField.")
         else:
             raise ValueError(
-                "%s couldn't find a field named %s in %s."
-                % (self.__class__.__name__, field_name, self.model._meta.object_name)
+                f"{self.__class__.__name__} couldn't find a field named {field_name} in {self.model._meta.object_name}."
             )
         self._is_validated = True
 
@@ -81,7 +80,7 @@ class HostSiteManager(models.Manager):
         if not self._is_validated:
             self._validate_field_name()
         qs = super().get_queryset()
-        return qs.filter(**{"%s__id__exact" % self._field_name: site_id})
+        return qs.filter(**{f"{self._field_name}__id__exact": site_id})
 
     def by_id(self, site_id=None):
         """

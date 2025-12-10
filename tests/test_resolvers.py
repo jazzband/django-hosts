@@ -16,7 +16,6 @@ from .hosts import simple
 
 
 class ReverseTest(HostsTestCase):
-
     @override_settings(ROOT_HOSTCONF="tests.hosts.simple")
     def test_reverse_host(self):
         self.assertRaises(ValueError, reverse_host, "with_kwargs", ["spam"], dict(eggs="spam"))
@@ -64,7 +63,6 @@ class ReverseTest(HostsTestCase):
 
 
 class UtilityTests(HostsTestCase):
-
     @override_settings(ROOT_HOSTCONF="tests.hosts.simple")
     def test_get_hostconf_module(self):
         self.assertEqual(get_hostconf_module(), simple)
