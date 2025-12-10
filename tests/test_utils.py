@@ -1,4 +1,4 @@
-from django_hosts.utils import normalize_scheme, normalize_port
+from django_hosts.utils import normalize_port, normalize_scheme
 
 from .base import HostsTestCase
 

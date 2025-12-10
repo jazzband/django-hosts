@@ -3,16 +3,15 @@ When defining hostconfs you need to use the ``patterns`` and ``host`` helpers
 """
 
 import re
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
-from django.urls import (
-    get_callable as actual_get_callable,
-    get_mod_func,
-)
+from django.urls import get_callable as actual_get_callable
+from django.urls import get_mod_func
 from django.utils.encoding import smart_str
 from django.utils.functional import cached_property
 
-from .utils import normalize_scheme, normalize_port
+from .utils import normalize_port, normalize_scheme
 
 
 def get_callable(lookup_view):

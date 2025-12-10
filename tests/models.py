@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.sites.models import Site
+from django.db import models
 
 from django_hosts.managers import HostSiteManager
 

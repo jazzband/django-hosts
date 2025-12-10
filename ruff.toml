@@ -12,6 +12,8 @@ select = [
     "E",
     # https://docs.astral.sh/ruff/rules/#pyflakes-f
     "F",
+    # https://docs.astral.sh/ruff/rules/#isort-i
+    "I",
     # https://docs.astral.sh/ruff/rules/#error-w
     "W",
     # https://docs.astral.sh/ruff/rules/#pyupgrade-up

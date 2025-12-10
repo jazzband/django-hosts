@@ -11,13 +11,14 @@ from importlib import import_module
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import setting_changed
-from django.urls import NoReverseMatch, reverse as reverse_path
+from django.urls import NoReverseMatch
+from django.urls import reverse as reverse_path
 from django.utils.encoding import iri_to_uri
 from django.utils.functional import lazy
 from django.utils.regex_helper import normalize
 
 from .defaults import host as host_cls
-from .utils import normalize_scheme, normalize_port
+from .utils import normalize_port, normalize_scheme
 
 
 @lru_cache
