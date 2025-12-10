@@ -45,7 +45,7 @@ def get_host(name=None):
     for host in get_host_patterns():
         if host.name == name:
             return host
-    raise NoReverseMatch("No host called '%s' exists" % name)
+    raise NoReverseMatch(f"No host called '{name}' exists")
 
 
 @lru_cache
@@ -55,7 +55,7 @@ def get_host_patterns():
     try:
         return module.host_patterns
     except AttributeError:
-        raise ImproperlyConfigured("Missing host_patterns in '%s'" % hostconf)
+        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'")
 
 
 def clear_host_caches():
@@ -122,7 +122,7 @@ def reverse_host(host, args=None, kwargs=None):
             return candidate
 
     raise NoReverseMatch(
-        "Reverse host for '%s' with arguments '%s' and keyword arguments '%s' not found." % (host.name, args, kwargs)
+        f"Reverse host for '{host.name}' with arguments '{args}' and keyword arguments '{kwargs}' not found."
     )
 
 

@@ -52,7 +52,7 @@ def patterns(prefix, *args):
             arg.add_prefix(prefix)
         name = arg.name
         if name in [h.name for h in hosts]:
-            raise ImproperlyConfigured("Duplicate host name: %s" % name)
+            raise ImproperlyConfigured(f"Duplicate host name: {name}")
         hosts.append(arg)
     return hosts
 
@@ -111,15 +111,7 @@ class host:
 
     def __repr__(self):
         return smart_str(
-            "<%s %s: regex=%r urlconf=%r scheme=%r port=%r>"
-            % (
-                self.__class__.__name__,
-                self.name,
-                self.regex,
-                self.urlconf,
-                self.scheme,
-                self.port,
-            )
+            f"<{self.__class__.__name__} {self.name}: regex={self.regex!r} urlconf={self.urlconf!r} scheme={self.scheme!r} port={self.port!r}>"
         )
 
     @cached_property

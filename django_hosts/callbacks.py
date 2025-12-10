@@ -29,7 +29,7 @@ class LazySite(LazyObject):
 class CachedLazySite(LazySite):
     def _setup(self):
         host = reverse_host(self.name, args=self.args, kwargs=self.kwargs)
-        cache_key = "hosts:%s" % host
+        cache_key = f"hosts:{host}"
         from django.core.cache import cache
 
         site = cache.get(cache_key, None)
