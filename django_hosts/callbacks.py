@@ -8,7 +8,6 @@ HOST_SITE_TIMEOUT = getattr(settings, "HOST_SITE_TIMEOUT", 3600)
 
 
 class LazySite(LazyObject):
-
     def __init__(self, request, *args, **kwargs):
         super().__init__()
         self.__dict__.update(
@@ -28,7 +27,6 @@ class LazySite(LazyObject):
 
 
 class CachedLazySite(LazySite):
-
     def _setup(self):
         host = reverse_host(self.name, args=self.args, kwargs=self.kwargs)
         cache_key = "hosts:%s" % host

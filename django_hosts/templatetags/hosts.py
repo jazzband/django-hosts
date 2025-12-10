@@ -17,7 +17,6 @@ kwarg_re = re.compile(r"(?:(\w+)=)?(.+)")
 
 
 class HostURLNode(URLNode):
-
     def __init__(self, *args, **kwargs):
         self.host = kwargs.pop("host")
         self.host_args = kwargs.pop("host_args")

@@ -122,8 +122,7 @@ def reverse_host(host, args=None, kwargs=None):
             return candidate
 
     raise NoReverseMatch(
-        "Reverse host for '%s' with arguments '%s' "
-        "and keyword arguments '%s' not found." % (host.name, args, kwargs)
+        "Reverse host for '%s' with arguments '%s' and keyword arguments '%s' not found." % (host.name, args, kwargs)
     )
 
 

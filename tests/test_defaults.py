@@ -6,7 +6,6 @@ from .base import HostsTestCase
 
 
 class PatternsTests(HostsTestCase):
-
     def test_pattern(self):
         host_patterns = patterns(
             "",
@@ -42,7 +41,6 @@ class PatternsTests(HostsTestCase):
 
 
 class HostTests(HostsTestCase):
-
     def test_host(self):
         api_host = host(r"api", "api.urls", name="api")
         self.assertTrue(isinstance(api_host, host))

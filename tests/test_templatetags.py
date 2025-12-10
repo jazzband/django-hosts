@@ -7,7 +7,6 @@ from .base import HostsTestCase
 
 
 class TemplateTagsTest(HostsTestCase):
-
     def render(self, template, context=None):
         if context is None:
             context = Context({})
