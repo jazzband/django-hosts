@@ -33,9 +33,10 @@ at ``api.example.com`` and ``beta.example.com``, add the following to a
 
     from django_hosts import patterns, host
 
-    host_patterns = patterns('path.to',
-        host(r'api', 'api.urls', name='api'),
-        host(r'beta', 'beta.urls', name='beta'),
+    host_patterns = patterns(
+        "path.to",
+        host(r"api", "api.urls", name="api"),
+        host(r"beta", "beta.urls", name="beta"),
     )
 
 This causes requests to ``{api,beta}.example.com`` to be routed to their
@@ -53,8 +54,9 @@ and ``bar.example.com`` to the same URLconf.
 
     from django_hosts import patterns, host
 
-    host_patterns = patterns('',
-        host(r'(foo|bar)', 'path.to.urls', name='foo-or-bar'),
+    host_patterns = patterns(
+        "",
+        host(r"(foo|bar)", "path.to.urls", name="foo-or-bar"),
     )
 
 .. note:
@@ -99,7 +101,7 @@ Then configure your Django site to use the app:
 
    .. code-block:: python
 
-       ROOT_HOSTCONF = 'mysite.hosts'
+       ROOT_HOSTCONF = "mysite.hosts"
 
 #. Set the ``DEFAULT_HOST`` setting to the **name** of the host pattern you
    want to refer to as the default pattern. It'll be used if no other

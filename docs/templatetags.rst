@@ -14,8 +14,9 @@ host pattern of:
     from django.conf import settings
     from django_hosts import patterns, host
 
-    host_patterns = patterns('',
-        host(r'admin', settings.ROOT_URLCONF, name='our-admin'),
+    host_patterns = patterns(
+        "",
+        host(r"admin", settings.ROOT_URLCONF, name="our-admin"),
     )
 
 and a ``ROOT_URLCONF`` of:
@@ -25,7 +26,7 @@ and a ``ROOT_URLCONF`` of:
     from django.urls import path
 
     urlpatterns = [
-        path('dashboard/', 'dashboard', name='dashboard'),
+        path("dashboard/", "dashboard", name="dashboard"),
     ]
 
 then this example will create a link to the admin dashboard:
@@ -93,7 +94,7 @@ the rendered URL you can simply set the
 
 .. code-block:: python
 
-    PARENT_HOST = 'example.com'
+    PARENT_HOST = "example.com"
 
 This would render the link of the previous section as:
 
@@ -109,8 +110,9 @@ to all URLs you can also spell out the domain in the host pattern:
     from django.conf import settings
     from django_hosts import patterns, host
 
-    host_patterns = patterns('',
-        host(r'admin\.example\.com', settings.ROOT_URLCONF, name='admin'),
+    host_patterns = patterns(
+        "",
+        host(r"admin\.example\.com", settings.ROOT_URLCONF, name="admin"),
     )
 
 Host and URL pattern parameters
@@ -123,10 +125,11 @@ If your host pattern contains an parameter (or keyed parameter), like:
     from django.conf import settings
     from django_hosts import patterns, host
 
-    host_patterns = patterns('',
-        host(r'www', settings.ROOT_URLCONF, name='homepage'),
-        host(r'(\w+)', 'path.to.support_urls', name='wildcard'),
-        host(r'(?P<username>\w+).users', 'path.to.user_urls', name='user-area'),
+    host_patterns = patterns(
+        "",
+        host(r"www", settings.ROOT_URLCONF, name="homepage"),
+        host(r"(\w+)", "path.to.support_urls", name="wildcard"),
+        host(r"(?P<username>\w+).users", "path.to.user_urls", name="user-area"),
     )
 
 you can also easily pass parameters to the

@@ -11,10 +11,10 @@ django-hosts' ``HostsRequestMiddleware`` middleware, e.g.:
 .. code-block:: python
 
     MIDDLEWARE = [
-        'django_hosts.middleware.HostsRequestMiddleware',
+        "django_hosts.middleware.HostsRequestMiddleware",
         # your other middlewares..
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-        'django_hosts.middleware.HostsResponseMiddleware',
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        "django_hosts.middleware.HostsResponseMiddleware",
     ]
 
 Also, you have to install `django-debug-toolbar 0.9.X`_ or higher.
@@ -32,4 +32,4 @@ depending on the host that should handle the call
 
 .. code-block:: python
 
-    client.post(..., SERVER_NAME='api-server.something')
+    client.post(..., SERVER_NAME="api-server.something")
