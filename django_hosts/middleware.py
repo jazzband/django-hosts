@@ -22,7 +22,7 @@ class HostsBaseMiddleware(MiddlewareMixin):
         try:
             self.default_host = get_host()
         except NoReverseMatch as exc:
-            raise ImproperlyConfigured(f"Invalid DEFAULT_HOST setting: {exc}")
+            raise ImproperlyConfigured(f"Invalid DEFAULT_HOST setting: {exc}") from exc
 
         middlewares = list(settings.MIDDLEWARE)
         show_exception = False

@@ -4,6 +4,8 @@ target-version = "py310"
 [lint]
 # https://docs.astral.sh/ruff/rules/
 select = [
+    # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+    "B",
     # https://docs.astral.sh/ruff/rules/#error-e
     "E",
     # https://docs.astral.sh/ruff/rules/#pyflakes-f

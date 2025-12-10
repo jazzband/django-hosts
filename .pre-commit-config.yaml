@@ -20,7 +20,7 @@ repos:
   rev: v0.14.7
   hooks:
     - id: ruff-check
-      args: ["--fix"]
+      args: ["--fix", "--unsafe-fixes"]
     - id: ruff-format
 
 # TODO: Revisit when https://github.com/astral-sh/ruff/issues/9620 is resolved.

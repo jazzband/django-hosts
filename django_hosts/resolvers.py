@@ -24,8 +24,8 @@ from .utils import normalize_scheme, normalize_port
 def get_hostconf():
     try:
         return settings.ROOT_HOSTCONF
-    except AttributeError:
-        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting")
+    except AttributeError as exc:
+        raise ImproperlyConfigured("Missing ROOT_HOSTCONF setting") from exc
 
 
 @lru_cache
@@ -40,8 +40,8 @@ def get_host(name=None):
     if name is None:
         try:
             name = settings.DEFAULT_HOST
-        except AttributeError:
-            raise ImproperlyConfigured("Missing DEFAULT_HOST setting")
+        except AttributeError as exc:
+            raise ImproperlyConfigured("Missing DEFAULT_HOST setting") from exc
     for host in get_host_patterns():
         if host.name == name:
             return host
@@ -54,8 +54,8 @@ def get_host_patterns():
     module = get_hostconf_module(hostconf)
     try:
         return module.host_patterns
-    except AttributeError:
-        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'")
+    except AttributeError as exc:
+        raise ImproperlyConfigured(f"Missing host_patterns in '{hostconf}'") from exc
 
 
 def clear_host_caches():
@@ -105,7 +105,7 @@ def reverse_host(host, args=None, kwargs=None):
         if args:
             if len(args) != len(params):
                 continue
-            candidate = result % dict(zip(params, args))
+            candidate = result % dict(zip(params, args, strict=False))
         else:
             if set(kwargs.keys()) != set(params):
                 continue
