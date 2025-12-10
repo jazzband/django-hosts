@@ -96,7 +96,7 @@ def fetch_arg(name, arg, bits, consume=True):
             raise TemplateSyntaxError(f"'{name}' arguments must include a variable name after '{arg}'")
         else:
             if consume:
-                del bits[pivot : pivot + 2]
+                del bits[pivot : pivot + 2]  # noqa: E203 # black - flake8 conflict
             return value, pivot, bits
     except ValueError:
         return None, None, bits
@@ -133,7 +133,7 @@ def host_url(parser, token):
     if host:
         host = parser.compile_filter(host)
         view_args, view_kwargs = parse_params(name, parser, bits[1:pivot])
-        host_args, host_kwargs = parse_params(name, parser, bits[pivot + 2 :])
+        host_args, host_kwargs = parse_params(name, parser, bits[pivot + 2 :])  # noqa: E203 # black - flake8 conflict
     else:
         # No host was given so use the default host
         host = settings.DEFAULT_HOST
