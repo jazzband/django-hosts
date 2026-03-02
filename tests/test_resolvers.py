@@ -64,7 +64,9 @@ class ReverseTest(HostsTestCase):
 
     @override_settings(ROOT_HOSTCONF="tests.hosts.blank", PARENT_HOST="example.com")
     def test_reverse_with_query(self):
-        self.assertEqual(reverse("simple-direct", host="blank_or_www", query={"spam": "eggs"}), "//example.com/simple/?spam=eggs")
+        self.assertEqual(
+            reverse("simple-direct", host="blank_or_www", query={"spam": "eggs"}), "//example.com/simple/?spam=eggs"
+        )
 
     @override_settings(ROOT_HOSTCONF="tests.hosts.blank", PARENT_HOST="example.com")
     def test_reverse_with_fragment(self):

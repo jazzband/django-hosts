@@ -211,7 +211,7 @@ def reverse(
     else:
         port = normalize_port(port)
 
-    resolved_url =  iri_to_uri(f"{scheme}{hostname}{port}{path}")
+    resolved_url = iri_to_uri(f"{scheme}{hostname}{port}{path}")
     if query is not None:
         if isinstance(query, QueryDict):
             query_string = query.urlencode()
@@ -222,6 +222,7 @@ def reverse(
     if fragment is not None:
         resolved_url += "#" + fragment
     return resolved_url
+
 
 #: The lazy version of the :func:`~django_hosts.resolvers.reverse`
 #: function to be used in class based views and other module level situations
