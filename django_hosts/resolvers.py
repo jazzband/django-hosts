@@ -7,10 +7,12 @@ scheme, hostname and port you'll need to use the ``reverse`` and
 import re
 from functools import lru_cache
 from importlib import import_module
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import setting_changed
+from django.http import QueryDict
 from django.urls import NoReverseMatch, reverse as reverse_path
 from django.utils.encoding import iri_to_uri
 from django.utils.functional import lazy
@@ -143,6 +145,9 @@ def reverse(
     host_kwargs=None,
     scheme=None,
     port=None,
+    *,
+    query=None,
+    fragment=None,
 ):
     """
     Given the host and view name and the appropriate parameters,
@@ -158,6 +163,12 @@ def reverse(
         '//www.example.com/about/'
         >>> reverse('repo', args=('jezdez',), host='www', scheme='git', port=1337)
         'git://jezdez.example.com:1337/repo/'
+        >>> reverse("about", query=[("color", "blue"), ("color", 1), ("none", None)])
+        '//www.example.com/about/?color=blue&color=1&none=None'
+        >>> reverse("about", query={"has empty spaces": "also has empty spaces!"})
+        '//www.example.com/about/?has+empty+spaces=also+has+empty+spaces%21'
+        >>> reverse("about", fragment="no encoding is done")
+        '//www.example.com/about/#no encoding is done'
 
     You can set the used port and scheme in the host object or override with
     the parameter named accordingly.
@@ -176,6 +187,8 @@ def reverse(
     :param host: the name of the host
     :param host_args: the host arguments
     :param host_kwargs: the host keyed arguments
+    :param query: an optional argument that specifies the query string to be added to the returned URL.
+    :param fragment: an optional argument that specifies a fragment identifier to be appended to the returned URL.
     :raises django.core.urlresolvers.NoReverseMatch: if no host or path matches
     :rtype: the fully qualified URL with path
     """
@@ -198,8 +211,17 @@ def reverse(
     else:
         port = normalize_port(port)
 
-    return iri_to_uri(f"{scheme}{hostname}{port}{path}")
-
+    resolved_url =  iri_to_uri(f"{scheme}{hostname}{port}{path}")
+    if query is not None:
+        if isinstance(query, QueryDict):
+            query_string = query.urlencode()
+        else:
+            query_string = urlencode(query, doseq=True)
+        if query_string:
+            resolved_url += "?" + query_string
+    if fragment is not None:
+        resolved_url += "#" + fragment
+    return resolved_url
 
 #: The lazy version of the :func:`~django_hosts.resolvers.reverse`
 #: function to be used in class based views and other module level situations
