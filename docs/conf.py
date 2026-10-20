@@ -43,7 +43,7 @@ master_doc = "index"
 # General information about the project.
 project = "django-hosts"
 copyright = (
-    "2015-2016, Jazzband members (https://jazzband.co/); "
+    "2015-2026, Jazzband members (https://jazzband.co/); "
     "2026, Django Commons"
 )
 
