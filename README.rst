@@ -10,17 +10,14 @@ django-hosts
 .. image:: https://img.shields.io/pypi/djversions/django-hosts.svg
    :target: https://pypi.org/project/django-hosts/
 
-.. image:: https://github.com/jazzband/django-hosts/workflows/Test/badge.svg
-   :target: https://github.com/jazzband/django-hosts/actions
+.. image:: https://github.com/django-commons/django-hosts/workflows/Test/badge.svg
+   :target: https://github.com/django-commons/django-hosts/actions
 
-.. image:: https://codecov.io/gh/jazzband/django-hosts/branch/master/graph/badge.svg
-   :target: https://app.codecov.io/gh/jazzband/django-hosts
+.. image:: https://codecov.io/gh/django-commons/django-hosts/branch/master/graph/badge.svg
+   :target: https://app.codecov.io/gh/django-commons/django-hosts
 
 .. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=flat
    :target: https://django-hosts.readthedocs.io/en/latest/
-
-.. image:: https://jazzband.co/static/img/badge.svg
-   :target: https://jazzband.co/
 
 .. overview-start
 
@@ -110,5 +107,5 @@ Then configure your Django site to use the app:
    pattern matches or you don't give a name to the ``host_url`` template
    tag.
 
-.. _`repository on Github`: https://github.com/jazzband/django-hosts
+.. _`repository on Github`: https://github.com/django-commons/django-hosts
 .. _`django-hosts.rtfd.org`: https://django-hosts.readthedocs.io/
