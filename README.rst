@@ -19,6 +19,8 @@ django-hosts
 .. image:: https://readthedocs.org/projects/django-hosts/badge/?version=latest&style=flat
    :target: https://django-hosts.readthedocs.io/en/latest/
 
+.. overview-start
+
 This Django app routes requests for specific hosts to different URL schemes
 defined in modules called "hostconfs".
 
