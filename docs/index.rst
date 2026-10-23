@@ -1,4 +1,14 @@
+django-hosts
+============
+
+.. only:: html
+
+   .. include:: ../README.rst
+      :start-after: ============
+      :end-before: .. overview-start
+
 .. include:: ../README.rst
+   :start-after: .. overview-start
 
 Usage
 -----

@@ -22,6 +22,8 @@ django-hosts
 .. image:: https://jazzband.co/static/img/badge.svg
    :target: https://jazzband.co/
 
+.. overview-start
+
 This Django app routes requests for specific hosts to different URL schemes
 defined in modules called "hostconfs".
 
