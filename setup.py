@@ -19,7 +19,7 @@ setup(
     setup_requires=["setuptools_scm"],
     url="https://django-hosts.readthedocs.io/",
     project_urls={
-        "Source": "https://github.com/jazzband/django-hosts",
+        "Source": "https://github.com/django-commons/django-hosts",
     },
     author="Jannis Leidel",
     author_email="jannis@leidel.info",
