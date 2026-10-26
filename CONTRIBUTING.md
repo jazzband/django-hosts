@@ -15,3 +15,12 @@ created in `/tmp` run:
 ```
 make clean
 ```
+
+To run the same documentation check as CI, which treats Sphinx warnings as
+errors, install [tox](https://tox.wiki/) and run:
+
+```
+tox -e docs
+```
+
+The HTML output is written to `.tox/docs/tmp/html`.
