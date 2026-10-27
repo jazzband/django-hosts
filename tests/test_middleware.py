@@ -1,6 +1,4 @@
-import asyncio
-
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, iscoroutinefunction
 from django.http import HttpResponse
 from django.test import RequestFactory
 from django.test.utils import override_settings
@@ -18,7 +16,7 @@ def get_response_empty(request):
 
 @async_only_middleware
 def async_middleware(get_response):
-    assert asyncio.iscoroutinefunction(get_response)
+    assert iscoroutinefunction(get_response)
     return get_response
 
 
