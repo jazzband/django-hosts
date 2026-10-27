@@ -8,6 +8,11 @@ X.Y (unreleased)
 
 - Switch from Jazzband org to Django Commons.
 
+- Confirmed support for Python 3.14.
+
+- Confirmed support for Django 6.0 and 6.1
+  (no functional code changes were required).
+
 7.0 (2025-04-24)
 ----------------
 

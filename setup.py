@@ -1,4 +1,3 @@
-import codecs
 from os import path
 
 from setuptools import find_packages, setup
@@ -6,7 +5,7 @@ from setuptools import find_packages, setup
 
 def read(*parts):
     filename = path.join(path.dirname(__file__), *parts)
-    with codecs.open(filename, encoding="utf-8") as fp:
+    with open(filename, encoding="utf-8") as fp:
         return fp.read()
 
 
@@ -32,6 +31,8 @@ setup(
         "Framework :: Django :: 4.2",
         "Framework :: Django :: 5.1",
         "Framework :: Django :: 5.2",
+        "Framework :: Django :: 6.0",
+        "Framework :: Django :: 6.1",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
@@ -42,5 +43,6 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
 )
